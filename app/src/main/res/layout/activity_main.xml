@@ -5,18 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawerLayout"
-    tools:context=".MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:listitem="@layout/recyclerview_item"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    tools:context=".MainActivity">
 
     <FrameLayout
         android:id="@+id/frame_layout"
@@ -27,20 +17,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            tools:listitem="@layout/recyclerview_item"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+</FrameLayout>
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/NavigationView"
-        app:headerLayout="@layout/header_sidebar"
+<!-- Side navigation drawer -->
+<com.google.android.material.navigation.NavigationView
+    android:id="@+id/navigationView"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentBottom="true"
+    app:headerLayout="@layout/header_sidebar"
+    app:menu="@menu/side_nav_menu" />
+
+
+    <!-- Bottom fixed navigation bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        app:menu="@menu/side_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu" />
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>

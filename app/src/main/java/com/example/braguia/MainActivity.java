@@ -37,11 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        drawerLayout = findViewById(R.id.drawerLayout);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(drawerToggle);
-        drawerToggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         //RecyclerView recyclerView = findViewById(R.id.recyclerview);
         //final TrailListAdapter adapter = new TrailListAdapter(new TrailListAdapter.TrailDiff());
@@ -61,10 +57,42 @@ public class MainActivity extends AppCompatActivity {
         //    throw new RuntimeException(e);
         //}
 
+        //replaceFragment(new HomeFragment());
+
+        //Bottom navbar
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+
+            switch (item.getItemId()){
+
+                case R.id.home:
+                    replaceFragment(new HomeFragment());
+                    break;
+
+                case R.id.favourites:
+                    replaceFragment(new FavouritesFragment());
+                    break;
+
+                case R.id.discover:
+                    replaceFragment(new DiscoverFragment());
+                    break;
+
+                case R.id.add_roadmap:
+                    replaceFragment(new AddRoadMapFragment());
+                    break;
+
+            }
+            return true;
+        });
+
+        drawerLayout = findViewById(R.id.drawerLayout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         // Left Side Navbar
-        binding.NavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        binding.navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
@@ -73,17 +101,17 @@ public class MainActivity extends AppCompatActivity {
                         //Toast.makeText(MainActivity.this, "Profile Selected", Toast.LENGTH_LONG).show();
                         replaceFragment(new ProfileFragment());
                         break;
-                    case R.id.discover:
-                        //Toast.makeText(MainActivity.this, "Discover Selected", Toast.LENGTH_LONG).show();
-                        replaceFragment(new DiscoverFragment());
+                    case R.id.emergercy_contacts:
+                        //Toast.makeText(MainActivity.this, "Emergency Contacts Selected", Toast.LENGTH_LONG).show();
+                        replaceFragment(new EmergencyContactsFragment());
                         break;
-                    case R.id.home:
-                        //Toast.makeText(MainActivity.this, "Home Selected", Toast.LENGTH_LONG).show();
-                        replaceFragment(new HomeFragment());
+                    case R.id.definitions:
+                        //Toast.makeText(MainActivity.this, "Definitions Selected", Toast.LENGTH_LONG).show();
+                        replaceFragment(new DefinitionsFragment());
                         break;
-                    case R.id.favourites:
-                        //Toast.makeText(MainActivity.this, "Favourites Selected", Toast.LENGTH_LONG).show();
-                        replaceFragment(new FavouritesFragment());
+                    case R.id.localization:
+                        //Toast.makeText(MainActivity.this, "Localization Selected", Toast.LENGTH_LONG).show();
+                        replaceFragment(new LocalizationFragment());
                         break;
                     case R.id.logout:
                         //Toast.makeText(MainActivity.this, "LogOut Selected", Toast.LENGTH_LONG).show();
