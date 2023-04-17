@@ -9,7 +9,7 @@
 
         <item
             android:title="Emergency Contacts"
-            android:id="@+id/emergercy_contacts"
+            android:id="@+id/emergency_contacts"
             android:icon="@drawable/baseline_contacts_24"/>
     </group>
 
