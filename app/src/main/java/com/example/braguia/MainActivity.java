@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
     private TrailViewModel trailViewModel;
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,37 +84,41 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+        //left side bar
+        binding.navigationView.setNavigationItemSelectedListener(
+                menuItem -> {
+
+                    switch (menuItem.getItemId()){
+                        case R.id.profile:
+                            //Toast.makeText(MainActivity.this, "Profile Selected", Toast.LENGTH_LONG).show();
+                            replaceFragment(new ProfileFragment());
+                            break;
+                        case R.id.emergency_contacts:
+                            //Toast.makeText(MainActivity.this, "Emergency Contacts Selected", Toast.LENGTH_LONG).show();
+                            replaceFragment(new EmergencyContactsFragment());
+                            break;
+                        case R.id.definitions:
+                            //Toast.makeText(MainActivity.this, "Definitions Selected", Toast.LENGTH_LONG).show();
+                            replaceFragment(new DefinitionsFragment());
+                            break;
+                        case R.id.localization:
+                            //Toast.makeText(MainActivity.this, "Localization Selected", Toast.LENGTH_LONG).show();
+                            replaceFragment(new LocalizationFragment());
+                            break;
+                        case R.id.logout:
+                            //Toast.makeText(MainActivity.this, "LogOut Selected", Toast.LENGTH_LONG).show();
+                            replaceFragment(new LogoutFragment());
+                            break;
+                    }
+                    // Close side bar
+                    binding.drawerLayout.closeDrawer(GravityCompat.START);
+                    return true;
+                });
+        //Allows side-bar items to be selected
+        binding.navigationView.bringToFront();
 
 
-        // Left Side Navbar
-        binding.navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.profile:
-                        //Toast.makeText(MainActivity.this, "Profile Selected", Toast.LENGTH_LONG).show();
-                        replaceFragment(new ProfileFragment());
-                        break;
-                    case R.id.emergency_contacts:
-                        //Toast.makeText(MainActivity.this, "Emergency Contacts Selected", Toast.LENGTH_LONG).show();
-                        replaceFragment(new EmergencyContactsFragment());
-                        break;
-                    case R.id.definitions:
-                        //Toast.makeText(MainActivity.this, "Definitions Selected", Toast.LENGTH_LONG).show();
-                        replaceFragment(new DefinitionsFragment());
-                        break;
-                    case R.id.localization:
-                        //Toast.makeText(MainActivity.this, "Localization Selected", Toast.LENGTH_LONG).show();
-                        replaceFragment(new LocalizationFragment());
-                        break;
-                    case R.id.logout:
-                        //Toast.makeText(MainActivity.this, "LogOut Selected", Toast.LENGTH_LONG).show();
-                        replaceFragment(new LogoutFragment());
-                        break;
-                }
-                return false;
-            }
-        });
+
 
     }
 
