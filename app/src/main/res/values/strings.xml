@@ -2,4 +2,7 @@
     <string name="app_name">BraGuia</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open">Open Left-Side NavBar</string>
+    <string name="close">Close Left-Side NavBar</string>
+
 </resources>
