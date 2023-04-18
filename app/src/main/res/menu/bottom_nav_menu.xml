@@ -15,8 +15,15 @@
         android:id="@+id/discover"
         android:icon="@drawable/baseline_search_24"/>
 
+
     <item
         android:title="Create roadmap"
         android:id="@+id/add_roadmap"
+        android:icon="@drawable/baseline_add_roadmap_24"/>
+
+    <item
+        android:title=""
+        android:id="@+id/default_item"
+        android:visible="false"
         android:icon="@drawable/baseline_add_roadmap_24"/>
 </menu>

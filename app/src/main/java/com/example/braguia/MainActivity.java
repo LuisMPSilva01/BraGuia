@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -36,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         drawer_layout = findViewById(R.id.drawerLayout);
         drawerToggle = new ActionBarDrawerToggle(this, drawer_layout, R.string.open, R.string.close);
         drawer_layout.addDrawerListener(drawerToggle);
@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Bottom navbar
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-
             switch (item.getItemId()){
 
                 case R.id.home:
@@ -79,15 +78,21 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.add_roadmap:
                     replaceFragment(new AddRoadMapFragment());
                     break;
+            }
 
+            Menu sb_menu = binding.sidebar.getMenu();
+            for(int i = 0; i < sb_menu.size(); i++) {
+                MenuItem sb_item = sb_menu.getItem(i);
+                if(sb_item.isChecked()){
+                    sb_item.setChecked(false);
+                }
             }
             return true;
         });
 
         //left side bar
-        binding.navigationView.setNavigationItemSelectedListener(
+        binding.sidebar.setNavigationItemSelectedListener(
                 menuItem -> {
-
                     switch (menuItem.getItemId()){
                         case R.id.profile:
                             //Toast.makeText(MainActivity.this, "Profile Selected", Toast.LENGTH_LONG).show();
@@ -110,15 +115,19 @@ public class MainActivity extends AppCompatActivity {
                             replaceFragment(new LogoutFragment());
                             break;
                     }
+
+                    Menu bnv_menu = binding.bottomNavigationView.getMenu();
+                    for(int i = 0; i < bnv_menu.size(); i++) {
+                        MenuItem bnv_item = bnv_menu.getItem(i);
+                        bnv_item.setChecked(!bnv_item.isChecked());
+                    }
+
                     // Close side bar
                     binding.drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
                 });
         //Allows side-bar items to be selected
-        binding.navigationView.bringToFront();
-
-
-
+        binding.sidebar.bringToFront();
 
     }
 
@@ -128,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout,fragment);
         fragmentTransaction.commit();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
