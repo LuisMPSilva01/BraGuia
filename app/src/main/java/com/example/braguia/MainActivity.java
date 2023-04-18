@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.braguia.databinding.ActivityMainBinding;
 import com.example.braguia.objects.Trail;
@@ -26,6 +27,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     private ActivityMainBinding binding;
     private DrawerLayout drawer_layout;
     private ActionBarDrawerToggle drawerToggle;
@@ -37,6 +39,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+
         drawer_layout = findViewById(R.id.drawerLayout);
         drawerToggle = new ActionBarDrawerToggle(this, drawer_layout, R.string.open, R.string.close);
         drawer_layout.addDrawerListener(drawerToggle);

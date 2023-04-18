@@ -28,6 +28,24 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/recyclerview_item" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:src="@drawable/logo"
+                android:visibility="visible" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+
     </FrameLayout>
 
     <com.google.android.material.navigation.NavigationView
