@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         //    throw new RuntimeException(e);
         //}
 
-        //replaceFragment(new HomeFragment());
+        replaceFragment(new HomeFragment());
 
         //Bottom navbar
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
