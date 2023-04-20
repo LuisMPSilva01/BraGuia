@@ -1,4 +1,4 @@
-package com.example.braguia.objects;
+package com.example.braguia.model;
 
 public class RelPin {
     private int id;

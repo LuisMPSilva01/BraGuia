@@ -1,4 +1,4 @@
-package com.example.braguia.objects;
+package com.example.braguia.model;
 
 public class Media {
     private int id;

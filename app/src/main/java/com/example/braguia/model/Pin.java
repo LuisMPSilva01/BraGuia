@@ -1,4 +1,4 @@
-package com.example.braguia.objects;
+package com.example.braguia.model;
 
 import java.util.ArrayList;
 import java.util.List;

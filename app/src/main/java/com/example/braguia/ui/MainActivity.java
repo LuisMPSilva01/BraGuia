@@ -1,6 +1,5 @@
-package com.example.braguia;
+package com.example.braguia.ui;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
@@ -8,21 +7,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.braguia.R;
+import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.databinding.ActivityMainBinding;
-import com.example.braguia.objects.Trail;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 
-import java.io.IOException;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private DrawerLayout drawer_layout;
     private ActionBarDrawerToggle drawerToggle;
-    private TrailViewModel trailViewModel;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -42,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
 
         drawer_layout = findViewById(R.id.drawerLayout);
@@ -51,22 +47,7 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        // Get a new or existing ViewModel from the ViewModelProvider.
-        //this.trailViewModel = new ViewModelProvider(this).get(TrailViewModel.class);
-
-        // Add an observer on the LiveData returned by getAlphabetizedWords.
-        // The onChanged() method fires when the observed data changes and the activity is
-        // in the foreground.
-        //try {
-        //    // Update the cached copy of the words in the adapter.
-        //    trailViewModel.getAllTrails().observe(this, adapter::submitList);
-        //} catch (IOException e) {
-        //    throw new RuntimeException(e);
-        //}
-
         replaceFragment(new HomeFragment());
-
         //Bottom navbar
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
@@ -136,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
                 });
         //Allows side-bar items to be selected
         binding.sidebar.bringToFront();
-
     }
 
     private void replaceFragment(Fragment fragment){
@@ -160,6 +140,10 @@ public class MainActivity extends AppCompatActivity {
             drawer_layout.closeDrawer(GravityCompat.START);
         else
             super.onBackPressed();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
 }
