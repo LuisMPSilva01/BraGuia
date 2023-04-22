@@ -1,6 +1,4 @@
-package com.example.braguia.model;
-
-import androidx.lifecycle.LiveData;
+package com.example.braguia.model.trails;
 
 import java.io.IOException;
 import java.util.List;

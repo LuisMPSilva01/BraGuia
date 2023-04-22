@@ -1,4 +1,4 @@
-package com.example.braguia.model;
+package com.example.braguia.model.trails;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -6,11 +6,8 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.example.braguia.model.Edge;
-import com.example.braguia.model.RelTrail;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "trail",indices = @Index(value = {"id"},unique = true))

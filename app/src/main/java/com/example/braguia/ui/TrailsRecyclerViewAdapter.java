@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
-import com.example.braguia.model.Trail;
+import com.example.braguia.model.trails.Trail;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 

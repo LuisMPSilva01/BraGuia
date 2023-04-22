@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.braguia.model.Trail;
+import com.example.braguia.model.trails.Trail;
 import com.example.braguia.repositories.TrailRepository;
 
 import java.io.IOException;

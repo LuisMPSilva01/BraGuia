@@ -1,4 +1,4 @@
-package com.example.braguia.model;
+package com.example.braguia.model.trails;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

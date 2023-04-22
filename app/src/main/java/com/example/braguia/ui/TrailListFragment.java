@@ -1,6 +1,5 @@
 package com.example.braguia.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
-import com.example.braguia.model.Trail;
+import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.io.IOException;

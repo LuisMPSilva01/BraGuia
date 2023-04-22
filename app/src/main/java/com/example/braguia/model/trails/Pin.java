@@ -1,4 +1,4 @@
-package com.example.braguia.model;
+package com.example.braguia.model.trails;
 
 import java.util.ArrayList;
 import java.util.List;

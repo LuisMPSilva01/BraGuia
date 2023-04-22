@@ -9,13 +9,18 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Trail.class, User.class}, version = 961)
+import com.example.braguia.model.app.AppInfo;
+import com.example.braguia.model.app.AppInfoDAO;
+import com.example.braguia.model.trails.Trail;
+import com.example.braguia.model.trails.TrailDAO;
+
+@Database(entities = {Trail.class, AppInfo.class}, version = 961)
 public abstract class GuideDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "BraGuide";
 
     public abstract TrailDAO trailDAO();
-
+    public abstract AppInfoDAO appInfoDAO();
     public static volatile GuideDatabase INSTANCE = null;
 
     public static GuideDatabase getInstance(Context context) {
@@ -42,15 +47,18 @@ public abstract class GuideDatabase extends RoomDatabase {
 
     static  class  PopulateDbAsyn extends AsyncTask<Void,Void,Void> {
 
-        private TrailDAO traildao;
+        private final TrailDAO traildao;
+        private final AppInfoDAO appInfoDAO;
 
         public PopulateDbAsyn(GuideDatabase catDatabase) {
             traildao = catDatabase.trailDAO();
+            appInfoDAO = catDatabase.appInfoDAO();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             traildao.deleteAll();
+            appInfoDAO.deleteAll();
             return null;
         }
     }

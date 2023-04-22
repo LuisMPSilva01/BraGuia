@@ -7,34 +7,33 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
+import com.example.braguia.model.app.AppInfo;
+import com.example.braguia.model.app.AppInfoAPI;
+import com.example.braguia.model.app.AppInfoDAO;
 import com.example.braguia.model.GuideDatabase;
-import com.example.braguia.model.trails.Trail;
-import com.example.braguia.model.trails.TrailAPI;
-import com.example.braguia.model.trails.TrailDAO;
 
 import java.io.IOException;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class TrailRepository {
+public class AppInfoRepository {
 
-    public TrailDAO trailDAO;
-    public MediatorLiveData<List<Trail>> allTrails;
+    public AppInfoDAO appInfoDAO;
+    public MediatorLiveData<AppInfo> appInfo;
     private GuideDatabase database;
 
-    public TrailRepository(Application application){
+    public AppInfoRepository(Application application){
         database = GuideDatabase.getInstance(application);
-        trailDAO = database.trailDAO();
-        allTrails = new MediatorLiveData<>();
-        allTrails.addSource(
-                trailDAO.getTrails(), localTrails -> {
+        appInfoDAO = database.appInfoDAO();
+        appInfo = new MediatorLiveData<>();
+        appInfo.addSource(
+                appInfoDAO.getAppInfo(), localAppInfo -> {
                     // TODO: ADD cache validation logic
-                    if (localTrails != null && localTrails.size() > 0) {
-                        allTrails.setValue(localTrails);
+                    if (localAppInfo != null) {
+                        appInfo.setValue(localAppInfo);
                     } else {
                         try {
                             makeRequest();
@@ -46,8 +45,8 @@ public class TrailRepository {
         );
     }
 
-    public void insert(List<Trail> trails){
-        new InsertAsyncTask(trailDAO).execute(trails);
+    public void insert(AppInfo appInfo){
+        new InsertAsyncTask(appInfoDAO).execute(appInfo);
     }
 
     private void makeRequest() throws IOException {
@@ -55,12 +54,12 @@ public class TrailRepository {
                 .baseUrl("https://c5a2-193-137-92-29.eu.ngrok.io/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        TrailAPI api = retrofit.create(TrailAPI.class);
-        Call<List<Trail>> call = api.getTrails();
-        call.enqueue(new retrofit2.Callback<List<Trail>>() {
+        AppInfoAPI api = retrofit.create(AppInfoAPI.class);
+        Call<AppInfo> call = api.getAppInfo();
+        call.enqueue(new retrofit2.Callback<AppInfo>() {
             @Override
 
-            public void onResponse(Call<List<Trail>> call, Response<List<Trail>> response) {
+            public void onResponse(Call<AppInfo> call, Response<AppInfo> response) {
                 if(response.isSuccessful()) {
                     insert(response.body());
                 }
@@ -70,26 +69,26 @@ public class TrailRepository {
             }
 
             @Override
-            public void onFailure(Call<List<Trail>> call, Throwable t) {
+            public void onFailure(Call<AppInfo> call, Throwable t) {
                 Log.e("main", "onFailure: " + t.getMessage());
             }
         });
     }
 
-    public LiveData<List<Trail>> getAllTrails(){
-        return allTrails;
+    public LiveData<AppInfo> getAppInfo(){
+        return appInfo;
     }
 
-    private static class InsertAsyncTask extends AsyncTask<List<Trail>,Void,Void> {
-        private TrailDAO trailDAO;
+    private static class InsertAsyncTask extends AsyncTask<AppInfo,Void,Void> {
+        private AppInfoDAO appInfoDAO;
 
-        public InsertAsyncTask(TrailDAO catDao) {
-            this.trailDAO=catDao;
+        public InsertAsyncTask(AppInfoDAO catDao) {
+            this.appInfoDAO=catDao;
         }
 
         @Override
-        protected Void doInBackground(List<Trail>... lists) {
-            trailDAO.insert(lists[0]);
+        protected Void doInBackground(AppInfo... appInfos) { //TODO isto não está certo acho
+            appInfoDAO.insert(appInfos[0]);
             return null;
         }
     }

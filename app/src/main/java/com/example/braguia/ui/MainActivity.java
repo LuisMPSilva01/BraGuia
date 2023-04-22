@@ -14,11 +14,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
+import com.example.braguia.model.app.AppInfo;
+import com.example.braguia.viewmodel.AppInfoViewModel;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.databinding.ActivityMainBinding;
 
+import java.io.IOException;
 import java.util.Objects;
 
 
@@ -39,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
+
+        AppInfoViewModel appInfoViewModel=  new ViewModelProvider(this).get(AppInfoViewModel.class);
+        AppInfo appInfo;
+
 
 
         drawer_layout = findViewById(R.id.drawerLayout);

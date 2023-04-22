@@ -1,4 +1,4 @@
-package com.example.braguia.model;
+package com.example.braguia.model.trails;
 
 public class RelTrail {
     private int id;
