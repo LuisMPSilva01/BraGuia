@@ -19,7 +19,6 @@
 
         <!-- add content-->
         <!--<include layout="@layout/content_trails" /> -->
-        <include layout="@layout/fragment_start_page" />
 
 
         <androidx.appcompat.widget.Toolbar

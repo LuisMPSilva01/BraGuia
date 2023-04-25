@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.HomeFragment">
 
+    <include layout="@layout/fragment_start_page" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
