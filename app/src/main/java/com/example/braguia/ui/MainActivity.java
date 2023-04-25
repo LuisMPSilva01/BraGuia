@@ -45,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
-        AppInfoViewModel appInfoViewModel=  new ViewModelProvider(this).get(AppInfoViewModel.class);
-        AppInfo appInfo;
-
 
 
         drawer_layout = findViewById(R.id.drawerLayout);

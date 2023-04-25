@@ -28,8 +28,8 @@ public class Partner {
     @SerializedName("partner_name")
     private String partnerName;
 
-    @ColumnInfo(name = "partner_name")
-    @SerializedName("partner_name")
+    @ColumnInfo(name = "partner_phone")
+    @SerializedName("partner_phone")
     private String partnerPhone;
     @ColumnInfo(name = "partner_url")
     @SerializedName("partner_url")

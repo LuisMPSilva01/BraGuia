@@ -18,8 +18,8 @@ import java.util.List;
 public class AppInfo {
     @PrimaryKey()
     @NonNull
-    @SerializedName("app_name")
     @ColumnInfo(name = "app_name")
+    @SerializedName("app_name")
     private String appName;
     @SerializedName("socials")
     private List<Social> socials;
@@ -28,11 +28,11 @@ public class AppInfo {
     @SerializedName("partners")
     private List<Partner> partners;
 
-    @SerializedName("app_desc")
     @ColumnInfo(name = "app_desc")
+    @SerializedName("app_desc")
     private String appDesc;
-    @SerializedName("app_landing_page_text")
     @ColumnInfo(name = "app_landing_page_text")
+    @SerializedName("app_landing_page_text")
     private String appLandingPageText;
 
 

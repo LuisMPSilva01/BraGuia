@@ -13,6 +13,7 @@ import com.example.braguia.model.app.AppInfoDAO;
 import com.example.braguia.model.GuideDatabase;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -55,13 +56,12 @@ public class AppInfoRepository {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         AppInfoAPI api = retrofit.create(AppInfoAPI.class);
-        Call<AppInfo> call = api.getAppInfo();
-        call.enqueue(new retrofit2.Callback<AppInfo>() {
+        Call<List<AppInfo>> call = api.getAppInfo();
+        call.enqueue(new retrofit2.Callback<List<AppInfo>>() {
             @Override
-
-            public void onResponse(Call<AppInfo> call, Response<AppInfo> response) {
+            public void onResponse(Call<List<AppInfo>> call, Response<List<AppInfo>> response) {
                 if(response.isSuccessful()) {
-                    insert(response.body());
+                    insert(response.body().get(0));
                 }
                 else{
                     Log.e("main", "onFailure: "+response.errorBody());
@@ -69,8 +69,9 @@ public class AppInfoRepository {
             }
 
             @Override
-            public void onFailure(Call<AppInfo> call, Throwable t) {
+            public void onFailure(Call<List<AppInfo>> call, Throwable t) {
                 Log.e("main", "onFailure: " + t.getMessage());
+                Log.e("main", "message: "+ t.getCause());
             }
         });
     }
