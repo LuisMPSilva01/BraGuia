@@ -4,49 +4,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.MainActivity">
+    android:layout_height="match_parent">
 
-    <!-- Side navigation drawer -->
-    <FrameLayout
-        android:id="@+id/frame_layout"
+    <!-- Conteúdo principal da tela -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <!-- add content-->
-        <!--<include layout="@layout/content_trails" /> -->
-
-
+        <!-- Toolbar com logotipo à esquerda -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary">
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_marginEnd="50dp"
-                android:src="@drawable/logo"
-                android:visibility="visible"
-                android:importantForAccessibility="no" />
-
+                android:adjustViewBounds="true"
+                android:cropToPadding="false"
+                android:src="@drawable/logo" />
 
         </androidx.appcompat.widget.Toolbar>
-    </FrameLayout>
 
+
+
+        <FrameLayout
+            android:id="@+id/frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- add content-->
+            <!--<include layout="@layout/content_trails" /> -->
+
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <!-- NavigationView com Sidebar -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/sidebar"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/header_sidebar"
+        app:itemIconTint="@color/white"
         app:menu="@menu/side_nav_menu" />
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
