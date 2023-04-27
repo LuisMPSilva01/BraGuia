@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.CookieManager;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +13,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
 import com.example.braguia.databinding.ActivityMainBinding;
+import com.example.braguia.viewmodel.AppInfoViewModel;
+import com.example.braguia.viewmodel.TrailViewModel;
+import com.example.braguia.viewmodel.UserViewModel;
 
 import java.util.Objects;
 

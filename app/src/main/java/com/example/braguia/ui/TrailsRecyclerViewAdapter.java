@@ -31,9 +31,9 @@ public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getId());
+        holder.mIdView.setText(String.valueOf(mValues.get(position).getId()));
         Picasso.get().load(mValues.get(position)
-                        .getUrl().replace("http", "https"))
+                .getTrail_img().replace("http", "https"))
                 .into(holder.imageView);
     }
 

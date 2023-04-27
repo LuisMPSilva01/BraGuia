@@ -28,9 +28,6 @@ public class TrailListFragment extends Fragment {
 
     private TrailViewModel trailsViewModel;
 
-    // private List<Trail> trails = new ArrayList<>();
-
-
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -61,7 +58,7 @@ public class TrailListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
-        trailsViewModel = new ViewModelProvider(this).get(TrailViewModel.class);
+        trailsViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
         try {
             trailsViewModel.getAllTrails().observe(getViewLifecycleOwner(), x -> {
 

@@ -36,7 +36,7 @@ public class AppInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_descricao, container, false);
 
 
-        appInfoViewModel = new ViewModelProvider(this).get(AppInfoViewModel.class);
+        appInfoViewModel = new ViewModelProvider(requireActivity()).get(AppInfoViewModel.class);
         try {
             Context context = view.getContext();
             appInfoViewModel.getAppInfo().observe(getViewLifecycleOwner(), x -> {

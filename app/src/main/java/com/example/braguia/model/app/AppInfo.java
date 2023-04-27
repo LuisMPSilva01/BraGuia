@@ -7,14 +7,12 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
-import com.example.braguia.model.app.converters.ContactListConverter;
-import com.example.braguia.model.app.converters.PartnerListConverter;
-import com.example.braguia.model.app.converters.SocialListConverter;
+import com.example.braguia.model.app.converters.AppInfoTypeConverter;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 @Entity(tableName = "app_info", indices = @Index(value = {"app_name"}, unique = true))
-@TypeConverters({SocialListConverter.class, ContactListConverter.class, PartnerListConverter.class})
+@TypeConverters({AppInfoTypeConverter.class})
 public class AppInfo {
     @PrimaryKey()
     @NonNull

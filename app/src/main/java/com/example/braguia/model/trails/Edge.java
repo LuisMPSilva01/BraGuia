@@ -1,49 +1,50 @@
 package com.example.braguia.model.trails;
 
-public class Edge {
-    private int id;
-    private Pin edgeStart;
-    private Pin edgeEnd;
-    private String edgeTransport;
-    private int edgeDuration;
-    private String edgeDesc;
-    private int edgeTrail;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 
-    public Edge(int id, Pin edgeStart, Pin edgeEnd, String edgeTransport, int edgeDuration, String edgeDesc, int edgeTrail) {
-        this.id = id;
-        this.edgeStart = edgeStart;
-        this.edgeEnd = edgeEnd;
-        this.edgeTransport = edgeTransport;
-        this.edgeDuration = edgeDuration;
-        this.edgeDesc = edgeDesc;
-        this.edgeTrail = edgeTrail;
-    }
+import com.example.braguia.model.app.AppInfo;
+import com.google.gson.annotations.SerializedName;
 
-    public int getId() {
-        return id;
-    }
+@Entity(
+        tableName = "edge",
+        foreignKeys = @ForeignKey(
+                entity = Trail.class,
+                parentColumns = "id",
+                childColumns = "edges",
+                onDelete = ForeignKey.CASCADE
+        ),
+        indices = {
+                @Index(value = {"id"}, unique = true)
+        })
+public class Edge{
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    @SerializedName("id")
+    int id;
 
-    public Pin getEdgeStart() {
-        return edgeStart;
-    }
+    @SerializedName("edge_start")
+    EdgeTip edge_start;
 
-    public Pin getEdgeEnd() {
-        return edgeEnd;
-    }
+    @SerializedName("edge_end")
+    EdgeTip edge_end;
 
-    public String getEdgeTransport() {
-        return edgeTransport;
-    }
+    @ColumnInfo(name = "edge_transport")
+    @SerializedName("edge_transport")
+    String edge_transport;
 
-    public int getEdgeDuration() {
-        return edgeDuration;
-    }
+    @ColumnInfo(name = "edge_duration")
+    @SerializedName("edge_duration")
+    int edge_duration;
 
-    public String getEdgeDesc() {
-        return edgeDesc;
-    }
+    @ColumnInfo(name = "edge_desc")
+    @SerializedName("edge_desc")
+    String edge_desc;
 
-    public int getEdgeTrail() {
-        return edgeTrail;
-    }
+    @ColumnInfo(name = "edge_trail")
+    @SerializedName("edge_trail")
+    int edge_trail;
 }

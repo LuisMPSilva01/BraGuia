@@ -9,31 +9,31 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(
-        tableName = "relPin",
+        tableName = "medium",
         foreignKeys = @ForeignKey(
                 entity = EdgeTip.class,
                 parentColumns = "id",
-                childColumns = "rel_pin",
+                childColumns = "media",
                 onDelete = ForeignKey.CASCADE
         ),
         indices = {
                 @Index(value = {"id"}, unique = true)
         })
-public class RelPin{
+public class Medium{
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")
     int id;
 
-    @ColumnInfo(name = "value")
-    @SerializedName("value")
-    String value;
+    @ColumnInfo(name = "media_file")
+    @SerializedName("media_file")
+    String media_file;
 
-    @ColumnInfo(name = "attrib")
-    @SerializedName("attrib")
-    String attrib;
+    @ColumnInfo(name = "media_type")
+    @SerializedName("media_type")
+    String media_type;
 
-    @ColumnInfo(name = "pin")
-    @SerializedName("pin")
-    int pin;
+    @ColumnInfo(name = "media_pin")
+    @SerializedName("media_pin")
+    int media_pin;
 }
