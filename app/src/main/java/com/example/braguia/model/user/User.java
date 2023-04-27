@@ -1,22 +1,28 @@
-package com.example.braguia.model;
+package com.example.braguia.model.user;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "user")
+import com.google.gson.JsonElement;
+
+@Entity(tableName = "user",indices = @Index(value = {"username"},unique = true))
 public class User {
 
     @PrimaryKey
     @NonNull
-    //@SerializedName("id")
     @ColumnInfo(name = "username")
     String username;
 
-    //@SerializedName("image_url")
     @ColumnInfo(name = "user_type")
     String user_type;
+
+    public User(String username, String user_type) {
+        this.username=username;
+        this.user_type=user_type;
+    }
 
     public void setUsername(@NonNull String username) {
         this.username = username;

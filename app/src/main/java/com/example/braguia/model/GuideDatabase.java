@@ -13,13 +13,16 @@ import com.example.braguia.model.app.AppInfo;
 import com.example.braguia.model.app.AppInfoDAO;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.trails.TrailDAO;
+import com.example.braguia.model.user.User;
+import com.example.braguia.model.user.UserDAO;
 
-@Database(entities = {Trail.class, AppInfo.class}, version = 962)
+@Database(entities = {Trail.class, AppInfo.class, User.class}, version = 964)
 public abstract class GuideDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "BraGuide";
 
     public abstract TrailDAO trailDAO();
+    public abstract UserDAO userDAO();
     public abstract AppInfoDAO appInfoDAO();
     public static volatile GuideDatabase INSTANCE = null;
 
@@ -48,10 +51,13 @@ public abstract class GuideDatabase extends RoomDatabase {
     static  class  PopulateDbAsyn extends AsyncTask<Void,Void,Void> {
 
         private final TrailDAO traildao;
+        private final UserDAO userDAO;
         private final AppInfoDAO appInfoDAO;
+
 
         public PopulateDbAsyn(GuideDatabase catDatabase) {
             traildao = catDatabase.trailDAO();
+            userDAO = catDatabase.userDAO();
             appInfoDAO = catDatabase.appInfoDAO();
         }
 
@@ -59,6 +65,7 @@ public abstract class GuideDatabase extends RoomDatabase {
         protected Void doInBackground(Void... voids) {
             traildao.deleteAll();
             appInfoDAO.deleteAll();
+            userDAO.deleteAll();
             return null;
         }
     }
