@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         Info = findViewById(R.id.tvInfo);
         Login = findViewById(R.id.btnLogin);
 
-        Info.setText("No of attempts remaining: 5");
+        Info.setText("REMOVE ME");
 
         Login.setOnClickListener(view -> {
             try {
@@ -74,10 +74,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void validate(String userName, String userPassword) throws IOException {
-
-        userViewModel.login(userName,userPassword, new UserViewModel.LoginCallback() {
+        getApplicationContext(); //Context is required to right cookies in SharedPreferences
+        userViewModel.login(userName,userPassword, getApplicationContext(),new UserViewModel.LoginCallback() {
             @Override
-            public void onLoginSuccess(User user) {
+            public void onLoginSuccess() {
                 changeToMainActivity();
             }
 

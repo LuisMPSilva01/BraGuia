@@ -1,6 +1,7 @@
 package com.example.braguia.viewmodel;
 
 import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -28,15 +29,16 @@ public class UserViewModel extends AndroidViewModel {
         user = repository.getUser();
     }
 
-    public void login(String username, String password, final LoginCallback callback) throws IOException {
+    public void login(String username, String password, Context context, final LoginCallback callback) throws IOException {
         JsonObject body = new JsonObject();
         body.addProperty("username", username);
         body.addProperty("email", "");
         body.addProperty("password", password);
-        repository.makeLoginRequest(body, new UserRepository.LoginCallback() {
+
+        repository.makeLoginRequest(body,context, new UserRepository.LoginCallback() {
             @Override
-            public void onLoginSuccess(User user) {
-                callback.onLoginSuccess(user);
+            public void onLoginSuccess() {
+                callback.onLoginSuccess();
             }
 
             @Override
@@ -47,7 +49,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
     public interface LoginCallback {
-        void onLoginSuccess(User user);
+        void onLoginSuccess();
         void onLoginFailure();
     }
 
