@@ -30,12 +30,7 @@ public class UserViewModel extends AndroidViewModel {
     }
 
     public void login(String username, String password, Context context, final LoginCallback callback) throws IOException {
-        JsonObject body = new JsonObject();
-        body.addProperty("username", username);
-        body.addProperty("email", "");
-        body.addProperty("password", password);
-
-        repository.makeLoginRequest(body,context, new UserRepository.LoginCallback() {
+        repository.makeLoginRequest(username,password,context, new UserRepository.LoginCallback() {
             @Override
             public void onLoginSuccess() {
                 callback.onLoginSuccess();
@@ -52,6 +47,27 @@ public class UserViewModel extends AndroidViewModel {
         void onLoginSuccess();
         void onLoginFailure();
     }
+
+    public void logOut(Context context , LogOutCallback callback) throws IOException {
+        repository.makeLogOutRequest(context, new UserRepository.LogoutCallback() {
+            @Override
+            public void onLogoutSuccess() {
+                callback.onLogOutSuccess();
+            }
+
+            @Override
+            public void onLogoutFailure() {
+                callback.onLogOutFailure();
+            }
+        });
+    }
+
+    public interface LogOutCallback {
+        void onLogOutSuccess();
+        void onLogOutFailure();
+    }
+
+
 
     public LiveData<User> getUser() throws IOException {
         return user;

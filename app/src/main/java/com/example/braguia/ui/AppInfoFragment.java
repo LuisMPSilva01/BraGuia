@@ -49,7 +49,9 @@ public class AppInfoFragment extends Fragment {
     }
 
     private void loadView(View view, AppInfo appInfo){
-        TextView textview = (TextView) view.findViewById(R.id.textView2);
-        textview.setText(appInfo.getAppDesc());
+        TextView title = view.findViewById(R.id.textView2);
+        title.setText(appInfo.getAppDesc());
+        TextView intro = view.findViewById(R.id.appIntro);
+        intro.setText(appInfo.getAppLandingPageText());
     }
 }

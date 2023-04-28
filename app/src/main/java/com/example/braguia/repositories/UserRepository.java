@@ -17,7 +17,11 @@ import com.example.braguia.model.user.UserDAO;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import okhttp3.Cookie;
 import okhttp3.Headers;
@@ -31,6 +35,8 @@ public class UserRepository {
     public UserDAO userDAO;
     public MediatorLiveData<User> user;
     private GuideDatabase database;
+    private Retrofit retrofit;
+    private UserAPI api;
 
     public UserRepository(Application application){
         database = GuideDatabase.getInstance(application);
@@ -41,32 +47,36 @@ public class UserRepository {
                     // TODO: ADD cache validation logic
                     if (localUser != null) {
                         user.setValue(localUser);
-                    }
+                    } else user.setValue(new User("","loggedOut"));
                 }
         );
+        retrofit=new Retrofit.Builder()
+                .baseUrl("https://c5a2-193-137-92-29.eu.ngrok.io/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        api = retrofit.create(UserAPI.class);
     }
 
     public void insert(User user){
         new UserRepository.InsertAsyncTask(userDAO).execute(user);
     }
 
-    public void makeLoginRequest(@Body JsonObject login,Context context,final LoginCallback callback) throws IOException {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl("https://c5a2-193-137-92-29.eu.ngrok.io/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        UserAPI api = retrofit.create(UserAPI.class);
-        Call<User> call = api.login(login);
+    public void makeLoginRequest(String username,String password,Context context,final LoginCallback callback) throws IOException {
+        JsonObject body = new JsonObject();
+        body.addProperty("username", username);
+        body.addProperty("email", "");
+        body.addProperty("password", password);
+
+        Call<User> call = api.login(body);
 
         call.enqueue(new retrofit2.Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
-                    User user =  new User(login.get("username").toString(),"premium");
+                    User user =  new User(username,"premium");
                     // Store the cookies
                     Headers headers = response.headers();
-                    List<String> cookies = headers.values("Set-Cookie");
-
+                    List<String> cookies = headers.values("Set-Cookie").stream().map(e->e.split(";")[0]).collect(Collectors.toList());
                     if (!cookies.isEmpty()) { //Insert cookie into SharedPreferences
                         String cookieString = TextUtils.join(";", cookies);
                         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
@@ -93,6 +103,38 @@ public class UserRepository {
     public interface LoginCallback {
         void onLoginSuccess();
         void onLoginFailure();
+    }
+
+    public void makeLogOutRequest(Context context,final LogoutCallback callback) throws IOException {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
+        String storedCookieString = sharedPreferences.getString("cookies", "");
+        List<String> cookieList = Arrays.stream(storedCookieString.split(";")).collect(Collectors.toList());
+        Call<User> call = api.logout(storedCookieString);
+        call.enqueue(new retrofit2.Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if(response.isSuccessful()) {
+                    insert(new User("","loggedOut"));
+                    Log.e("main", "logged out successfully");
+                    callback.onLogoutSuccess();
+                }
+                else{
+                    Log.e("main", "onFailure: "+response.errorBody());
+                    callback.onLogoutFailure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e("main", "onFailure: " + t.getMessage());
+                callback.onLogoutFailure();
+            }
+        });
+    }
+
+    public interface LogoutCallback {
+        void onLogoutSuccess();
+        void onLogoutFailure();
     }
 
     public LiveData<User> getUser(){

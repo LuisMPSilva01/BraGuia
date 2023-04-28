@@ -1,6 +1,7 @@
 package com.example.braguia.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import com.example.braguia.viewmodel.AppInfoViewModel;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
 
+import java.io.IOException;
 import java.util.Objects;
 
 
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private DrawerLayout drawer_layout;
     private ActionBarDrawerToggle drawerToggle;
+    private UserViewModel userViewModel;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -37,6 +40,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        try {
+            userViewModel.getUser().observe(this, user -> {
+                if (user != null && Objects.equals(user.getUser_type(), "loggedOut")) {
+                    changeToLoginActivity();
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,6 +117,18 @@ public class MainActivity extends AppCompatActivity {
                             break;
                         case R.id.logout:
                             //Toast.makeText(MainActivity.this, "LogOut Selected", Toast.LENGTH_LONG).show();
+                            try {
+                                userViewModel.logOut(getApplicationContext(), new UserViewModel.LogOutCallback() {
+                                    @Override
+                                    public void onLogOutSuccess() {
+                                        changeToLoginActivity();
+                                    }
+                                    @Override
+                                    public void onLogOutFailure() {}
+                                });
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             replaceFragment(new LogoutFragment());
                             break;
                     }
@@ -118,6 +145,11 @@ public class MainActivity extends AppCompatActivity {
                 });
         //Allows side-bar items to be selected
         binding.sidebar.bringToFront();
+    }
+
+    private void changeToLoginActivity(){
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 
     private void replaceFragment(Fragment fragment){

@@ -68,7 +68,7 @@ dependencies {
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
 
     // Testing
-    //androidTestImplementation "junit:junit:$rootProject.junitVersion"
-    //androidTestImplementation "androidx.arch.core:core-testing:2.2.0"
-    //androidTestImplementation 'org.mockito:mockito-core:5.3.1'
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
+    testImplementation 'org.mockito:mockito-core:5.3.1'
 }
