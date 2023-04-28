@@ -3,6 +3,7 @@ package com.example.braguia.ui;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         try {
             userViewModel.getUser().observe(this, user -> {
+                Log.e("main","user type="+user.getUser_type());
                 if (user != null && Objects.equals(user.getUser_type(), "loggedOut")) {
                     changeToLoginActivity();
                 }
@@ -116,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
                             replaceFragment(new LocalizationFragment());
                             break;
                         case R.id.logout:
-                            //Toast.makeText(MainActivity.this, "LogOut Selected", Toast.LENGTH_LONG).show();
                             try {
                                 userViewModel.logOut(getApplicationContext(), new UserViewModel.LogOutCallback() {
                                     @Override
@@ -129,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-                            replaceFragment(new LogoutFragment());
                             break;
                     }
 

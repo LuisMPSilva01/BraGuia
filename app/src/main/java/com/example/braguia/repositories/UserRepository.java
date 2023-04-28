@@ -149,7 +149,8 @@ public class UserRepository {
         }
 
         @Override
-        protected Void doInBackground(User... users) { //TODO isto não está certo acho
+        protected Void doInBackground(User... users) {
+            userDAO.deleteAll();
             userDAO.insert(users[0]);
             return null;
         }
