@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -81,9 +83,24 @@ public class TrailListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new TrailsRecyclerViewAdapter(trails));
+
+            TrailsRecyclerViewAdapter adapter = new TrailsRecyclerViewAdapter(trails);
+            recyclerView.setAdapter(adapter);
+            // Set the item click listener
+            adapter.setOnItemClickListener(trail -> {
+                // Handle the item click event
+                replaceFragment(trail);
+            });
         }
     }
+
+    private void replaceFragment(Trail trail) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
+        // Create a new instance of the destination fragment
+        TrailDescriptionFragment fragment = TrailDescriptionFragment.newInstance(trail.getId());
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity.replaceFragment(fragment);
+    }
+
 
     @Override
     public void onPause() {

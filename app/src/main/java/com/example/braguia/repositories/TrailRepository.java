@@ -80,6 +80,10 @@ public class TrailRepository {
         return allTrails;
     }
 
+    public LiveData<Trail> getTrailById(int id){
+        return trailDAO.getTrailById(id);
+    }
+
     private static class InsertAsyncTask extends AsyncTask<List<Trail>,Void,Void> {
         private TrailDAO trailDAO;
 

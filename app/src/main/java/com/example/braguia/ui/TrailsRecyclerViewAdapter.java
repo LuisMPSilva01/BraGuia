@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,9 +18,18 @@ import java.util.List;
 public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Trail> mValues;
+    private OnItemClickListener listener;
 
     public TrailsRecyclerViewAdapter(List<Trail> items) {
         mValues = items;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Trail trail);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -33,12 +43,19 @@ public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.trailName.setText(mValues.get(position).getTrail_name());
-        String durationText = String.valueOf(mValues.get(position).getTrail_duration()) + " minutos";
+        String durationText = mValues.get(position).getTrail_duration() + " minutos";
         holder.duration.setText(durationText);
         holder.difficulty.setText(mValues.get(position).getTrail_difficulty());
         Picasso.get().load(mValues.get(position)
                 .getTrail_img().replace("http", "https"))
                 .into(holder.imageView);
+
+        // Set click listener for each item
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(mValues.get(position));
+            }
+        });
     }
 
     @Override

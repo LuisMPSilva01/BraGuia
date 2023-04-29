@@ -16,6 +16,9 @@ public interface TrailDAO {
     @Query("SELECT DISTINCT * FROM trail")
     LiveData<List<Trail>> getTrails();
 
+    @Query("SELECT * FROM trail WHERE id = :id")
+    LiveData<Trail> getTrailById(int id);
+
     @Query("DELETE FROM trail")
     void deleteAll();
 }
