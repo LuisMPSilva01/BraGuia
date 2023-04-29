@@ -19,8 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
 import com.example.braguia.databinding.ActivityMainBinding;
-import com.example.braguia.viewmodel.AppInfoViewModel;
-import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
 
 import java.io.IOException;
@@ -155,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
     private void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout,fragment);
+        fragmentTransaction.replace(R.id.conteudo,fragment);
         fragmentTransaction.commit();
     }
 

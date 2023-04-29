@@ -2,6 +2,7 @@ package com.example.braguia.ui;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class TrailListFragment extends Fragment {
         trailsViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
         try {
             trailsViewModel.getAllTrails().observe(getViewLifecycleOwner(), x -> {
-
+                Log.e("Trailist","trails size:" + x.size());
                 loadRecyclerView(view, x);
 
             });
