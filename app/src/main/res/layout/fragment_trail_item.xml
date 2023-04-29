@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -8,10 +9,9 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
-        xmlns:card_view="https://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="grey"
+        card_view:cardBackgroundColor="@color/white"
         card_view:cardCornerRadius="15dp"
         android:layout_margin="5dp"
         card_view:cardElevation="5dp"
@@ -21,33 +21,56 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             >
+
             <ImageView
                 android:id="@+id/cardimage"
-                android:tag="image_tag"
-                android:layout_width="50dp"
-                android:layout_height="70dp"
+                android:layout_width="188dp"
+                android:layout_height="143dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:maxWidth="40dp"
                 android:maxHeight="40dp"
+                android:tag="image_tag"
                 android:contentDescription="TODO" />
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="222dp"
+                android:layout_height="154dp"
                 android:layout_marginTop="12dp"
                 android:layout_weight="2"
-                android:orientation="vertical"
-                >
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/item_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
+                    android:id="@+id/trailTitle"
+                    android:layout_width="71dp"
+                    android:gravity="center"
+                    android:layout_height="135dp"
+                    android:layout_margin="@dimen/smaller_margin"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
+                <LinearLayout
+                    android:layout_width="57dp"
+                    android:layout_height="136dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/trailTime"
+                        android:layout_width="78dp"
+                        android:gravity="center"
+                        android:layout_height="86dp"
+                        android:layout_margin="@dimen/smaller_margin"
+                        android:textAppearance="?attr/textAppearanceListItem" />
+
+                    <TextView
+                        android:id="@+id/trailDifficulty"
+                        android:layout_width="78dp"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/smaller_margin"
+                        android:textAppearance="?attr/textAppearanceListItem" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 

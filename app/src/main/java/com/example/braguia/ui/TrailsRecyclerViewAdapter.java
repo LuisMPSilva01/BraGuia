@@ -1,5 +1,6 @@
 package com.example.braguia.ui;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,10 @@ public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(String.valueOf(mValues.get(position).getId()));
+        holder.trailName.setText(mValues.get(position).getTrail_name());
+        String durationText = String.valueOf(mValues.get(position).getTrail_duration()) + " minutos";
+        holder.duration.setText(durationText);
+        holder.difficulty.setText(mValues.get(position).getTrail_difficulty());
         Picasso.get().load(mValues.get(position)
                 .getTrail_img().replace("http", "https"))
                 .into(holder.imageView);
@@ -44,20 +48,24 @@ public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+        public final TextView trailName;
+        public final TextView difficulty;
+        public final TextView duration;
         public final ImageView imageView;
         public Trail mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = view.findViewById(R.id.item_number);
+            trailName = view.findViewById(R.id.trailTitle);
+            difficulty = view.findViewById(R.id.trailDifficulty);
+            duration = view.findViewById(R.id.trailTime);
             imageView = view.findViewById(R.id.cardimage);
         }
 
         @Override
         public String toString() {
-            return super.toString() + mIdView;
+            return super.toString() + trailName+difficulty+duration;
         }
     }
 }
