@@ -8,7 +8,6 @@
 
     <!-- NavigationView com Sidebar -->
 
-
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/sidebar"
         android:layout_width="wrap_content"
@@ -48,7 +47,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/conteudo"
             android:layout_width="match_parent"
-            android:layout_height="616dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +61,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_percent="1"
-            app:menu="@menu/bottom_nav_menu"/>
+            app:menu="@menu/bottom_nav_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

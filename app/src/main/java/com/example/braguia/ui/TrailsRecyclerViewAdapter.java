@@ -24,7 +24,7 @@ public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item, parent, false);
+                .inflate(R.layout.fragment_trail_item, parent, false);
         return new ViewHolder(view);
     }
 

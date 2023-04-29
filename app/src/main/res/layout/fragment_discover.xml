@@ -11,14 +11,14 @@
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
-        android:layout_width="match_parent"
-        android:layout_height="47dp"
+        android:layout_width="371dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
         android:background="@color/red_2"
         android:orientation="vertical"
         android:queryHint="Search for something"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,5 +45,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_view"
-        tools:layout="@layout/fragment_item_list" />
+        tools:layout="@layout/fragment_trail_item_list" />
 </androidx.constraintlayout.widget.ConstraintLayout>
