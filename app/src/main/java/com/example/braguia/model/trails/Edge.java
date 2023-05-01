@@ -47,4 +47,32 @@ public class Edge{
     @ColumnInfo(name = "edge_trail")
     @SerializedName("edge_trail")
     int edge_trail;
+
+    public int getId() {
+        return id;
+    }
+
+    public EdgeTip getEdge_start() {
+        return edge_start;
+    }
+
+    public EdgeTip getEdge_end() {
+        return edge_end;
+    }
+
+    public String getEdge_transport() {
+        return edge_transport;
+    }
+
+    public int getEdge_duration() {
+        return edge_duration;
+    }
+
+    public String getEdge_desc() {
+        return edge_desc;
+    }
+
+    public int getEdge_trail() {
+        return edge_trail;
+    }
 }

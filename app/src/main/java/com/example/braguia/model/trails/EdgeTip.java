@@ -6,6 +6,7 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -60,4 +61,44 @@ public class EdgeTip {
     @ColumnInfo(name = "pin_alt")
     @SerializedName("pin_alt")
     double pin_alt;
+
+    public int getId() {
+        return id;
+    }
+
+    public List<RelPin> getRel_pin() {
+        return rel_pin;
+    }
+
+    public List<Medium> getMedia() {
+        return media;
+    }
+
+    public String getPin_name() {
+        return pin_name;
+    }
+
+    public String getPin_desc() {
+        return pin_desc;
+    }
+
+    public double getPin_lat() {
+        return pin_lat;
+    }
+
+    public double getPin_lng() {
+        return pin_lng;
+    }
+
+    public double getPin_alt() {
+        return pin_alt;
+    }
+
+    public LatLng getMapsCoordinate(){
+        return new LatLng(pin_lat,pin_lng);
+    }
+
+    public String getMapsCoordinateString(){
+        return pin_lat+","+pin_lng;
+    }
 }

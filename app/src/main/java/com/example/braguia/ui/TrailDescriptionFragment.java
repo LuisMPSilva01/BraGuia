@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.braguia.R;
 import com.example.braguia.model.app.AppInfo;
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.ui.Activitys.MapsActivity;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -52,6 +53,14 @@ public class TrailDescriptionFragment extends Fragment {
                         .replace("http", "https"))
                         .into(imagem);
         Button intro = view.findViewById(R.id.start_trip_button);
+        intro.setOnClickListener(v -> replaceFragment(trail));
+    }
+
+    private void replaceFragment(Trail trail) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
+        // Create a new instance of the destination fragment
+        MapsActivity fragment = MapsActivity.newInstance(trail.getId());
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity.replaceFragment(fragment);
     }
 }
 
