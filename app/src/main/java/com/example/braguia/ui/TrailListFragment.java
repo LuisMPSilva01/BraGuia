@@ -87,10 +87,8 @@ public class TrailListFragment extends Fragment {
             TrailsRecyclerViewAdapter adapter = new TrailsRecyclerViewAdapter(trails);
             recyclerView.setAdapter(adapter);
             // Set the item click listener
-            adapter.setOnItemClickListener(trail -> {
-                // Handle the item click event
-                replaceFragment(trail);
-            });
+            // Handle the item click event
+            adapter.setOnItemClickListener(this::replaceFragment);
         }
     }
 
