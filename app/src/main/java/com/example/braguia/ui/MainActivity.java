@@ -1,7 +1,12 @@
 package com.example.braguia.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -14,6 +19,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -38,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     private SwitchCompat localizSwitch;
 
+    NotificationManagerCompat notificationManagerCompat;
+    Notification notification;
+
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +64,27 @@ public class MainActivity extends AppCompatActivity {
         spanString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, spanString.length(), 0);
         localizationItem.setTitle(spanString);
 
+
+        ///////////////////////////////////Codigo para criar notificações. TODO: Meter em função/////////////////////////////////////////////////////
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("channel_id", "channel", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
+                .setSmallIcon(R.drawable.uminho_logo)
+                .setContentTitle("Ganda titulo")
+                .setContentText("Ganda mensagem da notificação");
+        notification = builder.build();
+        notificationManagerCompat = NotificationManagerCompat.from(this);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+            notificationManagerCompat.notify(1, notification);
+        } else {
+            // Solicite a permissão para o usuário
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
+        }
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
