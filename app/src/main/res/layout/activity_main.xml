@@ -14,7 +14,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/header_sidebar"
-        app:itemIconTint="@color/white"
         app:menu="@menu/side_nav_menu" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

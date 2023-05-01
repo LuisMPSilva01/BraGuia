@@ -6,7 +6,7 @@
         />
 
     <item
-        android:color="@color/red"
+        android:color="@color/gray"
         android:state_checked="false"
         />
 </selector>
