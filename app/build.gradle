@@ -67,8 +67,12 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
 
+    //Localization
+    implementation "com.google.android.gms:play-services-location:21.0.1"
+
     // Testing
     testImplementation "junit:junit:$rootProject.junitVersion"
     testImplementation "androidx.arch.core:core-testing:2.2.0"
     testImplementation 'org.mockito:mockito-core:5.3.1'
+
 }

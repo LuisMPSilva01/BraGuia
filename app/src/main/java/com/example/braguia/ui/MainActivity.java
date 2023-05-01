@@ -3,12 +3,16 @@ package com.example.braguia.ui;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -32,13 +36,22 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer_layout;
     private ActionBarDrawerToggle drawerToggle;
     private UserViewModel userViewModel;
+    private SwitchCompat localizSwitch;
 
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        MenuItem localizationItem = binding.sidebar.getMenu().findItem(R.id.localization);
+        localizationItem.setEnabled(false);
+        SpannableString spanString = new SpannableString(localizationItem.getTitle().toString());
+        spanString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, spanString.length(), 0);
+        localizationItem.setTitle(spanString);
+
 
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -85,18 +98,18 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
-            Menu sb_menu = binding.sidebar.getMenu();
-            for(int i = 0; i < sb_menu.size(); i++) {
-                MenuItem sb_item = sb_menu.getItem(i);
-                if(sb_item.isChecked()){
-                    sb_item.setChecked(false);
-                }
+            Menu bnv_menu = binding.bottomNavigationView.getMenu();
+            for(int i = 0; i < bnv_menu.size(); i++) {
+                MenuItem bnv_item = bnv_menu.getItem(i);
+                bnv_item.setChecked(!bnv_item.isChecked());
             }
+
             return true;
         });
 
         //left side bar
         binding.sidebar.setNavigationItemSelectedListener(
+
                 menuItem -> {
                     switch (menuItem.getItemId()){
                         case R.id.profile:
@@ -107,13 +120,11 @@ public class MainActivity extends AppCompatActivity {
                             //Toast.makeText(MainActivity.this, "Emergency Contacts Selected", Toast.LENGTH_LONG).show();
                             replaceFragment(new EmergencyContactsFragment());
                             break;
+                        case R.id.localization:
+                            return true;
                         case R.id.definitions:
                             //Toast.makeText(MainActivity.this, "Definitions Selected", Toast.LENGTH_LONG).show();
                             replaceFragment(new DefinitionsFragment());
-                            break;
-                        case R.id.localization:
-                            //Toast.makeText(MainActivity.this, "Localization Selected", Toast.LENGTH_LONG).show();
-                            replaceFragment(new LocalizationFragment());
                             break;
                         case R.id.logout:
                             try {
@@ -131,14 +142,29 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
 
-                    Menu bnv_menu = binding.bottomNavigationView.getMenu();
-                    for(int i = 0; i < bnv_menu.size(); i++) {
-                        MenuItem bnv_item = bnv_menu.getItem(i);
-                        bnv_item.setChecked(!bnv_item.isChecked());
+                    localizSwitch = findViewById(R.id.localizationSwitch);
+                    localizSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                        if(isChecked){
+                            Toast.makeText(MainActivity.this, "ON", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this, "OFF", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    Menu sb_menu = binding.sidebar.getMenu();
+                    for(int i = 0; i < sb_menu.size(); i++) {
+                        MenuItem sb_item = sb_menu.getItem(i);
+                        if(sb_item.isChecked()){
+                            sb_item.setChecked(false);
+                        }
                     }
+
 
                     // Close side bar
                     binding.drawerLayout.closeDrawer(GravityCompat.START);
+
+
                     return true;
                 });
         //Allows side-bar items to be selected
@@ -160,10 +186,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(drawerToggle.onOptionsItemSelected(item))
+        // Handle item selection
+        if (item.getItemId() == R.id.localization) {// Return true to indicate that the item was selected, but do not perform any action
             return true;
+        }// Allow the DrawerToggle to handle the click event if the clicked item is not R.id.identification
+        if (drawerToggle.onOptionsItemSelected(item))
+            return true;
+        // Otherwise, let the default behavior handle the click event
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onBackPressed() {

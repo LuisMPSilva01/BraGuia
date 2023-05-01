@@ -1,23 +1,15 @@
 package com.example.braguia.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
-import com.example.braguia.model.app.AppInfo;
-import com.example.braguia.model.user.User;
-import com.example.braguia.viewmodel.AppInfoViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
 
 import java.io.IOException;

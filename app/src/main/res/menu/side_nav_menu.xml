@@ -16,7 +16,9 @@
         <item
             android:id="@+id/localization"
             android:title="Localization"
-            app:actionLayout="@layout/switch_item" />
+            app:actionLayout="@layout/switch_item"
+            android:clickable="false" />
+
     </group>
 
     <item android:title="Configurations">
