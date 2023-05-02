@@ -11,6 +11,7 @@ import com.example.braguia.model.app.AppInfo;
 import com.example.braguia.model.app.AppInfoAPI;
 import com.example.braguia.model.app.AppInfoDAO;
 import com.example.braguia.model.GuideDatabase;
+import com.example.braguia.model.app.Contact;
 
 import java.io.IOException;
 import java.util.List;
@@ -78,6 +79,10 @@ public class AppInfoRepository {
 
     public LiveData<AppInfo> getAppInfo(){
         return appInfo;
+    }
+
+    public LiveData<List<Contact>> getContacts(){
+        return appInfoDAO.getContacts("BraGuia");
     }
 
     private static class InsertAsyncTask extends AsyncTask<AppInfo,Void,Void> {

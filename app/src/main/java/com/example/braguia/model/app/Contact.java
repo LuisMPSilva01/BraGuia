@@ -1,5 +1,6 @@
 package com.example.braguia.model.app;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -24,7 +25,8 @@ import com.google.gson.annotations.SerializedName;
 )
 
 public class Contact {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
+    @NonNull
     @SerializedName("contact_name")
     @ColumnInfo(name = "contact_name")
     private String contactName;

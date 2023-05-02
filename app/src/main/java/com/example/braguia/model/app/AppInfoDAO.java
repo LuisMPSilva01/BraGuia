@@ -5,6 +5,9 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import java.util.List;
+
 @Dao
 public interface AppInfoDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -12,6 +15,9 @@ public interface AppInfoDAO {
 
     @Query("SELECT DISTINCT * FROM app_info")
     LiveData<AppInfo> getAppInfo();
+
+    @Query("SELECT * FROM contact WHERE contact_app = :appName")
+    LiveData<List<Contact>> getContacts(String appName);
 
     @Query("DELETE FROM app_info")
     void deleteAll();

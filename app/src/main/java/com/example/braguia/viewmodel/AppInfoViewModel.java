@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.braguia.model.app.AppInfo;
+import com.example.braguia.model.app.Contact;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.repositories.AppInfoRepository;
 import com.example.braguia.repositories.TrailRepository;
@@ -27,5 +28,9 @@ public class AppInfoViewModel extends AndroidViewModel {
 
     public LiveData<AppInfo> getAppInfo() throws IOException {
         return appInfo;
+    }
+
+    public LiveData<List<Contact>> getContacts() throws IOException {
+        return repository.getContacts();
     }
 }
