@@ -9,26 +9,23 @@
         android:id="@+id/trailImageDescription"
         android:layout_width="349dp"
         android:layout_height="233dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="36dp"
         android:layout_weight="1"
         android:contentDescription="TODO"
         android:maxWidth="40dp"
         android:maxHeight="40dp"
         android:tag="image_tag"
-        app:layout_constraintBottom_toTopOf="@+id/start_trip_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.205" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/start_trip_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="412dp"
+        android:layout_marginTop="28dp"
         android:text="Start"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trailImageDescription" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,11 @@
-package com.example.braguia.ui.Activitys;
+package com.example.braguia.ui;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,21 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.braguia.R;
-import com.example.braguia.model.trails.Edge;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
-import com.example.braguia.ui.TrailDescriptionFragment;
 import com.example.braguia.viewmodel.TrailViewModel;
-import com.example.braguia.viewmodel.UserViewModel;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.example.braguia.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.DirectionsApi;
 import com.google.maps.DirectionsApiRequest;
@@ -40,27 +31,23 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.DirectionsStep;
 import com.google.maps.model.EncodedPolyline;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class MapsActivity extends Fragment {
+public class MapsFragment extends Fragment {
     final int id;
     private GoogleMap mMap;
     private String TAG = "MAPS";
     TrailViewModel trailViewModel;
 
-    public MapsActivity(int id){
+    public MapsFragment(int id){
         this.id=id;
     }
 
-    public static MapsActivity newInstance(int id) {
-        return new MapsActivity(id);
+    public static MapsFragment newInstance(int id) {
+        return new MapsFragment(id);
     }
 
     @Override
@@ -72,7 +59,7 @@ public class MapsActivity extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_maps, container, false);
         trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
-
+        requireActivity().getSupportFragmentManager().popBackStack();
         trailViewModel.getTrailById(1).observe(getViewLifecycleOwner(), trail -> {
             // Assuming the "trail" object contains information about the trail
             // and its coordinates, you can proceed to display it on the map.
@@ -171,5 +158,19 @@ public class MapsActivity extends Fragment {
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             loadMap(googleMap, trail);
         });
+    }
+
+    public static boolean meetsPreRequisites(Context context){
+        PackageManager pm = context.getPackageManager();
+        return isPackageInstalled("com.google.android.apps.maps", pm);
+    }
+
+    private static boolean isPackageInstalled(String packageName, PackageManager packageManager) {
+        try {
+            packageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 }

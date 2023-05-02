@@ -1,25 +1,21 @@
 package com.example.braguia.ui;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
-import com.example.braguia.model.app.AppInfo;
 import com.example.braguia.model.trails.Trail;
-import com.example.braguia.ui.Activitys.MapsActivity;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 public class TrailDescriptionFragment extends Fragment {
     private TrailViewModel trailViewModel;
@@ -58,9 +54,15 @@ public class TrailDescriptionFragment extends Fragment {
 
     private void replaceFragment(Trail trail) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
         // Create a new instance of the destination fragment
-        MapsActivity fragment = MapsActivity.newInstance(trail.getId());
-        MainActivity mainActivity = (MainActivity) requireActivity();
-        mainActivity.replaceFragment(fragment);
+        if(MapsFragment.meetsPreRequisites(getContext())){
+            Log.e("Main","Maps PreRequisistes met");
+            MapsFragment fragment = MapsFragment.newInstance(trail.getId());
+            MainActivity mainActivity = (MainActivity) requireActivity();
+            mainActivity.replaceFragment(fragment);
+        } else {
+            Toast toast = Toast.makeText(getContext(), "Instale o Google Maps para poder navegar", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 }
 
