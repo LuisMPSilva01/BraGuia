@@ -64,27 +64,7 @@ public class MainActivity extends AppCompatActivity {
         spanString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, spanString.length(), 0);
         localizationItem.setTitle(spanString);
 
-
-        ///////////////////////////////////Codigo para criar notificações. TODO: Meter em função/////////////////////////////////////////////////////
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("channel_id", "channel", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
-                .setSmallIcon(R.drawable.uminho_logo)
-                .setContentTitle("Ganda titulo")
-                .setContentText("Ganda mensagem da notificação");
-        notification = builder.build();
-        notificationManagerCompat = NotificationManagerCompat.from(this);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-            notificationManagerCompat.notify(1, notification);
-        } else {
-            // Solicite a permissão para o usuário
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
-        }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        createNotification(R.drawable.uminho_logo, "Ganda titulo", "Ganda mensagem");
 
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -175,16 +155,20 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
 
+
+
                     localizSwitch = findViewById(R.id.localizationSwitch);
-                    localizSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                        if(isChecked){
-                            Toast.makeText(MainActivity.this, "ON", Toast.LENGTH_SHORT).show();
+                    localizSwitch.setOnClickListener(view -> {
+                        if (localizSwitch.isChecked()){
+                            Toast.makeText(MainActivity.this, "ON", Toast.LENGTH_LONG).show();
+
+                        }else {
+                            Toast.makeText(MainActivity.this, "OFF", Toast.LENGTH_LONG).show();
                         }
-                        else{
-                            Toast.makeText(MainActivity.this, "OFF", Toast.LENGTH_SHORT).show();
-                        }
+
                     });
 
+                    
                     Menu sb_menu = binding.sidebar.getMenu();
                     for(int i = 0; i < sb_menu.size(); i++) {
                         MenuItem sb_item = sb_menu.getItem(i);
@@ -242,4 +226,25 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    public void createNotification(int image, String title, String message){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("channel_id", "channel", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
+                .setSmallIcon(image)
+                .setContentTitle(title)
+                .setContentText(message);
+        notification = builder.build();
+        notificationManagerCompat = NotificationManagerCompat.from(this);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+            notificationManagerCompat.notify(1, notification);
+        } else {
+            // Solicite a permissão para o usuário
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
+        }
+
+    }
 }
