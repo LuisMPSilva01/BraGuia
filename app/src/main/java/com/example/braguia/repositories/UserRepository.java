@@ -7,9 +7,12 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 
 import com.example.braguia.model.GuideDatabase;
 import com.example.braguia.model.user.User;
@@ -22,6 +25,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import okhttp3.Cookie;
@@ -34,31 +38,31 @@ import retrofit2.http.Body;
 
 public class UserRepository {
     public UserDAO userDAO;
-    public MediatorLiveData<User> user;
+    public MediatorLiveData<String> username;
     private GuideDatabase database;
     private Retrofit retrofit;
     private UserAPI api;
 
-    public UserRepository(Application application){
+    public UserRepository(Application application) {
         database = GuideDatabase.getInstance(application);
         userDAO = database.userDAO();
-        user = new MediatorLiveData<>();
+        username = new MediatorLiveData<>();
+        username.addSource(getUsername(application.getApplicationContext()) , localUsername ->{
+            Log.e("CHANGE","new localUsername:"+localUsername);
+            username.setValue(localUsername);
+        });
 
-        user.addSource(
-                userDAO.getUserByUsername(getUsername(application.getApplicationContext())),localUser ->{
-                    if (localUser != null) {
-                        user.setValue(localUser);
-                    } else user.setValue(new User("","loggedOut"));
-                }
-        );
-
-        retrofit=new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                 .baseUrl("https://c5a2-193-137-92-29.eu.ngrok.io/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(UserAPI.class);
     }
 
+
+    public LiveData<String> getUsername(){
+        return username;
+    }
     public void insert(User user){
         new UserRepository.InsertAsyncTask(userDAO).execute(user);
     }
@@ -119,9 +123,9 @@ public class UserRepository {
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
                     insert(new User("","loggedOut"));
-                    Log.e("main", "logged out successfully");
                     SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                     sharedPreferences.edit().putString("isLogged", "").apply();
+                    Log.e("main", "logged out successfully:"+sharedPreferences.getString("isLogged", ""));
                     callback.onLogoutSuccess();
                 }
                 else{
@@ -143,17 +147,34 @@ public class UserRepository {
         void onLogoutFailure();
     }
 
-    public LiveData<User> getUser(){
-        return user;
+    public LiveData<User> getUser(String username){
+        return userDAO.getUserByUsername(username);
     }
 
-    private String getUsername(Context context) {
+    private LiveData<String> getUsername(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("isLogged","");
+        MutableLiveData<String> userNameLiveData = new MutableLiveData<>();
+        userNameLiveData.setValue(sharedPreferences.getString("isLogged", ""));
+
+        // Register a shared preference change listener
+        SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPrefs, key) -> {
+            if ("isLogged".equals(key)) {
+                userNameLiveData.setValue(sharedPreferences.getString("isLogged", ""));
+            }
+        };
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+
+        //TODO comentar isto somehow fixes the code
+        //userNameLiveData.observeForever(ignored -> sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener));
+
+        return userNameLiveData;
     }
+
+
 
     public void updateTrailHistory(String userName,Integer trailId){
-        User u = getUser().getValue();
+        User u = getUser(userName).getValue();
         if(u!=null){
             List<Integer> ids = u.getTrailHistoryList();
             ids.add(trailId);
@@ -162,7 +183,7 @@ public class UserRepository {
     }
 
     public void updatePinHistory(String userName,Integer pinId){
-        User u = getUser().getValue();
+        User u = getUser(userName).getValue();
         if(u!=null){
             List<Integer> ids = u.getPinHistoryList();
             ids.add(pinId);
@@ -179,7 +200,6 @@ public class UserRepository {
 
         @Override
         protected Void doInBackground(User... users) {
-            userDAO.deleteAll();
             userDAO.insert(users[0]);
             return null;
         }
