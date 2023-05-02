@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             userViewModel.getUser().observe(this, user -> {
                 Log.e("main","user type="+user.getUser_type());
-                if (user != null && Objects.equals(user.getUser_type(), "loggedOut")) {
+                if (Objects.equals(user.getUser_type(), "loggedOut")) {
                     changeToLoginActivity();
                 }
             });
@@ -143,9 +143,7 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 userViewModel.logOut(getApplicationContext(), new UserViewModel.LogOutCallback() {
                                     @Override
-                                    public void onLogOutSuccess() {
-                                        changeToLoginActivity();
-                                    }
+                                    public void onLogOutSuccess() {}
                                     @Override
                                     public void onLogOutFailure() {}
                                 });

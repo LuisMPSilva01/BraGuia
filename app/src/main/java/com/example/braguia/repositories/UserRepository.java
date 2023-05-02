@@ -9,6 +9,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.braguia.model.GuideDatabase;
 import com.example.braguia.model.user.User;
@@ -42,14 +43,15 @@ public class UserRepository {
         database = GuideDatabase.getInstance(application);
         userDAO = database.userDAO();
         user = new MediatorLiveData<>();
+
         user.addSource(
-                userDAO.getUser(), localUser -> {
-                    // TODO: ADD cache validation logic
+                userDAO.getUserByUsername(getUsername(application.getApplicationContext())),localUser ->{
                     if (localUser != null) {
                         user.setValue(localUser);
                     } else user.setValue(new User("","loggedOut"));
                 }
         );
+
         retrofit=new Retrofit.Builder()
                 .baseUrl("https://c5a2-193-137-92-29.eu.ngrok.io/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -82,6 +84,8 @@ public class UserRepository {
                         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putString("cookies", cookieString).apply();
                     }
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString("isLogged", username).apply();
                     insert(user); //Insert user into user DataBase
                     callback.onLoginSuccess();
                 }
@@ -116,6 +120,8 @@ public class UserRepository {
                 if(response.isSuccessful()) {
                     insert(new User("","loggedOut"));
                     Log.e("main", "logged out successfully");
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString("isLogged", "").apply();
                     callback.onLogoutSuccess();
                 }
                 else{
@@ -139,6 +145,29 @@ public class UserRepository {
 
     public LiveData<User> getUser(){
         return user;
+    }
+
+    private String getUsername(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("isLogged","");
+    }
+
+    public void updateTrailHistory(String userName,Integer trailId){
+        User u = getUser().getValue();
+        if(u!=null){
+            List<Integer> ids = u.getTrailHistoryList();
+            ids.add(trailId);
+            userDAO.updateTrailHistory(userName,User.convertListToString(ids));
+        }
+    }
+
+    public void updatePinHistory(String userName,Integer pinId){
+        User u = getUser().getValue();
+        if(u!=null){
+            List<Integer> ids = u.getPinHistoryList();
+            ids.add(pinId);
+            userDAO.updatePinHistory(userName,User.convertListToString(ids));
+        }
     }
 
     private static class InsertAsyncTask extends AsyncTask<User,Void,Void> {
