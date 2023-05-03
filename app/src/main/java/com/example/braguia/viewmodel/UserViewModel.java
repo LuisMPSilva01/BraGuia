@@ -21,12 +21,12 @@ import retrofit2.http.Body;
 public class UserViewModel extends AndroidViewModel {
 
     private UserRepository repository;
-    public LiveData<User> user;
+    public LiveData<String> username;
 
     public UserViewModel(@NonNull Application application) {
         super(application);
         repository= new UserRepository(application);
-        user = repository.getUser();
+        username = repository.getUsername();
     }
 
     public void login(String username, String password, Context context, final LoginCallback callback) throws IOException {
@@ -68,8 +68,18 @@ public class UserViewModel extends AndroidViewModel {
     }
 
 
-
-    public LiveData<User> getUser() throws IOException {
-        return user;
+    public LiveData<String> getUserName(){
+        return username;
     }
+    public LiveData<User> getUser(String username) throws IOException {
+        return repository.getUser(username);
+    }
+    public void updateTrailHistory(String userName,Integer trailId){
+        repository.updateTrailHistory(userName,trailId);
+    }
+
+    public void updatePinHistory(String userName,Integer pinId){
+        repository.updatePinHistory(userName,pinId);
+    }
+
 }

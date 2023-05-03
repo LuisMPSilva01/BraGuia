@@ -65,16 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        try {
-            userViewModel.getUser().observe(this, user -> {
-                Log.e("main","user type="+user.getUser_type());
-                if (user != null && Objects.equals(user.getUser_type(), "loggedOut")) {
-                    changeToLoginActivity();
-                }
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        userViewModel.getUserName().observe(this, userName -> {
+            if (Objects.equals(userName, "")) {
+                changeToLoginActivity();
+            }
+        });
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -141,9 +136,7 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 userViewModel.logOut(getApplicationContext(), new UserViewModel.LogOutCallback() {
                                     @Override
-                                    public void onLogOutSuccess() {
-                                        changeToLoginActivity();
-                                    }
+                                    public void onLogOutSuccess() {}
                                     @Override
                                     public void onLogOutFailure() {}
                                 });

@@ -2,15 +2,12 @@ package com.example.braguia.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -19,9 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.app.Contact;
-import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.AppInfoViewModel;
-import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.io.IOException;
 import java.util.List;
