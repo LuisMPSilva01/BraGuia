@@ -1,5 +1,7 @@
 package com.example.braguia.ui;
 
+import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -7,14 +9,13 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-
+import android.view.View;
+import android.widget.CompoundButton;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -24,6 +25,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer_layout;
     private ActionBarDrawerToggle drawerToggle;
     private UserViewModel userViewModel;
-    private SwitchCompat localizSwitch;
+    private LocationManager locationManager;
 
     NotificationManagerCompat notificationManagerCompat;
     Notification notification;
@@ -55,14 +57,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        MenuItem localizationItem = binding.sidebar.getMenu().findItem(R.id.localization);
-        localizationItem.setEnabled(false);
-        SpannableString spanString = new SpannableString(localizationItem.getTitle().toString());
-        spanString.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.black)), 0, spanString.length(), 0);
-        localizationItem.setTitle(spanString);
 
         createNotification(R.drawable.uminho_logo, "Ganda titulo", "Ganda mensagem");
 
@@ -120,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+
         //left side bar
         binding.sidebar.setNavigationItemSelectedListener(
 
@@ -155,20 +153,6 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
 
-
-
-                    localizSwitch = findViewById(R.id.localizationSwitch);
-                    localizSwitch.setOnClickListener(view -> {
-                        if (localizSwitch.isChecked()){
-                            Toast.makeText(MainActivity.this, "ON", Toast.LENGTH_LONG).show();
-
-                        }else {
-                            Toast.makeText(MainActivity.this, "OFF", Toast.LENGTH_LONG).show();
-                        }
-
-                    });
-
-                    
                     Menu sb_menu = binding.sidebar.getMenu();
                     for(int i = 0; i < sb_menu.size(); i++) {
                         MenuItem sb_item = sb_menu.getItem(i);
@@ -176,17 +160,27 @@ public class MainActivity extends AppCompatActivity {
                             sb_item.setChecked(false);
                         }
                     }
-
-
                     // Close side bar
                     binding.drawerLayout.closeDrawer(GravityCompat.START);
-
-
                     return true;
                 });
+
+        // Localization switch event listener
+        MenuItem menuItem = binding.sidebar.getMenu().findItem(R.id.localization);
+        View view = MenuItemCompat.getActionView(menuItem);
+        SwitchCompat localization_switch = view.findViewById(R.id.localizationSwitch);
+        localization_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // Perform actions based on switch state change
+                startActivity(new Intent(ACTION_LOCATION_SOURCE_SETTINGS));
+            }
+        });
         //Allows side-bar items to be selected
         binding.sidebar.bringToFront();
-    }
+
+
+}
 
     private void changeToLoginActivity(){
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);

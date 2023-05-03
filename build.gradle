@@ -2,11 +2,12 @@
 buildscript {
     dependencies {
         classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
+        classpath 'com.android.tools.build:gradle:8.0.1'
     }
 }
 plugins {
-    id 'com.android.application' version '8.0.0' apply false
-    id 'com.android.library' version '8.0.0' apply false
+    id 'com.android.application' version '8.0.1' apply false
+    id 'com.android.library' version '8.0.1' apply false
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin' version '2.0.1' apply false
 }
 ext {
@@ -15,7 +16,7 @@ ext {
     coreTestingVersion = '2.2.0'
     lifecycleVersion = '2.3.1'
     materialVersion = '1.8.0'
-    roomVersion = '2.3.0'
+    roomVersion = '2.4.0'
     // testing
     junitVersion = '4.13.2'
     espressoVersion = '3.5.1'

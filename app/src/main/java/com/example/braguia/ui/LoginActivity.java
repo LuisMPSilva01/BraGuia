@@ -2,6 +2,7 @@ package com.example.braguia.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,7 +20,6 @@ public class LoginActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     private EditText Name;
     private EditText Password;
-    private TextView Info;
     private Button Login;
 
     public LoginActivity(){
@@ -44,12 +44,9 @@ public class LoginActivity extends AppCompatActivity {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Name = findViewById(R.id.etName);
-        Password = findViewById(R.id.etPassword);
-        Info = findViewById(R.id.tvInfo);
+        Name = findViewById(R.id.name_input);
+        Password = findViewById(R.id.password_input);
         Login = findViewById(R.id.btnLogin);
-
-        Info.setText("REMOVE ME");
 
         Login.setOnClickListener(view -> {
             try {
@@ -75,6 +72,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onLoginFailure() {
+                TextView txt_view = findViewById(R.id.login_failed_txt);
+                txt_view.setVisibility(View.VISIBLE);
             }
         });
     }
