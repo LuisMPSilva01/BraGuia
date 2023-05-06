@@ -65,11 +65,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        userViewModel.getUserName().observe(this, userName -> {
-            if (Objects.equals(userName, "")) {
-                changeToLoginActivity();
-            }
-        });
+        try {
+            userViewModel.getUser().observe(this, user -> {
+                if (Objects.equals(user.getUser_type(), "loggedOff")) {
+                    changeToLoginActivity();
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -35,11 +35,15 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        userViewModel.getUserName().observe(this, username -> {
-            if (!Objects.equals(username, "")) {
-                changeToMainActivity();
-            }
-        });
+        try {
+            userViewModel.getUser().observe(this, user -> {
+                if (!Objects.equals(user.getUser_type(), "loggedOff")) {
+                    changeToMainActivity();
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         Name = findViewById(R.id.name_input);
         Password = findViewById(R.id.password_input);
         Login = findViewById(R.id.btnLogin);

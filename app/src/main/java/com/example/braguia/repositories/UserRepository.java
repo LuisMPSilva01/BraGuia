@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -30,15 +31,23 @@ import java.util.stream.Collectors;
 
 import okhttp3.Cookie;
 import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 
 public class UserRepository {
     public UserDAO userDAO;
-    public MediatorLiveData<String> username;
+    public MediatorLiveData<User> user;
     private GuideDatabase database;
     private Retrofit retrofit;
     private UserAPI api;
@@ -46,23 +55,67 @@ public class UserRepository {
     public UserRepository(Application application) {
         database = GuideDatabase.getInstance(application);
         userDAO = database.userDAO();
-        username = new MediatorLiveData<>();
-        username.addSource(getUsername(application.getApplicationContext()) , localUsername ->{
-            Log.e("CHANGE","new localUsername:"+localUsername);
-            username.setValue(localUsername);
-        });
-
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://c5a2-193-137-92-29.eu.ngrok.io/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(UserAPI.class);
+
+        user = new MediatorLiveData<>();
+        user.addSource(getCookies(application.getApplicationContext()), updatedCookies ->{
+            updateUserAPI(updatedCookies,user);
+        });
+    }
+
+    public void updateUserAPI(String cookies,MediatorLiveData<User> userLiveData) {
+        if(cookies!=""){
+            Call<User> call = api.getUser(cookies);
+
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.isSuccessful()) {
+                        User user = response.body();
+                        String responseBody = response.body().toString();
+                        Log.e("Retrofit", "Response Body: " + responseBody);
+                        userLiveData.setValue(user);
+                    } else {
+                        Log.e("Retrofit", "Unsuccessful Response: " + response);
+                        userLiveData.setValue(new User("","loggedOff"));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+                    Log.e("Retrofit", "Response error:" + t.getMessage());
+                    userLiveData.setValue(new User("","loggedOff"));
+                }
+            });
+        } else {
+            userLiveData.setValue(new User("","loggedOff"));
+        }
+    }
+    private LiveData<String> getCookies(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
+        MutableLiveData<String> cookiesLiveData = new MutableLiveData<>();
+        cookiesLiveData.setValue(sharedPreferences.getString("cookies", ""));
+
+        // Register a shared preference change listener
+        SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPrefs, key) -> {
+            if ("cookies".equals(key)) {
+                cookiesLiveData.setValue(sharedPreferences.getString("cookies", ""));
+            }
+        };
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
+
+        //TODO comentar isto somehow fixes the code
+        //cookiesLiveData.observeForever(ignored -> sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener));
+
+        return cookiesLiveData;
     }
 
 
-    public LiveData<String> getUsername(){
-        return username;
-    }
     public void insert(User user){
         new UserRepository.InsertAsyncTask(userDAO).execute(user);
     }
@@ -88,8 +141,6 @@ public class UserRepository {
                         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putString("cookies", cookieString).apply();
                     }
-                    SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
-                    sharedPreferences.edit().putString("isLogged", username).apply();
                     insert(user); //Insert user into user DataBase
                     callback.onLoginSuccess();
                 }
@@ -122,10 +173,9 @@ public class UserRepository {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
-                    insert(new User("","loggedOut"));
                     SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
-                    sharedPreferences.edit().putString("isLogged", "").apply();
-                    Log.e("main", "logged out successfully:"+sharedPreferences.getString("isLogged", ""));
+                    sharedPreferences.edit().putString("cookies", "").apply();
+                    Log.e("main", "logged out successfully:");
                     callback.onLogoutSuccess();
                 }
                 else{
@@ -147,47 +197,25 @@ public class UserRepository {
         void onLogoutFailure();
     }
 
-    public LiveData<User> getUser(String username){
-        return userDAO.getUserByUsername(username);
+    public LiveData<User> getUser(){
+        return user;
     }
 
-    private LiveData<String> getUsername(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
-        MutableLiveData<String> userNameLiveData = new MutableLiveData<>();
-        userNameLiveData.setValue(sharedPreferences.getString("isLogged", ""));
-
-        // Register a shared preference change listener
-        SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPrefs, key) -> {
-            if ("isLogged".equals(key)) {
-                userNameLiveData.setValue(sharedPreferences.getString("isLogged", ""));
-            }
-        };
-
-        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
-
-        //TODO comentar isto somehow fixes the code
-        //userNameLiveData.observeForever(ignored -> sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener));
-
-        return userNameLiveData;
-    }
-
-
-
-    public void updateTrailHistory(String userName,Integer trailId){
-        User u = getUser(userName).getValue();
+    public void updateTrailHistory(Integer trailId){
+        User u = user.getValue();
         if(u!=null){
             List<Integer> ids = u.getTrailHistoryList();
             ids.add(trailId);
-            userDAO.updateTrailHistory(userName,User.convertListToString(ids));
+            userDAO.updateTrailHistory(u.getUsername(),User.convertListToString(ids));
         }
     }
 
-    public void updatePinHistory(String userName,Integer pinId){
-        User u = getUser(userName).getValue();
+    public void updatePinHistory(Integer pinId){
+        User u = user.getValue();
         if(u!=null){
             List<Integer> ids = u.getPinHistoryList();
             ids.add(pinId);
-            userDAO.updatePinHistory(userName,User.convertListToString(ids));
+            userDAO.updatePinHistory(u.getUsername(),User.convertListToString(ids));
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -20,10 +21,36 @@ public class User {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "username")
+    @SerializedName("username")
     String username;
 
+    @ColumnInfo(name = "first_name")
+    @SerializedName("first_name")
+    String first_name;
+
+    @ColumnInfo(name = "last_name")
+    @SerializedName("last_name")
+    String last_name;
+
+    @ColumnInfo(name = "email")
+    @SerializedName("email")
+    String email;
+
+    @ColumnInfo(name = "is_staff")
+    @SerializedName("is_staff")
+    Boolean is_staff;
+
+    @ColumnInfo(name = "is_active")
+    @SerializedName("is_active")
+    Boolean is_active;
+
     @ColumnInfo(name = "user_type")
+    @SerializedName("user_type")
     String user_type;
+
+    @ColumnInfo(name = "is_superuser")
+    @SerializedName("is_superuser")
+    Boolean is_superuser;
 
     @ColumnInfo(name = "trailHistory")
     String trailHistory;
@@ -86,4 +113,21 @@ public class User {
     public List<Integer> getPinHistoryList() {
         return convertStringToList(pinHistory);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", email='" + email + '\'' +
+                ", is_staff=" + is_staff +
+                ", is_active=" + is_active +
+                ", user_type='" + user_type + '\'' +
+                ", is_superuser=" + is_superuser +
+                ", trailHistory='" + trailHistory + '\'' +
+                ", pinHistory='" + pinHistory + '\'' +
+                '}';
+    }
+
 }
