@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
@@ -17,6 +19,9 @@ import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TrailDescriptionFragment extends Fragment {
     private TrailViewModel trailViewModel;
@@ -47,6 +52,14 @@ public class TrailDescriptionFragment extends Fragment {
 
         trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
         trailViewModel.getTrailById(id).observe(getViewLifecycleOwner(), x -> loadView(view, x));
+
+
+        FragmentManager childFragmentManager = getChildFragmentManager();
+        PinListFragment childFragment = PinListFragment.newInstance(new ArrayList<>(List.of(id)));
+        FragmentTransaction transaction = childFragmentManager.beginTransaction();
+        transaction.add(R.id.pin_list_content, childFragment);
+        transaction.commit();
+
         return view;
     }
 
@@ -57,6 +70,9 @@ public class TrailDescriptionFragment extends Fragment {
                         .into(imagem);
         Button intro = view.findViewById(R.id.start_trip_button);
         intro.setOnClickListener(v -> replaceFragment(trail));
+
+
+
     }
 
     private void replaceFragment(Trail trail) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
