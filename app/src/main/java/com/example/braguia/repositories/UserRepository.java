@@ -77,6 +77,7 @@ public class UserRepository {
 
         userName = new MediatorLiveData<>();
         userName.addSource(getCookies(application.getApplicationContext()), updatedCookies ->{
+            Log.e("Debug","updated cookiies");
             updateUserAPI(updatedCookies,userName);
         });
     }
@@ -220,7 +221,9 @@ public class UserRepository {
         MediatorLiveData<User> userLiveData = new MediatorLiveData<>();
         final LiveData<User>[] currentSource = new LiveData[]{null};
         userLiveData.addSource(userName, userName -> {
+            Log.e("DEBUG","USERNAME UPDATE:"+userName);
             if (currentSource[0] != null) {
+                Log.e("DEBUG","SOURCE REMOVED"+userName);
                 userLiveData.removeSource(currentSource[0]);
             }
             if (userName != null && userName!="") {

@@ -3,6 +3,7 @@ package com.example.braguia.viewmodel;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -30,6 +31,7 @@ public class UserViewModel extends AndroidViewModel {
     public UserViewModel(@NonNull Application application) {
         super(application);
         repository= new UserRepository(application,false);
+        Log.e("DEBUG","New user View Model");
         user = repository.getUser();
     }
 
