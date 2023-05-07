@@ -63,10 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
         createNotification(R.drawable.uminho_logo, "Ganda titulo", "Ganda mensagem");
 
-
+        Log.e("MainActivity","STARTACTIVITY");
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         try {
             userViewModel.getUser().observe(this, user -> {
+                Log.e("MainActivity","REFRESH");
                 if (Objects.equals(user.getUser_type(), "loggedOff")) {
                     changeToLoginActivity();
                 }

@@ -30,4 +30,8 @@ public class TrailViewModel extends AndroidViewModel {
     public LiveData<Trail> getTrailById(int id) {
         return repository.getTrailById(id);
     }
+
+    public LiveData<List<Trail>> getTrailsById(List<Integer> ids) {
+        return repository.getTrailsById(ids);
+    }
 }

@@ -16,8 +16,9 @@ import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.trails.TrailDAO;
 import com.example.braguia.model.user.User;
 import com.example.braguia.model.user.UserDAO;
+import com.example.braguia.model.user.UserUpdater;
 
-@Database(entities = {Trail.class, AppInfo.class, User.class, Contact.class}, version = 982)
+@Database(entities = {Trail.class, AppInfo.class, User.class, Contact.class, UserUpdater.class}, version = 985)
 public abstract class GuideDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "BraGuide";

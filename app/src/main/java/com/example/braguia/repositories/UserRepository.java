@@ -8,12 +8,15 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.Transformations;
+import androidx.room.Room;
+import androidx.test.core.app.ApplicationProvider;
 
 import com.example.braguia.model.GuideDatabase;
 import com.example.braguia.model.user.User;
@@ -27,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 import okhttp3.Cookie;
@@ -47,13 +52,22 @@ import retrofit2.http.Header;
 
 public class UserRepository {
     public UserDAO userDAO;
-    public MediatorLiveData<User> user;
+    public MediatorLiveData<String> userName;
     private GuideDatabase database;
     private Retrofit retrofit;
     private UserAPI api;
 
-    public UserRepository(Application application) {
-        database = GuideDatabase.getInstance(application);
+    public UserRepository(Application application,Boolean freshDB) {
+        if(freshDB){
+            database = Room.inMemoryDatabaseBuilder(
+                            ApplicationProvider.getApplicationContext(),
+                            GuideDatabase.class)
+                    .allowMainThreadQueries()
+                    .build();
+        }else {
+            database = GuideDatabase.getInstance(application);
+        }
+
         userDAO = database.userDAO();
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://c5a2-193-137-92-29.eu.ngrok.io/")
@@ -61,13 +75,14 @@ public class UserRepository {
                 .build();
         api = retrofit.create(UserAPI.class);
 
-        user = new MediatorLiveData<>();
-        user.addSource(getCookies(application.getApplicationContext()), updatedCookies ->{
-            updateUserAPI(updatedCookies,user);
+        userName = new MediatorLiveData<>();
+        userName.addSource(getCookies(application.getApplicationContext()), updatedCookies ->{
+            updateUserAPI(updatedCookies,userName);
         });
     }
 
-    public void updateUserAPI(String cookies,MediatorLiveData<User> userLiveData) {
+
+    public void updateUserAPI(String cookies,MediatorLiveData<String> userName) {
         if(cookies!=""){
             Call<User> call = api.getUser(cookies);
 
@@ -78,32 +93,33 @@ public class UserRepository {
                         User user = response.body();
                         String responseBody = response.body().toString();
                         Log.e("Retrofit", "Response Body: " + responseBody);
-                        userLiveData.setValue(user);
+                        userName.postValue(user.getUsername());
+                        insert(user);
                     } else {
                         Log.e("Retrofit", "Unsuccessful Response: " + response);
-                        userLiveData.setValue(new User("","loggedOff"));
+                        userName.postValue("");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
                     Log.e("Retrofit", "Response error:" + t.getMessage());
-                    userLiveData.setValue(new User("","loggedOff"));
+                    userName.postValue("");
                 }
             });
         } else {
-            userLiveData.setValue(new User("","loggedOff"));
+            userName.postValue("");
         }
     }
     private LiveData<String> getCookies(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
         MutableLiveData<String> cookiesLiveData = new MutableLiveData<>();
-        cookiesLiveData.setValue(sharedPreferences.getString("cookies", ""));
+        cookiesLiveData.postValue(sharedPreferences.getString("cookies", ""));
 
         // Register a shared preference change listener
         SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPrefs, key) -> {
             if ("cookies".equals(key)) {
-                cookiesLiveData.setValue(sharedPreferences.getString("cookies", ""));
+                cookiesLiveData.postValue(sharedPreferences.getString("cookies", ""));
             }
         };
 
@@ -120,6 +136,9 @@ public class UserRepository {
         new UserRepository.InsertAsyncTask(userDAO).execute(user);
     }
 
+
+
+
     public void makeLoginRequest(String username,String password,Context context,final LoginCallback callback) throws IOException {
         JsonObject body = new JsonObject();
         body.addProperty("username", username);
@@ -132,7 +151,7 @@ public class UserRepository {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
-                    User user =  new User(username,"premium");
+                    User user =  new User(username,"premium","","");
                     // Store the cookies
                     Headers headers = response.headers();
                     List<String> cookies = headers.values("Set-Cookie").stream().map(e->e.split(";")[0]).collect(Collectors.toList());
@@ -197,26 +216,67 @@ public class UserRepository {
         void onLogoutFailure();
     }
 
-    public LiveData<User> getUser(){
-        return user;
+    public LiveData<User> getUser() {
+        MediatorLiveData<User> userLiveData = new MediatorLiveData<>();
+        final LiveData<User>[] currentSource = new LiveData[]{null};
+        userLiveData.addSource(userName, userName -> {
+            if (currentSource[0] != null) {
+                userLiveData.removeSource(currentSource[0]);
+            }
+            if (userName != null && userName!="") {
+                currentSource[0] = userDAO.getUserByUsername(userName);
+                userLiveData.addSource(currentSource[0], u -> {
+                    if (u != null) {
+                        userLiveData.postValue(u);
+                    }
+                });
+            } else {
+                userLiveData.postValue(new User("", "loggedOff","",""));
+            }
+        });
+        return userLiveData;
     }
 
-    public void updateTrailHistory(Integer trailId){
-        User u = user.getValue();
-        if(u!=null){
-            List<Integer> ids = u.getTrailHistoryList();
-            ids.add(trailId);
-            userDAO.updateTrailHistory(u.getUsername(),User.convertListToString(ids));
-        }
+    public void setUsername(String fixedUsername) {
+        this.userName = new MediatorLiveData<>();
+        this.userName.postValue(fixedUsername);
     }
+
+
+
+
+
+    public void updateTrailHistory(Integer trailId) throws InterruptedException {
+        LiveData<User> userLiveData = getUser();
+        Observer<User> observer = new Observer<>() {
+            @Override
+            public void onChanged(User user) {
+                if (user != null) {
+                    List<Integer> ids = user.getTrailHistoryList();
+                    ids.add(trailId);
+                    new UpdateTrailHistAsyncTask(userDAO).execute(user.getUsername(), User.convertListToString(ids));
+                    userLiveData.removeObserver(this);
+                }
+            }
+        };
+        userLiveData.observeForever(observer);
+    }
+
 
     public void updatePinHistory(Integer pinId){
-        User u = user.getValue();
-        if(u!=null){
-            List<Integer> ids = u.getPinHistoryList();
-            ids.add(pinId);
-            userDAO.updatePinHistory(u.getUsername(),User.convertListToString(ids));
-        }
+        LiveData<User> userLiveData = getUser();
+        Observer<User> observer = new Observer<>() {
+            @Override
+            public void onChanged(User user) {
+                if (user != null) {
+                    List<Integer> ids = user.getPinHistoryList();
+                    ids.add(pinId);
+                    new UpdatePinHistAsyncTask(userDAO).execute(user.getUsername(), User.convertListToString(ids));
+                    userLiveData.removeObserver(this);
+                }
+            }
+        };
+        userLiveData.observeForever(observer);
     }
 
     private static class InsertAsyncTask extends AsyncTask<User,Void,Void> {
@@ -228,9 +288,37 @@ public class UserRepository {
 
         @Override
         protected Void doInBackground(User... users) {
-            userDAO.insert(users[0]);
+            userDAO.insertOrUpdate(users[0]);
             return null;
         }
     }
 
+    private static class UpdateTrailHistAsyncTask extends AsyncTask<String,Void,Void> {
+        private UserDAO userDAO;
+
+        public UpdateTrailHistAsyncTask(UserDAO catDao) {
+            this.userDAO=catDao;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            userDAO.updateTrailHistory(strings[0],strings[1]);
+            return null;
+        }
+    }
+
+    private static class UpdatePinHistAsyncTask extends AsyncTask<String,Void,Void> {
+        private UserDAO userDAO;
+
+        public UpdatePinHistAsyncTask(UserDAO catDao) {
+            this.userDAO=catDao;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            userDAO.updatePinHistory(strings[0],strings[1]);
+
+            return null;
+        }
+    }
 }

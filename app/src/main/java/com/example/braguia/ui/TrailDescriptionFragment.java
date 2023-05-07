@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.braguia.R;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.TrailViewModel;
+import com.example.braguia.viewmodel.UserViewModel;
 import com.squareup.picasso.Picasso;
 
 public class TrailDescriptionFragment extends Fragment {
@@ -37,6 +38,12 @@ public class TrailDescriptionFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trail_description, container, false);
 
+        UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        try {
+            userViewModel.updateTrailHistory(id);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
         trailViewModel.getTrailById(id).observe(getViewLifecycleOwner(), x -> loadView(view, x));

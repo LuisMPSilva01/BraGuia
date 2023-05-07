@@ -1,5 +1,6 @@
 package com.example.braguia;
 
+import static androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -7,6 +8,7 @@ import android.util.Log;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -38,25 +41,80 @@ public class UserRepositoryTest {
 
     @Before
     public void setup() {
-        userRepository = new UserRepository(ApplicationProvider.getApplicationContext());
+        userRepository = new UserRepository(ApplicationProvider.getApplicationContext(),true);
+    }
+
+    @Test
+    public void testInsertAndGetUser() throws Throwable {
+        CountDownLatch latch = new CountDownLatch(1);
+        User user = new User("John", "Premium", "", "");
+        userRepository.setUsername("John");
+        userRepository.insert(user);
+
+        // Define an observer to check the result of the getUser method
+        Observer<User> userObserver = new Observer<User>() {
+            @Override
+            public void onChanged(User u) {
+                assertNotNull(u);
+                assertEquals(u, user);
+                latch.countDown();
+                userRepository.getUser().removeObserver(this);
+            }
+        };
+
+        runOnUiThread(() -> {
+            // Add the observer to the getUser LiveData
+            userRepository.getUser().observeForever(userObserver);
+        });
+
+        // Wait for the observation to complete
+        latch.await(5, TimeUnit.SECONDS);
+        if (latch.getCount() > 0) {
+            throw new TimeoutException("Latch timed out");
+        }
     }
 
 
     @Test
-    public void userDetails() throws InterruptedException, IOException {
+    public void testUpdateTrailHistory() throws Throwable {
         CountDownLatch latch = new CountDownLatch(1);
-        userRepository.makeLoginRequest("premium_user", "paiduser", ApplicationProvider.getApplicationContext(), new UserRepository.LoginCallback() {
-            @Override
-            public void onLoginSuccess() {
-                LiveData<User> userLiveData = userRepository.getUser();
-            }
 
-            @Override
-            public void onLoginFailure() {
+        User user = new User("John", "Premium","","");
+        userRepository.setUsername("John");
+        userRepository.insert(user);
+
+        runOnUiThread(() -> {
+            try {
+                userRepository.updateTrailHistory(1);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        runOnUiThread(() -> {
+            try {
+                userRepository.updateTrailHistory(2);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         });
 
-        latch.await(100, TimeUnit.SECONDS);
+        List<Integer> testList = new ArrayList<>();
+        testList.add(2);
+        testList.add(1);
+
+        runOnUiThread(() -> userRepository.getUser().observeForever(u -> {
+            if(u.getTrailHistoryList().size()==2) {
+                assertNotNull(u);
+                assertEquals(testList, u.getTrailHistoryList());
+                latch.countDown();
+            }
+        }));
+
+        // Wait for the observation to complete
+        latch.await(5, TimeUnit.SECONDS);
+        if (latch.getCount() > 0) {
+            throw new TimeoutException("Latch timed out");
+        }
     }
 
 }

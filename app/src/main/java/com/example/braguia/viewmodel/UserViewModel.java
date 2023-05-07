@@ -1,11 +1,14 @@
 package com.example.braguia.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.user.User;
@@ -15,6 +18,7 @@ import com.google.gson.JsonObject;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.http.Body;
 
@@ -25,7 +29,7 @@ public class UserViewModel extends AndroidViewModel {
 
     public UserViewModel(@NonNull Application application) {
         super(application);
-        repository= new UserRepository(application);
+        repository= new UserRepository(application,false);
         user = repository.getUser();
     }
 
@@ -70,7 +74,7 @@ public class UserViewModel extends AndroidViewModel {
     public LiveData<User> getUser() throws IOException {
         return user;
     }
-    public void updateTrailHistory(Integer trailId){
+    public void updateTrailHistory(Integer trailId) throws InterruptedException {
         repository.updateTrailHistory(trailId);
     }
 
@@ -78,4 +82,8 @@ public class UserViewModel extends AndroidViewModel {
         repository.updatePinHistory(pinId);
     }
 
+    public LiveData<List<Trail>> getTrailHistory(ViewModelStoreOwner vmso){
+        TrailViewModel trailViewModel = new ViewModelProvider(vmso).get(TrailViewModel.class);
+        return trailViewModel.getTrailsById(Objects.requireNonNull(user.getValue()).getTrailHistoryList());
+    }
 }

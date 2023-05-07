@@ -3,20 +3,16 @@ package com.example.braguia.model.user;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity(tableName = "user",indices = @Index(value = {"username"},unique = true))
-public class User {
+@Entity
+public class UserUpdater {
 
     @PrimaryKey
     @NonNull
@@ -52,41 +48,30 @@ public class User {
     @SerializedName("is_superuser")
     Boolean is_superuser;
 
-    @ColumnInfo(name = "trailHistory")
-    String trailHistory;
-
-    @ColumnInfo(name = "pinHistory")
-    String pinHistory;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return username.equals(user.username) && Objects.equals(first_name, user.first_name) && Objects.equals(last_name, user.last_name) && Objects.equals(email, user.email) && Objects.equals(is_staff, user.is_staff) && Objects.equals(is_active, user.is_active) && Objects.equals(user_type, user.user_type) && Objects.equals(is_superuser, user.is_superuser) && Objects.equals(trailHistory, user.trailHistory) && Objects.equals(pinHistory, user.pinHistory);
+    public UserUpdater(@NonNull String username, String first_name, String last_name, String email, Boolean is_staff, Boolean is_active, String user_type, Boolean is_superuser) {
+        this.username = username;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.email = email;
+        this.is_staff = is_staff;
+        this.is_active = is_active;
+        this.user_type = user_type;
+        this.is_superuser = is_superuser;
     }
 
-    public boolean compativel(UserUpdater adapter){
-        return username.equals(adapter.username) && Objects.equals(first_name, adapter.first_name) && Objects.equals(last_name, adapter.last_name) && Objects.equals(email, adapter.email) && Objects.equals(is_staff, adapter.is_staff) && Objects.equals(is_active, adapter.is_active) && Objects.equals(user_type, adapter.user_type) && Objects.equals(is_superuser, adapter.is_superuser);
+    public UserUpdater(User u){
+        this.username = u.getUsername();
+        this.first_name = u.getFirst_name();
+        this.last_name = u.getLast_name();
+        this.email = u.getEmail();
+        this.is_staff = u.getIs_staff();
+        this.is_active = u.getIs_active();
+        this.user_type = u.getUser_type();
+        this.is_superuser = u.getIs_superuser();
     }
 
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
-    }
-
-    public void setTrailHistory(String trailHistory) {
-        this.trailHistory = trailHistory;
-    }
-
-    public void setPinHistory(String pinHistory) {
-        this.pinHistory = pinHistory;
-    }
-
-    public User(String username, String user_type,String trailHistory,String pinHistory) {
-        this.username=username;
-        this.user_type=user_type;
-        this.trailHistory=trailHistory;
-        this.pinHistory=pinHistory;
     }
 
     public void setUsername(@NonNull String username) {
@@ -128,30 +113,6 @@ public class User {
             integerList.add(Integer.parseInt(part));
         }
         return integerList;
-    }
-
-    public List<Integer> getTrailHistoryList() {
-        return convertStringToList(trailHistory);
-    }
-
-    public List<Integer> getPinHistoryList() {
-        return convertStringToList(pinHistory);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", email='" + email + '\'' +
-                ", is_staff=" + is_staff +
-                ", is_active=" + is_active +
-                ", user_type='" + user_type + '\'' +
-                ", is_superuser=" + is_superuser +
-                ", trailHistory='" + trailHistory + '\'' +
-                ", pinHistory='" + pinHistory + '\'' +
-                '}';
     }
 
     public String getFirst_name() {
