@@ -19,12 +19,16 @@ import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.example.braguia.model.GuideDatabase;
+import com.example.braguia.model.trails.Edge;
+import com.example.braguia.model.trails.EdgeTip;
+import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.user.User;
 import com.example.braguia.model.user.UserAPI;
 import com.example.braguia.model.user.UserDAO;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +37,7 @@ import java.util.Objects;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import okhttp3.Cookie;
 import okhttp3.Headers;
@@ -85,7 +90,9 @@ public class UserRepository {
 
     public void updateUserAPI(String cookies,MediatorLiveData<String> userName) {
         if(cookies!=""){
+            Log.e("DEBUG","Cookies:"+cookies);
             Call<User> call = api.getUser(cookies);
+            List<Trail> trails = new ArrayList<>();
 
             call.enqueue(new Callback<User>() {
                 @Override
@@ -112,7 +119,7 @@ public class UserRepository {
             userName.postValue("");
         }
     }
-    private LiveData<String> getCookies(Context context) {
+    public LiveData<String> getCookies(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
         MutableLiveData<String> cookiesLiveData = new MutableLiveData<>();
         cookiesLiveData.postValue(sharedPreferences.getString("cookies", ""));
