@@ -10,15 +10,33 @@
             android:icon="@drawable/baseline_person_outline_24"/>
 
         <item
-            android:title="Emergency Contacts"
-            android:id="@+id/emergency_contacts"
-            android:icon="@drawable/baseline_contacts_24"/>
-
-        <item
             android:id="@+id/localization"
             android:title="Localization"
             app:actionLayout="@layout/switch_item"
-            app:showAsAction="always" />
+            android:enabled="false" />
+
+        <item android:title="Contacts" android:icon="@drawable/baseline_contacts_24">
+            <menu>
+                <group android:checkableBehavior="single" >
+                    <item
+                        android:id="@+id/emergency_contacts"
+                        android:title="Emergency"
+                        android:icon="@drawable/baseline_emergency_24"/>
+
+                    <item
+                        android:id="@+id/socials_contacts"
+                        android:title="Socials"
+                        android:icon="@drawable/baseline_web_24"/>
+
+                    <item
+                        android:id="@+id/partners_contacts"
+                        android:title="Partners"
+                        android:icon="@drawable/baseline_groups_24"/>
+
+                </group>
+            </menu>
+
+        </item>
 
     </group>
 

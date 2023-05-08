@@ -60,6 +60,7 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.4.1'
     implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
     androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
 

@@ -9,13 +9,17 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                             replaceFragment(new EmergencyContactsFragment());
                             break;
                         case R.id.localization:
-                            return true;
+                            return false;
                         case R.id.definitions:
                             //Toast.makeText(MainActivity.this, "Definitions Selected", Toast.LENGTH_LONG).show();
                             replaceFragment(new DefinitionsFragment());
@@ -174,6 +178,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(ACTION_LOCATION_SOURCE_SETTINGS));
             }
         });
+
+        // Localization item not clickable
+        MenuItem menuItem2 = binding.sidebar.getMenu().findItem(R.id.localization);
+        SpannableString spannableString = new SpannableString(menuItem2.getTitle());
+        spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
+        menuItem2.setTitle(spannableString);
+        menuItem2.setEnabled(false);
+
         //Allows side-bar items to be selected
         binding.sidebar.bringToFront();
 
