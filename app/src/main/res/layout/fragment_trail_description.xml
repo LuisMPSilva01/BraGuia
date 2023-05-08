@@ -38,6 +38,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/start_trip_button"
-        tools:layout="@layout/fragment_trail_item_list" />
+        tools:layout="@layout/fragment_pin_list" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

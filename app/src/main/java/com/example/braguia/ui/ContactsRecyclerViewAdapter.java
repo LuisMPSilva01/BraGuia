@@ -39,15 +39,9 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
     public void onBindViewHolder(final ContactsRecyclerViewAdapter.ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.contact_name.setText(mValues.get(position).getContactName());
-
-        String contactPhoneText = "Contact phone: "+ mValues.get(position).getContactPhone();
-        holder.contact_phone.setText(contactPhoneText);
-
-        String contactMailText = "Email: "+ mValues.get(position).getContactMail();
-        holder.contact_mail.setText(contactMailText);
-
-        String contactUrlText = "Visit us: "+ mValues.get(position).getContactMail();
-        holder.contact_url.setText(contactUrlText);
+        holder.contact_phone.setText(mValues.get(position).getContactPhone());
+        holder.contact_mail.setText(mValues.get(position).getContactMail());
+        holder.contact_url.setText(mValues.get(position).getContactUrl());
 
         // Set click listener for phone
         holder.contact_phone.setOnClickListener(v -> {
