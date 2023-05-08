@@ -128,17 +128,20 @@ public class MainActivity extends AppCompatActivity {
                 menuItem -> {
                     switch (menuItem.getItemId()){
                         case R.id.profile:
-                            //Toast.makeText(MainActivity.this, "Profile Selected", Toast.LENGTH_LONG).show();
                             replaceFragment(new ProfileFragment());
                             break;
                         case R.id.emergency_contacts:
-                            //Toast.makeText(MainActivity.this, "Emergency Contacts Selected", Toast.LENGTH_LONG).show();
-                            replaceFragment(new EmergencyContactsFragment());
+                            replaceFragment(new ContactsListFragment());
+                            break;
+                        case R.id.socials_contacts:
+                            replaceFragment(new SocialsListFragment());
+                            break;
+                        case R.id.partners_contacts:
+                            replaceFragment(new PartnersListFragment());
                             break;
                         case R.id.localization:
                             return false;
                         case R.id.definitions:
-                            //Toast.makeText(MainActivity.this, "Definitions Selected", Toast.LENGTH_LONG).show();
                             replaceFragment(new DefinitionsFragment());
                             break;
                         case R.id.logout:
