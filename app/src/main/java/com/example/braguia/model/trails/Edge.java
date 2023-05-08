@@ -6,7 +6,6 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.example.braguia.model.app.AppInfo;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(
