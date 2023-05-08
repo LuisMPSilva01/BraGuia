@@ -66,7 +66,6 @@ public class TrailListFragment extends Fragment {
             trailsViewModel.getAllTrails().observe(getViewLifecycleOwner(), x -> {
                 Log.e("Trailist","trails size:" + x.size());
                 loadRecyclerView(view, x);
-
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
