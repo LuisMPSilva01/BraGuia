@@ -8,9 +8,16 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.example.braguia.model.trails.converters.TrailTypeConverter;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity(tableName = "trail",indices = @Index(value = {"id"},unique = true))
 @TypeConverters({TrailTypeConverter.class})
@@ -110,4 +117,31 @@ public class Trail{
     public void setTrail_difficulty(String trail_difficulty) {
         this.trail_difficulty = trail_difficulty;
     }
+
+    public List<EdgeTip> getRoute() {
+        return new ArrayList<>(getEdges().stream()
+                .flatMap(e -> Stream.of(e.getEdge_start(), e.getEdge_end()))
+                .collect(Collectors.toMap(EdgeTip::getLocationString, e -> e, (e1, e2) -> e1, LinkedHashMap::new))
+                .values());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Trail trail = (Trail) o;
+        return id == trail.id &&
+                trail_duration == trail.trail_duration &&
+                Objects.equals(trail_img, trail.trail_img) &&
+                Objects.equals(rel_trails, trail.rel_trails) &&
+                Objects.equals(edges, trail.edges) &&
+                Objects.equals(trail_name, trail.trail_name) &&
+                Objects.equals(trail_desc, trail.trail_desc) &&
+                Objects.equals(trail_difficulty, trail.trail_difficulty);
+    }
+
 }

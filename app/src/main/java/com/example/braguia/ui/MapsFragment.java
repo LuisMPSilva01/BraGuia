@@ -3,21 +3,16 @@ package com.example.braguia.ui;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
-import com.example.braguia.ui.MapsUtilils.DirectionPointListener;
 import com.example.braguia.ui.MapsUtilils.GetPathFromLocation;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,7 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,7 +47,7 @@ public class MapsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_maps, container, false);
+        View view = inflater.inflate(R.layout.fragment_maps_overview, container, false);
         trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
         requireActivity().getSupportFragmentManager().popBackStack();
         trailViewModel.getTrailById(1).observe(getViewLifecycleOwner(), trail -> {
@@ -65,10 +60,7 @@ public class MapsFragment extends Fragment {
     public void loadMap(GoogleMap googleMap,Trail trail) {
         mMap = googleMap;
 
-        List<EdgeTip> edgeTips = trail.getEdges().stream()
-                .flatMap(e -> Stream.of(e.getEdge_start(), e.getEdge_end()))
-                .distinct()
-                .collect(Collectors.toList());
+        List<EdgeTip> edgeTips = trail.getRoute();
 
         ArrayList<LatLng> wayPointsAPI = new ArrayList<>();
         for(EdgeTip edgeTip:edgeTips){
@@ -87,7 +79,7 @@ public class MapsFragment extends Fragment {
         }).execute();
 
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(source, 18));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(source, 12));
     }
 
     private void displayTrailOnMap(Trail trail) {

@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity(
         tableName = "relPin",
         foreignKeys = @ForeignKey(
@@ -36,4 +38,17 @@ public class RelPin{
     @ColumnInfo(name = "pin")
     @SerializedName("pin")
     int pin;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RelPin relPin = (RelPin) o;
+        return id == relPin.id && pin == relPin.pin && Objects.equals(value, relPin.value) && Objects.equals(attrib, relPin.attrib);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, value, attrib, pin);
+    }
 }

@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity(
         tableName = "medium",
         foreignKeys = @ForeignKey(
@@ -36,4 +38,17 @@ public class Medium{
     @ColumnInfo(name = "media_pin")
     @SerializedName("media_pin")
     int media_pin;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Medium medium = (Medium) o;
+        return id == medium.id && media_pin == medium.media_pin && Objects.equals(media_file, medium.media_file) && Objects.equals(media_type, medium.media_type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, media_file, media_type, media_pin);
+    }
 }

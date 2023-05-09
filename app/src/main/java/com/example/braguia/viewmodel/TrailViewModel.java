@@ -19,7 +19,7 @@ public class TrailViewModel extends AndroidViewModel {
 
     public TrailViewModel(@NonNull Application application) {
         super(application);
-        repository= new TrailRepository(application);
+        repository= new TrailRepository(application,false);
         trails = repository.getAllTrails();
     }
 

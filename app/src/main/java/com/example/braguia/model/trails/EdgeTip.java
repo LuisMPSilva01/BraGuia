@@ -1,5 +1,7 @@
 package com.example.braguia.model.trails;
 
+import android.net.Uri;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -10,6 +12,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity(
         tableName = "Tip",
@@ -98,7 +101,27 @@ public class EdgeTip {
         return new LatLng(pin_lat,pin_lng);
     }
 
-    public String getMapsCoordinateString(){
+    public String getLocationString(){
         return pin_lat+","+pin_lng;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EdgeTip edgeTip = (EdgeTip) o;
+        return id == edgeTip.id
+                && Double.compare(edgeTip.pin_lat, pin_lat) == 0
+                && Double.compare(edgeTip.pin_lng, pin_lng) == 0
+                && Double.compare(edgeTip.pin_alt, pin_alt) == 0
+                && Objects.equals(rel_pin, edgeTip.rel_pin)
+                && Objects.equals(media, edgeTip.media)
+                && Objects.equals(pin_name, edgeTip.pin_name)
+                && Objects.equals(pin_desc, edgeTip.pin_desc);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, rel_pin, media, pin_name, pin_desc, pin_lat, pin_lng, pin_alt);
     }
 }
