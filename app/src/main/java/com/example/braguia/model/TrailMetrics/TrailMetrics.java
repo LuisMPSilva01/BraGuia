@@ -67,6 +67,9 @@ public class TrailMetrics {
         this.vizitedPins = vizitedPins;
     }
 
+    public static String formatPinList(List<Integer> pinIds){
+        return pinIds.stream().map(String::valueOf).collect(Collectors.joining(";"));
+    }
     @NonNull
     public String getUsername() {
         return username;
@@ -86,5 +89,9 @@ public class TrailMetrics {
 
     public String getVizitedPins() {
         return vizitedPins;
+    }
+
+    public int getMetricId() {
+        return metricId;
     }
 }

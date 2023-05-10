@@ -19,6 +19,7 @@ import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.example.braguia.model.GuideDatabase;
+import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.TrailMetrics.TrailMetricsDAO;
 import com.example.braguia.model.trails.Edge;
 import com.example.braguia.model.trails.EdgeTip;
@@ -31,6 +32,7 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +90,34 @@ public class UserRepository {
             Log.e("Debug","updated cookiies");
             updateUserAPI(updatedCookies,userName);
         });
+    }
+
+    public LiveData<List<TrailMetrics>> getTrailMetrics(){
+        return Transformations.switchMap(userName, name -> {
+            if (name == null) {
+                return new MutableLiveData<>(Collections.emptyList());
+            } else {
+                return trailMetricsDAO.getMetricsByUsername(name);
+            }
+        });
+    }
+
+    public LiveData<TrailMetrics> getTrailMetricsById(int id){
+        return trailMetricsDAO.getMetricsById(id);
+    }
+
+    public void addTrailMetrics(int trailId, float completedPercentage, float timeTaken, String pinIds) {
+        LiveData<User> userLiveData = getUser();
+        Observer<User> observer = new Observer<>() {
+            @Override
+            public void onChanged(User user) {
+                if (user != null) {
+                    new InsertTrailMetricsAsync(trailMetricsDAO).execute(new TrailMetrics(user.getUsername(),trailId,completedPercentage,timeTaken,pinIds));
+                    userLiveData.removeObserver(this);
+                }
+            }
+        };
+        userLiveData.observeForever(observer);
     }
 
 
@@ -162,7 +192,7 @@ public class UserRepository {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
-                    User user =  new User(username,"premium","","");
+                    User user =  new User(username,"premium");
                     // Store the cookies
                     Headers headers = response.headers();
                     List<String> cookies = headers.values("Set-Cookie").stream().map(e->e.split(";")[0]).collect(Collectors.toList());
@@ -227,6 +257,7 @@ public class UserRepository {
         void onLogoutFailure();
     }
 
+
     public LiveData<User> getUser() {
         MediatorLiveData<User> userLiveData = new MediatorLiveData<>();
         final LiveData<User>[] currentSource = new LiveData[]{null};
@@ -244,7 +275,7 @@ public class UserRepository {
                     }
                 });
             } else {
-                userLiveData.postValue(new User("", "loggedOff","",""));
+                userLiveData.postValue(new User("", "loggedOff"));
             }
         });
         return userLiveData;
@@ -258,7 +289,7 @@ public class UserRepository {
 
 
 
-
+/*
     public void updateTrailHistory(Integer trailId) throws InterruptedException {
         LiveData<User> userLiveData = getUser();
         Observer<User> observer = new Observer<>() {
@@ -274,23 +305,7 @@ public class UserRepository {
         };
         userLiveData.observeForever(observer);
     }
-
-
-    public void updatePinHistory(Integer pinId){
-        LiveData<User> userLiveData = getUser();
-        Observer<User> observer = new Observer<>() {
-            @Override
-            public void onChanged(User user) {
-                if (user != null) {
-                    List<Integer> ids = user.getPinHistoryList();
-                    ids.add(pinId);
-                    new UpdatePinHistAsyncTask(userDAO).execute(user.getUsername(), User.convertListToString(ids));
-                    userLiveData.removeObserver(this);
-                }
-            }
-        };
-        userLiveData.observeForever(observer);
-    }
+*/
 
     private static class InsertAsyncTask extends AsyncTask<User,Void,Void> {
         private UserDAO userDAO;
@@ -306,31 +321,16 @@ public class UserRepository {
         }
     }
 
-    private static class UpdateTrailHistAsyncTask extends AsyncTask<String,Void,Void> {
-        private UserDAO userDAO;
+    private static class InsertTrailMetricsAsync extends AsyncTask<TrailMetrics,Void,Void> {
+        private TrailMetricsDAO trailMetricsDAO;
 
-        public UpdateTrailHistAsyncTask(UserDAO catDao) {
-            this.userDAO=catDao;
+        public InsertTrailMetricsAsync(TrailMetricsDAO trailMetricsDAO) {
+            this.trailMetricsDAO=trailMetricsDAO;
         }
 
         @Override
-        protected Void doInBackground(String... strings) {
-            userDAO.updateTrailHistory(strings[0],strings[1]);
-            return null;
-        }
-    }
-
-    private static class UpdatePinHistAsyncTask extends AsyncTask<String,Void,Void> {
-        private UserDAO userDAO;
-
-        public UpdatePinHistAsyncTask(UserDAO catDao) {
-            this.userDAO=catDao;
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            userDAO.updatePinHistory(strings[0],strings[1]);
-
+        protected Void doInBackground(TrailMetrics... trailMetrics) {
+            trailMetricsDAO.insert(trailMetrics[0]);
             return null;
         }
     }

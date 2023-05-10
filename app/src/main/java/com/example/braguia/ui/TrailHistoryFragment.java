@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
+import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TrailHistoryFragment extends Fragment {
 
@@ -27,9 +29,6 @@ public class TrailHistoryFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
 
     private int mColumnCount = 1;
-
-    private UserViewModel userViewModel;
-
     public TrailHistoryFragment() {
     }
 
@@ -55,15 +54,24 @@ public class TrailHistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_trail_item_list, container, false);
 
-        userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-        userViewModel.getTrailHistory(requireActivity()).observe(getViewLifecycleOwner(), x -> {
-            Log.e("Trailist","trails size:" + x.size());
-            loadRecyclerView(view, x);
+        UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        TrailViewModel trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
+        userViewModel.getMetrics().observe(getViewLifecycleOwner(), metrics -> {
+            if(metrics!=null && metrics.size()>0){
+                trailViewModel.getTrailsById(metrics.stream()
+                        .map(TrailMetrics::getTrail_id)
+                        .collect(Collectors.toList()))
+                        .observe(getViewLifecycleOwner(),trails ->{
+                            if(trails!=null && metrics.size()==trails.size()){
+                                loadRecyclerView(view, metrics,trails);
+                            }
+                        } );
+            }
         });
         return view;
     }
 
-    private void loadRecyclerView(View view, List<Trail> trails){
+    private void loadRecyclerView(View view, List<TrailMetrics> metrics,List<Trail> trails){
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -73,17 +81,16 @@ public class TrailHistoryFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            TrailsRecyclerViewAdapter adapter = new TrailsRecyclerViewAdapter(trails);
+            TrailMetricsRecyclerViewAdapter adapter = new TrailMetricsRecyclerViewAdapter(metrics,trails);
             recyclerView.setAdapter(adapter);
             // Set the item click listener
             // Handle the item click event
-            adapter.setOnItemClickListener(this::replaceFragment);
+            adapter.setClickListener(this::replaceFragment);
         }
     }
 
-    private void replaceFragment(Trail trail) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
-        // Create a new instance of the destination fragment
-        TrailDescriptionFragment fragment = TrailDescriptionFragment.newInstance(trail.getId());
+    private void replaceFragment(TrailMetrics trailMetrics) {
+        TrailMetricsDescriptionFragment fragment = TrailMetricsDescriptionFragment.newInstance(trailMetrics.getMetricId());
         MainActivity mainActivity = (MainActivity) requireActivity();
         mainActivity.replaceFragment(fragment);
     }

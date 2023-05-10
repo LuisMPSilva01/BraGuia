@@ -60,7 +60,16 @@ public class Trail{
         this.trail_duration = 2;
         this.trail_difficulty = "trail_difficulty";
     }
-
+    public EdgeTip getEdgeTipById(int pinId){
+        for (Edge edge : edges) {
+            if (edge.getEdge_start().getId() == pinId) {
+                return edge.getEdge_start();
+            } else if (edge.getEdge_end().getId() == pinId) {
+                return edge.getEdge_end();
+            }
+        }
+        return null;
+    }
     public int getId() {
         return id;
     }

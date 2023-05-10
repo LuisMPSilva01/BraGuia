@@ -52,18 +52,12 @@ public class User {
     @SerializedName("is_superuser")
     Boolean is_superuser;
 
-    @ColumnInfo(name = "trailHistory")
-    String trailHistory;
-
-    @ColumnInfo(name = "pinHistory")
-    String pinHistory;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return username.equals(user.username) && Objects.equals(first_name, user.first_name) && Objects.equals(last_name, user.last_name) && Objects.equals(email, user.email) && Objects.equals(is_staff, user.is_staff) && Objects.equals(is_active, user.is_active) && Objects.equals(user_type, user.user_type) && Objects.equals(is_superuser, user.is_superuser) && Objects.equals(trailHistory, user.trailHistory) && Objects.equals(pinHistory, user.pinHistory);
+        return username.equals(user.username) && Objects.equals(first_name, user.first_name) && Objects.equals(last_name, user.last_name) && Objects.equals(email, user.email) && Objects.equals(is_staff, user.is_staff) && Objects.equals(is_active, user.is_active) && Objects.equals(user_type, user.user_type) && Objects.equals(is_superuser, user.is_superuser) ;
     }
 
     public boolean compativel(UserUpdater adapter){
@@ -73,20 +67,9 @@ public class User {
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
     }
-
-    public void setTrailHistory(String trailHistory) {
-        this.trailHistory = trailHistory;
-    }
-
-    public void setPinHistory(String pinHistory) {
-        this.pinHistory = pinHistory;
-    }
-
-    public User(@NonNull String username, String user_type, String trailHistory, String pinHistory) {
+    public User(@NonNull String username, String user_type) {
         this.username=username;
         this.user_type=user_type;
-        this.trailHistory=trailHistory;
-        this.pinHistory=pinHistory;
     }
 
     public void setUsername(@NonNull String username) {
@@ -130,14 +113,6 @@ public class User {
         return integerList;
     }
 
-    public List<Integer> getTrailHistoryList() {
-        return convertStringToList(trailHistory);
-    }
-
-    public List<Integer> getPinHistoryList() {
-        return convertStringToList(pinHistory);
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -149,8 +124,6 @@ public class User {
                 ", is_active=" + is_active +
                 ", user_type='" + user_type + '\'' +
                 ", is_superuser=" + is_superuser +
-                ", trailHistory='" + trailHistory + '\'' +
-                ", pinHistory='" + pinHistory + '\'' +
                 '}';
     }
 

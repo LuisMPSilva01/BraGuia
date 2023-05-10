@@ -18,7 +18,6 @@ public interface TrailDAO {
 
     @Query("SELECT * FROM trail WHERE id = :id")
     LiveData<Trail> getTrailById(int id);
-
     @Query("SELECT * FROM trail WHERE id IN (:ids)")
     LiveData<List<Trail>> getTrailsById(List<Integer> ids);
 

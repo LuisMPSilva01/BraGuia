@@ -85,9 +85,9 @@ public class PinListFragment extends Fragment {
     }
 
     private void replaceFragment(EdgeTip edgeTip) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
-        Toast toast = Toast.makeText(getContext(), "Teste", Toast.LENGTH_SHORT);
-        toast.show();
-
+        PinFragment fragment = PinFragment.newInstance(edgeTip);
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity.replaceFragment(fragment);
     }
 }
 

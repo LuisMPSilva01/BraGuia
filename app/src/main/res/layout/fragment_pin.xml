@@ -9,27 +9,34 @@
         android:id="@+id/pin_title"
         android:layout_width="174dp"
         android:layout_height="18dp"
+        android:layout_marginTop="64dp"
         android:gravity="center"
         android:text="Pin title"
-        tools:layout_editor_absoluteX="108dp"
-        tools:layout_editor_absoluteY="75dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
+
 
     <ImageView
         android:id="@+id/pin_img"
         android:layout_width="159dp"
         android:layout_height="155dp"
-        tools:layout_editor_absoluteX="31dp"
-        tools:layout_editor_absoluteY="145dp"
-        tools:srcCompat="@tools:sample/avatars"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pin_title"
+        tools:ignore="MissingConstraints"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <VideoView
         android:id="@+id/pin_vid"
         android:layout_width="159dp"
         android:layout_height="155dp"
-        tools:layout_editor_absoluteX="201dp"
-        tools:layout_editor_absoluteY="145dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/pin_img"
+        app:layout_constraintTop_toBottomOf="@+id/pin_title"
         tools:ignore="MissingConstraints" />
 
 
@@ -37,16 +44,20 @@
         android:id="@+id/pin_description"
         android:layout_width="325dp"
         android:layout_height="86dp"
+        android:layout_marginTop="40dp"
         android:text="Pin description"
-        tools:layout_editor_absoluteX="32dp"
-        tools:layout_editor_absoluteY="344dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pin_img"
         tools:ignore="MissingConstraints" />
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/pin_mapView"
         android:layout_width="325dp"
         android:layout_height="140dp"
-        tools:layout_editor_absoluteX="34dp"
-        tools:layout_editor_absoluteY="449dp"
+        android:layout_marginTop="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pin_description"
         tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>

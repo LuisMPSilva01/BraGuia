@@ -6,6 +6,8 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
@@ -15,6 +17,9 @@ import com.example.braguia.model.trails.TrailAPI;
 import com.example.braguia.model.trails.TrailDAO;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -96,8 +101,31 @@ public class TrailRepository {
     }
 
     public LiveData<List<Trail>> getTrailsById(List<Integer> ids) {
-        return trailDAO.getTrailsById(ids);
+        MediatorLiveData<List<Trail>> mediatorLiveData = new MediatorLiveData<>();
+        LiveData<List<Trail>> liveData = trailDAO.getTrailsById(ids);
+
+        mediatorLiveData.addSource(liveData, trails -> {
+            // Duplicate each Trail object based on the number of times it appears in the ids list
+            List<Trail> duplicatedTrails = new ArrayList<>();
+            for (Trail trail : trails) {
+                int count = Collections.frequency(ids, trail.getId());
+                for (int i = 0; i < count; i++) {
+                    duplicatedTrails.add(trail);
+                }
+            }
+
+            // Sort the list of duplicated Trail objects based on the order of the IDs in the ids list
+            duplicatedTrails.sort(Comparator.comparingInt(t -> ids.indexOf(t.getId())));
+
+            // Update the value of the MediatorLiveData with the sorted list of duplicated Trail objects
+            mediatorLiveData.postValue(duplicatedTrails);
+        });
+
+        return mediatorLiveData;
     }
+
+
+
 
     private static class InsertAsyncTask extends AsyncTask<List<Trail>,Void,Void> {
         private TrailDAO trailDAO;

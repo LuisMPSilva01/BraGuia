@@ -12,7 +12,9 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.room.ColumnInfo;
 
+import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.user.User;
 import com.example.braguia.repositories.TrailRepository;
@@ -20,8 +22,10 @@ import com.example.braguia.repositories.UserRepository;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import retrofit2.http.Body;
 
@@ -78,16 +82,19 @@ public class UserViewModel extends AndroidViewModel {
     public LiveData<User> getUser() throws IOException {
         return user;
     }
-    public void updateTrailHistory(Integer trailId) throws InterruptedException {
-        repository.updateTrailHistory(trailId);
+
+    public LiveData<List<TrailMetrics>> getMetrics(){
+        return repository.getTrailMetrics();
     }
 
-    public void updatePinHistory(Integer pinId){
-        repository.updatePinHistory(pinId);
+    public LiveData<TrailMetrics> getMetricsById(int id){
+        return repository.getTrailMetricsById(id);
     }
 
-    public LiveData<List<Trail>> getTrailHistory(ViewModelStoreOwner vmso){
-        TrailViewModel trailViewModel = new ViewModelProvider(vmso).get(TrailViewModel.class);
-        return trailViewModel.getTrailsById(Objects.requireNonNull(user.getValue()).getTrailHistoryList());
+    public void addMetrics(int trailId,float completedPercentage,float timeTaken,List<Integer> vizitedPins){
+        repository.addTrailMetrics(trailId,
+                completedPercentage,
+                timeTaken,
+                TrailMetrics.formatPinList(vizitedPins));
     }
 }

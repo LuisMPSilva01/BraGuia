@@ -27,17 +27,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MapsFragment extends Fragment {
-    final int id;
     private GoogleMap mMap;
     private String TAG = "MAPS";
     TrailViewModel trailViewModel;
+    final List<EdgeTip> edgeTips;
 
-    public MapsFragment(int id){
-        this.id=id;
+    public MapsFragment(List<EdgeTip> edgeTips){
+        this.edgeTips=edgeTips;
     }
 
-    public static MapsFragment newInstance(int id) {
-        return new MapsFragment(id);
+    public static MapsFragment newInstance(List<EdgeTip> edgeTips) {
+        return new MapsFragment(edgeTips);
     }
 
     @Override
@@ -48,47 +48,37 @@ public class MapsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_maps_overview, container, false);
-        trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
-        requireActivity().getSupportFragmentManager().popBackStack();
-        trailViewModel.getTrailById(1).observe(getViewLifecycleOwner(), trail -> {
-            if(trail!=null) {
-                displayTrailOnMap(trail);
-            }
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(googleMap -> {
+            googleMap.getUiSettings().setZoomControlsEnabled(true);
+            loadMap(googleMap);
         });
         return view;
     }
-    public void loadMap(GoogleMap googleMap,Trail trail) {
+    public void loadMap(GoogleMap googleMap) {
         mMap = googleMap;
-
-        List<EdgeTip> edgeTips = trail.getRoute();
 
         ArrayList<LatLng> wayPointsAPI = new ArrayList<>();
         for(EdgeTip edgeTip:edgeTips){
             wayPointsAPI.add(edgeTip.getMapsCoordinate());
             mMap.addMarker(new MarkerOptions().position(edgeTip.getMapsCoordinate()).title(edgeTip.getPin_name()));
         }
-
         LatLng source = wayPointsAPI.get(0);
-        LatLng destination = wayPointsAPI.get(wayPointsAPI.size()-1);
-        wayPointsAPI.remove(0);
-        wayPointsAPI.remove(wayPointsAPI.size()-1);
 
-        new GetPathFromLocation(getActivity(), source, destination, wayPointsAPI, mMap, false, false, polyLine ->{
-            polyLine.color(R.color.teal_200);
-            mMap.addPolyline(polyLine);
-        }).execute();
+        if(wayPointsAPI.size()>=2) {
+            LatLng destination = wayPointsAPI.get(wayPointsAPI.size() - 1);
+            wayPointsAPI.remove(0);
+            wayPointsAPI.remove(wayPointsAPI.size() - 1);
 
+            new GetPathFromLocation(getActivity(), source, destination, wayPointsAPI, mMap, false, false, polyLine -> {
+                polyLine.color(R.color.teal_200);
+                mMap.addPolyline(polyLine);
+            }).execute();
+        }
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(source, 12));
-    }
-
-    private void displayTrailOnMap(Trail trail) {
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(googleMap -> {
-            googleMap.getUiSettings().setZoomControlsEnabled(true);
-            loadMap(googleMap, trail);
-        });
     }
 
     public static boolean meetsPreRequisites(Context context){

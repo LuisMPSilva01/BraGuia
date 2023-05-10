@@ -56,26 +56,10 @@ public class TrailDescriptionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_trail_description, container, false);
 
         UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-        try {
-            userViewModel.updateTrailHistory(id);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        userViewModel.addMetrics(id,23,103,new ArrayList<>());
 
         trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
         trailViewModel.getTrailById(id).observe(getViewLifecycleOwner(), x -> loadView(view, x));
-
-
-        FragmentManager childFragmentManager = getChildFragmentManager();
-        PinListFragment childFragment = PinListFragment.newInstance(new ArrayList<>(List.of(id)));
-        FragmentTransaction transaction1 = childFragmentManager.beginTransaction();
-        transaction1.add(R.id.pin_list_content, childFragment);
-        transaction1.commit();
-
-        MapsFragment mapsFragment = MapsFragment.newInstance(id);
-        FragmentTransaction transaction2 = childFragmentManager.beginTransaction();
-        transaction2.replace(R.id.maps_trail_overview, mapsFragment);
-        transaction2.commit();
         return view;
     }
 
@@ -89,6 +73,19 @@ public class TrailDescriptionFragment extends Fragment {
                         .into(imagem);
         Button intro = view.findViewById(R.id.start_trip_button);
         intro.setOnClickListener(v -> startNavigation(trail));
+
+
+        FragmentManager childFragmentManager = getChildFragmentManager();
+        PinListFragment childFragment = PinListFragment.newInstance(new ArrayList<>(List.of(id)));
+        FragmentTransaction transaction1 = childFragmentManager.beginTransaction();
+        transaction1.add(R.id.pin_list_content, childFragment);
+        transaction1.commit();
+
+
+        MapsFragment mapsFragment = MapsFragment.newInstance(trail.getRoute());
+        FragmentTransaction transaction2 = childFragmentManager.beginTransaction();
+        transaction2.replace(R.id.maps_trail_overview, mapsFragment);
+        transaction2.commit();
     }
 
     private void startNavigation(Trail trail) {
