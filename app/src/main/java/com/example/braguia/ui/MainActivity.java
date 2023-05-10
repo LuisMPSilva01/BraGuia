@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Localization switch event listener
         MenuItem menuItem = binding.sidebar.getMenu().findItem(R.id.localization);
-        View view = MenuItemCompat.getActionView(menuItem);
+        View view = menuItem.getActionView();
         SwitchCompat localization_switch = view.findViewById(R.id.localizationSwitch);
         localization_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
