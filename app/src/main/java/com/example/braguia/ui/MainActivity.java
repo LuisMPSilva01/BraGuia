@@ -148,7 +148,9 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 userViewModel.logOut(getApplicationContext(), new UserViewModel.LogOutCallback() {
                                     @Override
-                                    public void onLogOutSuccess() {}
+                                    public void onLogOutSuccess() {
+                                        changeToLoginActivity();
+                                    }
                                     @Override
                                     public void onLogOutFailure() {}
                                 });
