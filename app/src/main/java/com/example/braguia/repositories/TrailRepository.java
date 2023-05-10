@@ -56,11 +56,12 @@ public class TrailRepository {
         );
     }
 
+
     public void insert(List<Trail> trails){
         new InsertAsyncTask(trailDAO).execute(trails);
     }
 
-    private void makeRequest() throws IOException {
+    public void makeRequest() throws IOException {
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl("https://c5a2-193-137-92-29.eu.ngrok.io/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -107,7 +108,10 @@ public class TrailRepository {
 
         @Override
         protected Void doInBackground(List<Trail>... lists) {
-            trailDAO.insert(lists[0]);
+            for (Trail trail:lists[0]){
+                trailDAO.insert(trail);
+            }
+
             return null;
         }
     }

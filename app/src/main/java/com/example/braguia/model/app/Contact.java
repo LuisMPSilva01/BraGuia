@@ -43,7 +43,7 @@ public class Contact {
     @ColumnInfo(name = "contact_desc")
     private String contactDesc;
     @SerializedName("contact_app")
-    @ColumnInfo(name = "contact_app")
+    @ColumnInfo(name = "contact_app", index = true)
     private String contactApp;
 
     public String getContactName() {

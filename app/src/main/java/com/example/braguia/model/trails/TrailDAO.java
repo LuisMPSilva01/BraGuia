@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface TrailDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(List<Trail> cats);
+    void insert(Trail trail);
 
     @Query("SELECT DISTINCT * FROM trail")
     LiveData<List<Trail>> getTrails();

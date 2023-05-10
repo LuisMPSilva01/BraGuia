@@ -82,7 +82,7 @@ public class User {
         this.pinHistory = pinHistory;
     }
 
-    public User(String username, String user_type,String trailHistory,String pinHistory) {
+    public User(@NonNull String username, String user_type, String trailHistory, String pinHistory) {
         this.username=username;
         this.user_type=user_type;
         this.trailHistory=trailHistory;

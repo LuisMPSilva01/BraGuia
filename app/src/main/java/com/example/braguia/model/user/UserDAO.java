@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.braguia.model.app.AppInfo;
+import com.example.braguia.model.TrailMetrics.TrailMetrics;
 
 import java.util.List;
 

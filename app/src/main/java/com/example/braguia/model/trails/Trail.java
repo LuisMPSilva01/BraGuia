@@ -1,6 +1,5 @@
 package com.example.braguia.model.trails;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
@@ -8,14 +7,12 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.example.braguia.model.trails.converters.TrailTypeConverter;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,7 +20,6 @@ import java.util.stream.Stream;
 @TypeConverters({TrailTypeConverter.class})
 public class Trail{
     @PrimaryKey
-    @NonNull
     @ColumnInfo(name = "id")
     @SerializedName("id")
     int id;
@@ -53,6 +49,17 @@ public class Trail{
     @ColumnInfo(name = "trail_difficulty")
     @SerializedName("trail_difficulty")
     String trail_difficulty;
+
+    public Trail(int id) {
+        this.id = id;
+        this.trail_img = "";
+        this.rel_trails = new ArrayList<>();
+        this.edges = new ArrayList<>();
+        this.trail_name = "";
+        this.trail_desc = "trail_desc";
+        this.trail_duration = 2;
+        this.trail_difficulty = "trail_difficulty";
+    }
 
     public int getId() {
         return id;

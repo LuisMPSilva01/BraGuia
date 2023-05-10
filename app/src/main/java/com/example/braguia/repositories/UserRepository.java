@@ -19,6 +19,7 @@ import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.example.braguia.model.GuideDatabase;
+import com.example.braguia.model.TrailMetrics.TrailMetricsDAO;
 import com.example.braguia.model.trails.Edge;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
@@ -57,6 +58,7 @@ import retrofit2.http.Header;
 
 public class UserRepository {
     public UserDAO userDAO;
+    public TrailMetricsDAO trailMetricsDAO;
     public MediatorLiveData<String> userName;
     private GuideDatabase database;
     private Retrofit retrofit;
@@ -74,6 +76,7 @@ public class UserRepository {
         }
 
         userDAO = database.userDAO();
+        trailMetricsDAO = database.trailMetricsDAO();
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://c5a2-193-137-92-29.eu.ngrok.io/")
                 .addConverterFactory(GsonConverterFactory.create())
