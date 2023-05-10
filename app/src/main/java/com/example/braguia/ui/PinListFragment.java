@@ -57,12 +57,7 @@ public class PinListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pin_list, container, false);
 
         trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
-        try {
-            trailViewModel.getAllTrails().observe(getViewLifecycleOwner(), x -> loadView(view, x));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        //trailViewModel.getTrailsById(ids).observe(getViewLifecycleOwner(), x -> loadView(view, x)); //TODO:FIX!
+        trailViewModel.getTrailsById(ids).observe(getViewLifecycleOwner(), x -> loadView(view, x)); //TODO:FIX!
         return view;
     }
 

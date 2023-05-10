@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Objects;
+
 @Entity(
         tableName = "edge",
         foreignKeys = @ForeignKey(
@@ -73,5 +75,24 @@ public class Edge{
 
     public int getEdge_trail() {
         return edge_trail;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Edge edge = (Edge) o;
+        return id == edge.id
+                && edge_duration == edge.edge_duration
+                && edge_trail == edge.edge_trail
+                && Objects.equals(edge_start, edge.edge_start)
+                && Objects.equals(edge_end, edge.edge_end)
+                && Objects.equals(edge_transport, edge.edge_transport)
+                && Objects.equals(edge_desc, edge.edge_desc);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, edge_start, edge_end, edge_transport, edge_duration, edge_desc, edge_trail);
     }
 }

@@ -6,6 +6,8 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.room.Room;
+import androidx.test.core.app.ApplicationProvider;
 
 import com.example.braguia.model.GuideDatabase;
 import com.example.braguia.model.trails.Trail;
@@ -26,8 +28,16 @@ public class TrailRepository {
     public MediatorLiveData<List<Trail>> allTrails;
     private GuideDatabase database;
 
-    public TrailRepository(Application application){
-        database = GuideDatabase.getInstance(application);
+    public TrailRepository(Application application,Boolean freshDB){
+        if(freshDB){
+            database = Room.inMemoryDatabaseBuilder(
+                            ApplicationProvider.getApplicationContext(),
+                            GuideDatabase.class)
+                    .allowMainThreadQueries()
+                    .build();
+        }else {
+            database = GuideDatabase.getInstance(application);
+        }
         trailDAO = database.trailDAO();
         allTrails = new MediatorLiveData<>();
         allTrails.addSource(
