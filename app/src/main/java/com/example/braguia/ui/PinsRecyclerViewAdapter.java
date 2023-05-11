@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
+import com.example.braguia.viewAdapters.EdgeTipViewAdapter;
 
 import java.util.List;
 
@@ -41,8 +42,9 @@ public class PinsRecyclerViewAdapter extends RecyclerView.Adapter<PinsRecyclerVi
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.pinName.setText(mValues.get(position).getPin_name());
-        holder.pinImage.setImageResource(R.drawable.uminho_logo); //TODO: isto é provisorio
-        //Picasso.get().load(mValues.get(position).getPin_desc().replace("http", "https")).into(holder.imageView);
+        if(!EdgeTipViewAdapter.setImageView(mValues.get(position),holder.pinImage)){
+            holder.pinImage.setImageResource(R.drawable.no_preview_image);
+        }
 
         // Set click listener for each item
         holder.itemView.setOnClickListener(v -> {

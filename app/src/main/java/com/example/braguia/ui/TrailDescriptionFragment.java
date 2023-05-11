@@ -39,6 +39,7 @@ public class TrailDescriptionFragment extends Fragment {
     public static TrailDescriptionFragment newInstance(int id) {
         return new TrailDescriptionFragment(id);
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

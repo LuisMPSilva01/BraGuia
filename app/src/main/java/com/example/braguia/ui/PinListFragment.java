@@ -63,10 +63,10 @@ public class PinListFragment extends Fragment {
 
     private void loadView(View view, List<Trail> trails){
         if (view instanceof RecyclerView) {
-            Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
 
-            recyclerView.setLayoutManager(new GridLayoutManager(context, 1));
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
+            recyclerView.setLayoutManager(gridLayoutManager);
 
             List<EdgeTip> edgeTips = trails.stream()
                     .map(e->e.getEdges()
@@ -78,8 +78,8 @@ public class PinListFragment extends Fragment {
                     .collect(Collectors.toList());
             PinsRecyclerViewAdapter adapter = new PinsRecyclerViewAdapter(edgeTips);
             recyclerView.setAdapter(adapter);
-            // Set the item click listener
-            // Handle the item click event
+
+
             adapter.setOnItemClickListener(this::replaceFragment);
         }
     }

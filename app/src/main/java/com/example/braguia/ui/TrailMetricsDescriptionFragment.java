@@ -49,8 +49,8 @@ public class TrailMetricsDescriptionFragment extends Fragment {
 
         UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         TrailViewModel trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
-        userViewModel.getMetricsById(id).observe(requireActivity(), trailMetrics -> {
-            trailViewModel.getTrailById(trailMetrics.getTrail_id()).observe(requireActivity(), trail -> {
+        userViewModel.getMetricsById(id).observe(getViewLifecycleOwner(), trailMetrics -> {
+            trailViewModel.getTrailById(trailMetrics.getTrail_id()).observe(getViewLifecycleOwner(), trail -> {
                 if(trail!=null){
                     loadView(view,trail,trailMetrics);
                 }

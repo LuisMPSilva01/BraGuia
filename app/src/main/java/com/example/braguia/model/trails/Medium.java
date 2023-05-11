@@ -51,4 +51,20 @@ public class Medium{
     public int hashCode() {
         return Objects.hash(id, media_file, media_type, media_pin);
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getMedia_file() {
+        return media_file;
+    }
+
+    public String getMedia_type() {
+        return media_type;
+    }
+
+    public int getMedia_pin() {
+        return media_pin;
+    }
 }

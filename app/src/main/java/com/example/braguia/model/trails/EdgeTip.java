@@ -13,6 +13,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity(
         tableName = "Tip",
@@ -75,6 +76,17 @@ public class EdgeTip {
 
     public List<Medium> getMedia() {
         return media;
+    }
+
+    public boolean hasImage(){
+        return media.stream().map(Medium::getMedia_type).anyMatch(e -> Objects.equals(e, "I"));
+    }
+
+    public boolean hasVideo(){
+        return media.stream().map(Medium::getMedia_type).anyMatch(e -> Objects.equals(e, "V"));
+    }
+    public boolean hasAudio(){
+        return media.stream().map(Medium::getMedia_type).anyMatch(e -> Objects.equals(e, "R"));
     }
 
     public String getPin_name() {
