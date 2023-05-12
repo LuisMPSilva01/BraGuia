@@ -7,7 +7,10 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
+import com.example.braguia.model.trails.converters.EdgeTipTypeConverter;
+import com.example.braguia.model.trails.converters.TrailTypeConverter;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
@@ -20,20 +23,21 @@ import java.util.stream.Collectors;
         foreignKeys = {
                 @ForeignKey(
                         entity = Edge.class,
-                        parentColumns = "id",
-                        childColumns = "edge_start",
+                        parentColumns = "edge_start",
+                        childColumns = "id",
                         onDelete = ForeignKey.CASCADE
                 ),
                 @ForeignKey(
                         entity = Edge.class,
-                        parentColumns = "id",
-                        childColumns = "edge_end",
+                        parentColumns = "edge_end",
+                        childColumns = "id",
                         onDelete = ForeignKey.CASCADE
                 )
         },
         indices = {
                 @Index(value = {"id"}, unique = true)
         })
+@TypeConverters({EdgeTipTypeConverter.class})
 public class EdgeTip {
     @PrimaryKey
     @ColumnInfo(name = "id")
