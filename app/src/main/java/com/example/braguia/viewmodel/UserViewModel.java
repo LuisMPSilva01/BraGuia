@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.room.ColumnInfo;
 
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
+import com.example.braguia.model.Trip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.user.User;
 import com.example.braguia.repositories.TrailRepository;
@@ -96,5 +97,9 @@ public class UserViewModel extends AndroidViewModel {
                 completedPercentage,
                 timeTaken,
                 TrailMetrics.formatPinList(vizitedPins));
+    }
+
+    public void addMetrics(Trip trip){
+        repository.addTrailMetrics(trip);
     }
 }

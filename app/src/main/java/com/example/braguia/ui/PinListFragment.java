@@ -1,11 +1,9 @@
 package com.example.braguia.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,7 +15,6 @@ import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.TrailViewModel;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,16 +22,26 @@ import java.util.stream.Stream;
 
 public class PinListFragment extends Fragment {
     private TrailViewModel trailViewModel;
-    private static final String ARG_MY_LIST = "my_list";
+    private static final String ARG_TRAIL_LIST = "TRAIL_LIST";
+    private static final String ARG_PIN_LIST = "PIN_LIST";
 
     private List<Integer> ids;
 
 
 
-    public static PinListFragment newInstance(List<Integer> ids) {
+    public static PinListFragment newInstanceByTrails(List<Integer> ids) {
         PinListFragment fragment = new PinListFragment();
         Bundle args = new Bundle();
-        args.putIntegerArrayList(ARG_MY_LIST, new ArrayList<>(ids));
+        args.putIntegerArrayList(ARG_TRAIL_LIST, new ArrayList<>(ids));
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public static PinListFragment newInstanceByPins(List<Integer> ids) {
+        PinListFragment fragment = new PinListFragment();
+        Bundle args = new Bundle();
+        args.putIntegerArrayList(ARG_PIN_LIST, new ArrayList<>(ids));
         fragment.setArguments(args);
 
         return fragment;
@@ -43,12 +50,21 @@ public class PinListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Get the arguments from the Bundle
         if (getArguments() != null) {
-            ids = getArguments().getIntegerArrayList(ARG_MY_LIST);
+            List<Integer> idsList = getArguments().getIntegerArrayList(ARG_TRAIL_LIST);
+            if(idsList != null) {
+                ids = idsList;
+            } else {
+                ids = getArguments().getIntegerArrayList(ARG_PIN_LIST);
+                if(ids == null) {
+                    throw new IllegalArgumentException("Both trail ID list and pin ID list are null");
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("Arguments bundle is null");
         }
     }
+
 
 
     @Override

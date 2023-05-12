@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
+import com.example.braguia.model.Trip;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.TrailViewModel;
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 public class TrailDescriptionFragment extends Fragment {
     private TrailViewModel trailViewModel;
     private final int id;
+    private Trip trip;
     public TrailDescriptionFragment(int id){
         this.id=id;
     }
@@ -46,18 +47,12 @@ public class TrailDescriptionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(!MapsFragment.meetsPreRequisites(getContext())){
             Toast toast = Toast.makeText(getContext(), "Instale o Google Maps para poder navegar", Toast.LENGTH_SHORT);
             toast.show();
         }
-
         View view = inflater.inflate(R.layout.fragment_trail_description, container, false);
-
-        UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
-        userViewModel.addMetrics(id,23,103,new ArrayList<>());
 
         trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
         trailViewModel.getTrailById(id).observe(getViewLifecycleOwner(), x -> loadView(view, x));
@@ -73,11 +68,23 @@ public class TrailDescriptionFragment extends Fragment {
                         .replace("http", "https"))
                         .into(imagem);
         Button intro = view.findViewById(R.id.start_trip_button);
-        intro.setOnClickListener(v -> startNavigation(trail));
+
+        trip = null;
+        intro.setOnClickListener(v -> {
+            if(trip==null){
+                intro.setText(R.string.finish);
+                startNavigation(trail);
+                trip = new Trip(trail);
+            } else {
+                intro.setText(R.string.start);
+                endNavigation(trip);
+                trip=null;
+            }
+        });
 
 
         FragmentManager childFragmentManager = getChildFragmentManager();
-        PinListFragment childFragment = PinListFragment.newInstance(new ArrayList<>(List.of(id)));
+        PinListFragment childFragment = PinListFragment.newInstanceByTrails(new ArrayList<>(List.of(id)));
         FragmentTransaction transaction1 = childFragmentManager.beginTransaction();
         transaction1.add(R.id.pin_list_content, childFragment);
         transaction1.commit();
@@ -115,6 +122,12 @@ public class TrailDescriptionFragment extends Fragment {
             Toast toast = Toast.makeText(getContext(), "Instale o Google Maps para poder navegar", Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    private void endNavigation(Trip trip) {
+        UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        userViewModel.addMetrics(trip);
+        Toast.makeText(getContext(), "Métricas registadas no histórico", Toast.LENGTH_LONG).show();
     }
 }
 

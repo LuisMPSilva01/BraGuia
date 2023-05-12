@@ -21,6 +21,7 @@ import androidx.test.core.app.ApplicationProvider;
 import com.example.braguia.model.GuideDatabase;
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.TrailMetrics.TrailMetricsDAO;
+import com.example.braguia.model.Trip;
 import com.example.braguia.model.trails.Edge;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
@@ -112,7 +113,23 @@ public class UserRepository {
             @Override
             public void onChanged(User user) {
                 if (user != null) {
-                    new InsertTrailMetricsAsync(trailMetricsDAO).execute(new TrailMetrics(user.getUsername(),trailId,completedPercentage,timeTaken,pinIds));
+                    TrailMetrics trailMetrics = new TrailMetrics(user.getUsername(),trailId,completedPercentage,timeTaken,pinIds);
+                    new InsertTrailMetricsAsync(trailMetricsDAO).execute(trailMetrics);
+                    userLiveData.removeObserver(this);
+                }
+            }
+        };
+        userLiveData.observeForever(observer);
+    }
+
+    public void addTrailMetrics(Trip trip) {
+        LiveData<User> userLiveData = getUser();
+        Observer<User> observer = new Observer<>() {
+            @Override
+            public void onChanged(User user) {
+                if (user != null) {
+                    TrailMetrics trailMetrics = trip.finish(user.getUsername());
+                    new InsertTrailMetricsAsync(trailMetricsDAO).execute(trailMetrics);
                     userLiveData.removeObserver(this);
                 }
             }

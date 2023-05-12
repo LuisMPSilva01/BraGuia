@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.repositories.TrailRepository;
 
@@ -33,5 +34,9 @@ public class TrailViewModel extends AndroidViewModel {
 
     public LiveData<List<Trail>> getTrailsById(List<Integer> ids) {
         return repository.getTrailsById(ids);
+    }
+
+    public LiveData<List<EdgeTip>> getPinsById(List<Integer> ids) {
+        return repository.getPinsById(ids);
     }
 }

@@ -12,6 +12,7 @@ import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.example.braguia.model.GuideDatabase;
+import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.trails.TrailAPI;
 import com.example.braguia.model.trails.TrailDAO;
@@ -119,6 +120,30 @@ public class TrailRepository {
 
             // Update the value of the MediatorLiveData with the sorted list of duplicated Trail objects
             mediatorLiveData.postValue(duplicatedTrails);
+        });
+
+        return mediatorLiveData;
+    }
+
+    public LiveData<List<EdgeTip>> getPinsById(List<Integer> ids) {
+        MediatorLiveData<List<EdgeTip>> mediatorLiveData = new MediatorLiveData<>();
+        LiveData<List<EdgeTip>> liveData = trailDAO.getPinsById(ids);
+
+        mediatorLiveData.addSource(liveData, pins -> {
+            // Duplicate each Pin object based on the number of times it appears in the ids list
+            List<EdgeTip> duplicatedPins = new ArrayList<>();
+            for (EdgeTip edgeTip : pins) {
+                int count = Collections.frequency(ids, edgeTip.getId());
+                for (int i = 0; i < count; i++) {
+                    duplicatedPins.add(edgeTip);
+                }
+            }
+
+            // Sort the list of duplicated Trail objects based on the order of the IDs in the ids list
+            duplicatedPins.sort(Comparator.comparingInt(t -> ids.indexOf(t.getId())));
+
+            // Update the value of the MediatorLiveData with the sorted list of duplicated Trail objects
+            mediatorLiveData.postValue(duplicatedPins);
         });
 
         return mediatorLiveData;

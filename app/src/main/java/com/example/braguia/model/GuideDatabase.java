@@ -13,6 +13,7 @@ import com.example.braguia.model.TrailMetrics.TrailMetricsDAO;
 import com.example.braguia.model.app.AppInfo;
 import com.example.braguia.model.app.AppInfoDAO;
 import com.example.braguia.model.app.Contact;
+import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.trails.TrailDAO;
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
@@ -20,7 +21,7 @@ import com.example.braguia.model.user.User;
 import com.example.braguia.model.user.UserDAO;
 import com.example.braguia.model.user.UserUpdater;
 
-@Database(entities = {Trail.class, AppInfo.class, User.class, Contact.class, UserUpdater.class, TrailMetrics.class}, version = 1001)
+@Database(entities = {Trail.class, AppInfo.class, User.class, Contact.class, UserUpdater.class, TrailMetrics.class, EdgeTip.class}, version = 1004)
 public abstract class GuideDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "BraGuide";
