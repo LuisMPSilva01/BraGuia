@@ -99,10 +99,6 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new HomeFragment());
                     break;
 
-                case R.id.favourites:
-                    replaceFragment(new FavouritesFragment());
-                    break;
-
                 case R.id.discover:
                     replaceFragment(new DiscoverFragment());
                     break;

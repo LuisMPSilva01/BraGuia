@@ -10,11 +10,6 @@ import android.view.ViewGroup;
 
 import com.example.braguia.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LogoutFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LogoutFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -34,6 +29,6 @@ public class LogoutFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favourites, container, false);
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 }

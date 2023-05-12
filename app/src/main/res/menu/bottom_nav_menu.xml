@@ -6,11 +6,6 @@
         android:icon="@drawable/baseline_home_24"/>
 
     <item
-        android:title="Favourites"
-        android:id="@+id/favourites"
-        android:icon="@drawable/baseline_favorite_24"/>
-
-    <item
         android:title="Discover"
         android:id="@+id/discover"
         android:icon="@drawable/baseline_search_24"/>
