@@ -1,21 +1,24 @@
 package com.example.braguia.ui;
 
-import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.braguia.R;
 import com.example.braguia.model.app.AppInfo;
+import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.AppInfoViewModel;
+import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,16 +27,9 @@ import java.io.IOException;
  */
 public class HomeFragment extends Fragment {
     private AppInfoViewModel appInfoViewModel;
+    private TrailViewModel trailsViewModel;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private TrailsHomeRecyclerViewAdapter adapter;
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
@@ -48,10 +44,17 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        trailsViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
+        try {
+            trailsViewModel.getAllTrails().observe(getViewLifecycleOwner(), y -> {
+                loadRecyclerView(view, y);
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         appInfoViewModel = new ViewModelProvider(requireActivity()).get(AppInfoViewModel.class);
         try {
-            Context context = view.getContext();
             appInfoViewModel.getAppInfo().observe(getViewLifecycleOwner(), x -> {
                 loadView(view, x);
             });
@@ -61,10 +64,33 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void loadView(View view, AppInfo appInfo){
+    private void loadView(View view, AppInfo appInfo ){
         TextView title = view.findViewById(R.id.textView2);
         title.setText(appInfo.getAppDesc());
         TextView intro = view.findViewById(R.id.appIntro);
         intro.setText(appInfo.getAppLandingPageText());
+
+    }
+
+    private void loadRecyclerView(View view, List<Trail> trails){
+        RecyclerView recyclerView = view.findViewById(R.id.trail_main_list);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+        adapter = new TrailsHomeRecyclerViewAdapter(trails);
+        recyclerView.setAdapter(adapter);
+
+
+        adapter.setOnItemClickListener(this::replaceFragment);
+
+
+    }
+
+    private void replaceFragment(Trail trail) {
+        // Create a new instance of the destination fragment
+        TrailDescriptionFragment fragment = TrailDescriptionFragment.newInstance(trail.getId());
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity.replaceFragment(fragment);
     }
 }

@@ -1,13 +1,11 @@
 package com.example.braguia.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,12 +23,7 @@ import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
-/*
-* Neste momento, este fragmento só imprime o conteudo escrito no centro do ecrã.
-* TODO: Podemos permitir pesquisa por nome, sugerir locais (random?) debaixo da searchview, ...
-* */
 public class DiscoverFragment extends Fragment {
 
     private SearchView searchView;

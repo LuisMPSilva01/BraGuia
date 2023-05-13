@@ -1,6 +1,5 @@
 package com.example.braguia.ui;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,22 +7,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
-import com.example.braguia.model.app.Partner;
 import com.example.braguia.model.trails.Trail;
-import com.example.braguia.repositories.TrailRepository;
-import com.example.braguia.viewmodel.TrailViewModel;
-import com.example.braguia.viewmodel.UserViewModel;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class TrailMetricsRecyclerViewAdapter extends RecyclerView.Adapter<TrailMetricsRecyclerViewAdapter.ViewHolder> {
 

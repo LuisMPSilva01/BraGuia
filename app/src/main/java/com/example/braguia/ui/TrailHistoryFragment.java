@@ -2,7 +2,6 @@ package com.example.braguia.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
