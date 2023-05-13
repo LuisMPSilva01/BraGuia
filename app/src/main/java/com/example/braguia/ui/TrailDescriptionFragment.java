@@ -1,8 +1,16 @@
 package com.example.braguia.ui;
 
+import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +20,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
-import com.example.braguia.model.Trip;
+import com.example.braguia.ui.Services.LocationTracker;
+import com.example.braguia.ui.Services.Trip;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.TrailViewModel;
@@ -74,7 +88,8 @@ public class TrailDescriptionFragment extends Fragment {
             if(trip==null){
                 intro.setText(R.string.finish);
                 startNavigation(trail);
-                trip = new Trip(trail);
+                trip = new Trip(trail, this::createNotification);
+                trip.start(getContext());
             } else {
                 intro.setText(R.string.start);
                 endNavigation(trip);
@@ -98,6 +113,7 @@ public class TrailDescriptionFragment extends Fragment {
 
     private void startNavigation(Trail trail) {
         // Create a new instance of the destination fragment
+        createNotification(trail.getRoute().get(0));
         if(MapsFragment.meetsPreRequisites(getContext())){
             List<String> route = trail.getRoute().stream()
                     .map(EdgeTip::getLocationString)
@@ -128,6 +144,52 @@ public class TrailDescriptionFragment extends Fragment {
         UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         userViewModel.addMetrics(trip);
         Toast.makeText(getContext(), "Métricas registadas no histórico", Toast.LENGTH_LONG).show();
+    }
+
+    public void createNotification(EdgeTip edgeTip){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("channel_id", "channel", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = requireActivity().getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireActivity(), "channel_id")
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle(edgeTip.getPin_name())
+                .setContentText(edgeTip.getPin_desc());
+
+        // Add action button
+        Intent intent = new Intent(requireActivity(), NotificationPinScreenActivity.class);
+        intent.putExtra("EdgeTip", edgeTip);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(requireActivity());
+        stackBuilder.addNextIntentWithParentStack(intent);
+            // Get the PendingIntent containing the entire back stack
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(0,
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(resultPendingIntent);
+
+
+        Notification notification = builder.build();
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(requireActivity());
+            notificationManagerCompat.notify(1, notification);
+        } else {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Save any necessary data into the outState Bundle object
+    }
+
+    private void replaceFragment(EdgeTip edgeTip) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
+        PinFragment fragment = PinFragment.newInstance(edgeTip);
+        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity.replaceFragment(fragment);
     }
 }
 

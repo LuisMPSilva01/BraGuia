@@ -40,6 +40,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
 import com.example.braguia.databinding.ActivityMainBinding;
+import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.viewmodel.UserViewModel;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;

@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity(
@@ -21,7 +22,7 @@ import java.util.Objects;
         indices = {
                 @Index(value = {"id"}, unique = true)
         })
-public class RelPin{
+public class RelPin implements Serializable {
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")

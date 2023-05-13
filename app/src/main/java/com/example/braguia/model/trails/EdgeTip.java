@@ -1,5 +1,6 @@
 package com.example.braguia.model.trails;
 
+import android.location.Location;
 import android.net.Uri;
 
 import androidx.room.ColumnInfo;
@@ -14,6 +15,7 @@ import com.example.braguia.model.trails.converters.TrailTypeConverter;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -38,7 +40,7 @@ import java.util.stream.Collectors;
                 @Index(value = {"id"}, unique = true)
         })
 @TypeConverters({EdgeTipTypeConverter.class})
-public class EdgeTip {
+public class EdgeTip implements Serializable {
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")
@@ -119,6 +121,14 @@ public class EdgeTip {
 
     public String getLocationString(){
         return pin_lat+","+pin_lng;
+    }
+
+    public Location getLocation(){
+        Location location = new Location("");
+        location.setLatitude(37.7749);
+        location.setLongitude(-122.4194);
+        location.setAltitude(0.0);
+        return location;
     }
 
     @Override
