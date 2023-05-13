@@ -17,6 +17,7 @@ import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,7 +25,7 @@ public class PinListFragment extends Fragment {
     private TrailViewModel trailViewModel;
     private static final String ARG_TRAIL_LIST = "TRAIL_LIST";
     private static final String ARG_PIN_LIST = "PIN_LIST";
-
+    private String type;
     private List<Integer> ids;
 
 
@@ -54,8 +55,10 @@ public class PinListFragment extends Fragment {
             List<Integer> idsList = getArguments().getIntegerArrayList(ARG_TRAIL_LIST);
             if(idsList != null) {
                 ids = idsList;
+                type= "trails";
             } else {
                 ids = getArguments().getIntegerArrayList(ARG_PIN_LIST);
+                type= "pins";
                 if(ids == null) {
                     throw new IllegalArgumentException("Both trail ID list and pin ID list are null");
                 }
@@ -73,25 +76,31 @@ public class PinListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pin_list, container, false);
 
         trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
-        trailViewModel.getTrailsById(ids).observe(getViewLifecycleOwner(), x -> loadView(view, x)); //TODO:FIX!
+        if(Objects.equals(type, "trails")){
+            trailViewModel.getTrailsById(ids).observe(getViewLifecycleOwner(), trails -> {
+                List<EdgeTip> edgeTips = trails.stream()
+                        .map(e->e.getEdges()
+                                .stream()
+                                .flatMap(es -> Stream.of(es.getEdge_start(), es.getEdge_end()))
+                                .collect(Collectors.toList()))
+                        .flatMap(List::stream)
+                        .distinct()
+                        .collect(Collectors.toList());
+                loadView(view, edgeTips);
+            });
+        } else if (type=="pins") {
+            trailViewModel.getPinsById(ids).observe(getViewLifecycleOwner(), x -> loadView(view, x));
+        }
         return view;
     }
 
-    private void loadView(View view, List<Trail> trails){
+    private void loadView(View view, List<EdgeTip> edgeTips){
         if (view instanceof RecyclerView) {
             RecyclerView recyclerView = (RecyclerView) view;
 
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(gridLayoutManager);
 
-            List<EdgeTip> edgeTips = trails.stream()
-                    .map(e->e.getEdges()
-                            .stream()
-                            .flatMap(es -> Stream.of(es.getEdge_start(), es.getEdge_end()))
-                            .collect(Collectors.toList()))
-                    .flatMap(List::stream)
-                    .distinct()
-                    .collect(Collectors.toList());
             PinsRecyclerViewAdapter adapter = new PinsRecyclerViewAdapter(edgeTips);
             recyclerView.setAdapter(adapter);
 

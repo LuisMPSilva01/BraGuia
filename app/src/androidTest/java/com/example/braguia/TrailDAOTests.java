@@ -15,6 +15,7 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.braguia.model.GuideDatabase;
+import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.trails.TrailDAO;
 import com.example.braguia.model.user.User;
@@ -68,6 +69,33 @@ public class TrailDAOTests {
                 });
             }
         });
+
+        if (!latch.await(10, TimeUnit.SECONDS)) {
+            throw new TimeoutException("Timed out waiting for all trails to be loaded");
+        }
+    }
+
+    @Test
+    public void testGetPinsById() throws Throwable {
+        CountDownLatch latch = new CountDownLatch(1);
+        LiveData<List<Trail>> trailsLiveData = trailRepository.getAllTrails();
+
+        Observer<List<Trail>> allTrailsObserver = new Observer<List<Trail>>() {
+                    @Override
+                    public void onChanged(List<Trail> allTrails) {
+                        if (allTrails != null && allTrails.size() > 0) {
+                            LiveData<List<EdgeTip>> pinLiveData = trailRepository.getPinsById(allTrails.get(0).getEdges().stream().map(e->e.getEdge_start().getId()).collect(Collectors.toList()));
+                            pinLiveData.observeForever(pins -> {
+                                if (pins != null && pins.size() > 0) {
+                                    latch.countDown();
+                                }
+                            });
+                            trailsLiveData.removeObserver(this);
+                        }
+                    }
+        };
+        trailsLiveData.observeForever(allTrailsObserver);
+
 
         if (!latch.await(10, TimeUnit.SECONDS)) {
             throw new TimeoutException("Timed out waiting for all trails to be loaded");

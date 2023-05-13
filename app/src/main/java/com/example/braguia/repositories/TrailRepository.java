@@ -18,10 +18,14 @@ import com.example.braguia.model.trails.TrailAPI;
 import com.example.braguia.model.trails.TrailDAO;
 
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -127,23 +131,26 @@ public class TrailRepository {
 
     public LiveData<List<EdgeTip>> getPinsById(List<Integer> ids) {
         MediatorLiveData<List<EdgeTip>> mediatorLiveData = new MediatorLiveData<>();
-        LiveData<List<EdgeTip>> liveData = trailDAO.getPinsById(ids);
+        LiveData<List<Trail>> liveData = trailDAO.getTrails();
 
-        mediatorLiveData.addSource(liveData, pins -> {
-            // Duplicate each Pin object based on the number of times it appears in the ids list
-            List<EdgeTip> duplicatedPins = new ArrayList<>();
-            for (EdgeTip edgeTip : pins) {
-                int count = Collections.frequency(ids, edgeTip.getId());
-                for (int i = 0; i < count; i++) {
-                    duplicatedPins.add(edgeTip);
+        mediatorLiveData.addSource(liveData, trails -> {
+            List<EdgeTip> filteredPins = new ArrayList<>();
+            boolean appended;
+            for (Integer id : ids) {
+                appended=false;
+                for (Trail trail : trails) {
+                    if(!appended) {
+                        for (EdgeTip pin : trail.getRoute()) {
+                            if (!appended && pin.getId() == id) {
+                                filteredPins.add(pin);
+                                appended=true;
+                            }
+                        }
+                    }
                 }
             }
+            mediatorLiveData.postValue(filteredPins);
 
-            // Sort the list of duplicated Trail objects based on the order of the IDs in the ids list
-            duplicatedPins.sort(Comparator.comparingInt(t -> ids.indexOf(t.getId())));
-
-            // Update the value of the MediatorLiveData with the sorted list of duplicated Trail objects
-            mediatorLiveData.postValue(duplicatedPins);
         });
 
         return mediatorLiveData;

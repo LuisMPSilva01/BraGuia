@@ -23,7 +23,4 @@ public interface TrailDAO {
 
     @Query("DELETE FROM trail")
     void deleteAll();
-
-    @Query("SELECT * FROM Tip WHERE id IN (:ids)")
-    LiveData<List<EdgeTip>> getPinsById(List<Integer> ids);
 }

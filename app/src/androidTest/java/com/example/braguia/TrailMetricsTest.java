@@ -66,7 +66,7 @@ public class TrailMetricsTest {
         CountDownLatch latch = new CountDownLatch(1);
 
 
-        User user = new User("John", "Premium","","");
+        User user = new User("John", "Premium");
         userDAO.insert(user);
         trailDAO.insert(new Trail(1));
         trailDAO.getTrailById(1).observeForever(trail -> {

@@ -57,7 +57,7 @@ public class UserDAOTests {
     @Test
     public void testInsertAndGetUser() throws InterruptedException {
         // Create a user
-        User user = new User("John", "Premium","","");
+        User user = new User("John", "Premium");
 
         // Insert the user into the database
         userDao.insert(user);
@@ -78,8 +78,8 @@ public class UserDAOTests {
     @Test
     public void testInsertAndGetUsers() throws InterruptedException {
         // Create a user
-        User user1 = new User("John", "Premium","","");
-        User user2 = new User("Wick", "Premium","","");
+        User user1 = new User("John", "Premium");
+        User user2 = new User("Wick", "Premium");
         // Insert the user into the database
         userDao.insert(user1);
         userDao.insert(user2);
@@ -90,6 +90,7 @@ public class UserDAOTests {
             assertNotNull(u);
             assertEquals(user1.getUsername(), u.getUsername());
         });
+
 
         LiveData<User> userLiveData2 = userDao.getUserByUsername("Wick");
         CountDownLatch latch = new CountDownLatch(1);
@@ -103,105 +104,10 @@ public class UserDAOTests {
         latch.await(3, TimeUnit.SECONDS);
     }
 
-
-
-    @Test
-    public void updateTrailHistory() throws InterruptedException {
-        // Insert a user into the database
-        User user = new User("John", "Premium","","");
-        userDao.insert(user);
-
-        // Update the trail history of the user
-        List<Integer> ids = new ArrayList<>();
-        ids.add(1);
-        String newTrailHistory =  User.convertListToString(ids);
-
-        userDao.updateTrailHistory(user.getUsername(), newTrailHistory);
-
-        LiveData<User> userLiveData = userDao.getUserByUsername("John");
-        CountDownLatch latch = new CountDownLatch(1);
-        userLiveData.observeForever(u -> {
-            assertNotNull(u);
-            assertEquals(ids, u.getTrailHistoryList());
-            latch.countDown();
-        });
-
-        // Wait for the observation to complete
-        latch.await(2, TimeUnit.SECONDS);
-    }
-
-
-    @Test
-    public void testUpdatePinHistory() throws InterruptedException {
-        // Insert a user into the database
-        User user = new User("John", "Premium","","");
-        userDao.insert(user);
-
-        // Update the trail history of the user
-        List<Integer> ids = new ArrayList<>();
-        ids.add(1);
-        String newPinHistory =  User.convertListToString(ids);
-        userDao.updatePinHistory(user.getUsername(), newPinHistory);
-
-        LiveData<User> userLiveData = userDao.getUserByUsername("John");
-        CountDownLatch latch = new CountDownLatch(1);
-        userLiveData.observeForever(u -> {
-            assertNotNull(u);
-            assertEquals(ids, u.getPinHistoryList());
-            latch.countDown();
-        });
-
-        // Wait for the observation to complete
-        latch.await(2, TimeUnit.SECONDS);
-    }
-
-    @Test
-    public void userAdapterUpdate() throws InterruptedException, TimeoutException {
-        // Insert a user into the database
-        User user = new User("John", "Premium","","");
-        userDao.insert(user);
-        // Update the trail history of the user
-        List<Integer> ids = new ArrayList<>();
-        ids.add(1);
-        String newTrailHistory =  User.convertListToString(ids);
-
-        userDao.updateTrailHistory(user.getUsername(), newTrailHistory);
-
-
-        UserUpdater userUpdater = new UserUpdater("John","a","b","@",true,true,"premium",true);
-        LiveData<User> userLiveData = userDao.getUserByUsername("John");
-        CountDownLatch latch = new CountDownLatch(1);
-        userLiveData.observeForever(u -> {
-            assertNotNull(u);
-            assertEquals(ids, u.getTrailHistoryList());
-            latch.countDown();
-        });
-
-        // Wait for the observation to complete
-        latch.await(2, TimeUnit.SECONDS);
-
-        CountDownLatch latch2 = new CountDownLatch(1);
-
-        userDao.update(userUpdater);
-        userLiveData = userDao.getUserByUsername("John");
-        userLiveData.observeForever(u -> {
-            if(u.compativel(userUpdater)) {
-                assertNotNull(u);
-                assertEquals(ids, u.getTrailHistoryList());
-                latch2.countDown();
-            }
-        });
-        // Wait for the observation to complete
-        latch2.await(10, TimeUnit.SECONDS);
-        if (latch.getCount()+latch2.getCount() > 0) {
-            throw new TimeoutException("Latch timed out");
-        }
-    }
-
     @Test
     public void userInsertOrUpdate() throws InterruptedException, TimeoutException {
         // Insert a user into the database
-        User user = new User("John", "Premium","1","1");
+        User user = new User("John", "Premium");
         userDao.insertOrUpdate(user);
 
         LiveData<User> userLiveData = userDao.getUserByUsername("John");
@@ -225,12 +131,12 @@ public class UserDAOTests {
 
 
         CountDownLatch latch2 = new CountDownLatch(1);
-        User user2 = new User("John", "Standard","2","2");
+        User user2 = new User("John", "Standard");
         userDao.insertOrUpdate(user2);
         userLiveData = userDao.getUserByUsername("John");
         userLiveData.observeForever(u -> {
             assertNotNull(u);
-            assertEquals(new User("John", "Standard","1","1"), u); //trail history and pin history remain the same on updates
+            assertEquals(new User("John", "Standard"), u); //trail history and pin history remain the same on updates
             latch2.countDown();
         });
         // Wait for the observation to complete
