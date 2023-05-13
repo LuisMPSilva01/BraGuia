@@ -1,7 +1,6 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Fragments;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
-import com.example.braguia.model.trails.Trail;
 import com.example.braguia.ui.MapsUtilils.GetPathFromLocation;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,8 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MapsFragment extends Fragment {
     private GoogleMap mMap;

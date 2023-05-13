@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,12 +13,17 @@ import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.ui.Activitys.MainActivity;
+import com.example.braguia.ui.TrailsRecyclerView;
+import com.example.braguia.ui.TrailsRecyclerViewAdapter;
 import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.io.IOException;
@@ -101,6 +106,10 @@ public class DiscoverFragment extends Fragment {
     private void replaceFragment(Trail trail) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
         // Create a new instance of the destination fragment
         TrailDescriptionFragment fragment = TrailDescriptionFragment.newInstance(trail.getId());
+
+        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navHostFragment.getNavController().navigate(R.id.trailDescriptionFragment);
+
         MainActivity mainActivity = (MainActivity) requireActivity();
         mainActivity.replaceFragment(fragment);
     }

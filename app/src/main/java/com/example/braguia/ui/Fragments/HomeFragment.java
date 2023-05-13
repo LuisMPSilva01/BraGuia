@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.braguia.R;
 import com.example.braguia.model.app.AppInfo;
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.ui.Activitys.MainActivity;
+import com.example.braguia.ui.TrailsHomeRecyclerViewAdapter;
 import com.example.braguia.viewmodel.AppInfoViewModel;
 import com.example.braguia.viewmodel.TrailViewModel;
 

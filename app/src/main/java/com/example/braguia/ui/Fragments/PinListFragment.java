@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
+import com.example.braguia.ui.Activitys.MainActivity;
+import com.example.braguia.ui.PinsRecyclerViewAdapter;
 import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.util.ArrayList;

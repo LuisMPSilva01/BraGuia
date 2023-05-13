@@ -29,15 +29,15 @@
             android:value="${apiKey}" />
 
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".ui.Activitys.LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.DefinitionsActivity"
+            android:name=".ui.Activitys.DefinitionsActivity"
             android:exported="true"
             android:theme="@style/DefinitionsTheme"
-            android:parentActivityName=".ui.MainActivity"/>
+            android:parentActivityName=".ui.Activitys.MainActivity"/>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.Activitys.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -48,8 +48,8 @@
         </activity>
 
         <activity
-            android:name=".ui.NotificationPinScreenActivity"
-            android:parentActivityName=".ui.MainActivity"
+            android:name=".ui.Activitys.NotificationPinScreenActivity"
+            android:parentActivityName=".ui.Activitys.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
         </activity>

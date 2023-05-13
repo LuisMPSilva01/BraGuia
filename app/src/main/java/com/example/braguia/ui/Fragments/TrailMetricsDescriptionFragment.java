@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,9 +18,6 @@ import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TrailMetricsDescriptionFragment extends Fragment {
     private final int id;

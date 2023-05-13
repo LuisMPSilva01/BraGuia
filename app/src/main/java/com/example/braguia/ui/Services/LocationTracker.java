@@ -2,9 +2,6 @@ package com.example.braguia.ui.Services;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,17 +13,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.braguia.model.trails.EdgeTip;
-import com.example.braguia.ui.MainActivity;
-import com.example.braguia.ui.PinFragment;
 
 public class LocationTracker extends Service implements LocationListener {
 

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.braguia.ui.Fragments.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment2"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_discoverFragment"
+            app:destination="@id/discoverFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_addRoadMapFragment"
+            app:destination="@id/addRoadMapFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_contactsListFragment"
+            app:destination="@id/contactsListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_socialsListFragment"
+            app:destination="@id/socialsListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_partnersListFragment"
+            app:destination="@id/partnersListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.braguia.ui.Fragments.ProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/discoverFragment"
+        android:name="com.example.braguia.ui.Fragments.DiscoverFragment"
+        android:label="fragment_discover"
+        tools:layout="@layout/fragment_discover" >
+        <action
+            android:id="@+id/action_discoverFragment_to_trailDescriptionFragment"
+            app:destination="@id/trailDescriptionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addRoadMapFragment"
+        android:name="com.example.braguia.ui.Fragments.AddRoadMapFragment"
+        android:label="fragment_add_road_map"
+        tools:layout="@layout/fragment_add_road_map" />
+    <fragment
+        android:id="@+id/contactsListFragment"
+        android:name="com.example.braguia.ui.Fragments.ContactsListFragment"
+        android:label="fragment_contacts_list"
+        tools:layout="@layout/fragment_contacts_list" />
+    <fragment
+        android:id="@+id/socialsListFragment"
+        android:name="com.example.braguia.ui.Fragments.SocialsListFragment"
+        android:label="fragment_socials_list"
+        tools:layout="@layout/fragment_socials_list" />
+    <fragment
+        android:id="@+id/partnersListFragment"
+        android:name="com.example.braguia.ui.Fragments.PartnersListFragment"
+        android:label="fragment_partners_list"
+        tools:layout="@layout/fragment_partners_list" />
+    <fragment
+        android:id="@+id/trailDescriptionFragment"
+        android:name="com.example.braguia.ui.Fragments.TrailDescriptionFragment"
+        android:label="TrailDescriptionFragment" >
+        <argument
+            android:name="trailId"
+            app:argType="integer" />
+    </fragment>
+</navigation>

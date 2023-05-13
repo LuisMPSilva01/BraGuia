@@ -1,8 +1,6 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Fragments;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,14 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
-import com.example.braguia.model.app.Contact;
-import com.example.braguia.model.app.Partner;
+import com.example.braguia.model.app.Social;
+import com.example.braguia.ui.SocialsRecyclerViewAdapter;
 import com.example.braguia.viewmodel.AppInfoViewModel;
 
 import java.io.IOException;
 import java.util.List;
 
-public class PartnersListFragment extends Fragment {
+public class SocialsListFragment extends Fragment {
 
 
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -37,11 +35,11 @@ public class PartnersListFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PartnersListFragment() {
+    public SocialsListFragment() {
     }
 
-    public static PartnersListFragment newInstance(int columnCount) {
-        PartnersListFragment fragment = new PartnersListFragment();
+    public static SocialsListFragment newInstance(int columnCount) {
+        SocialsListFragment fragment = new SocialsListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -60,14 +58,14 @@ public class PartnersListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_partners_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_socials_list, container, false);
 
         appInfoViewModel = new ViewModelProvider(requireActivity()).get(AppInfoViewModel.class);
         try {
             appInfoViewModel.getAppInfo().observe(getViewLifecycleOwner(), appInfo -> {
-                List<Partner> partners = appInfo.getPartners();
-                Log.e("Partners List","partners size:" + partners.size());
-                loadRecyclerView(view, partners);
+                List<Social> socials = appInfo.getSocials();
+                Log.e("Socials List","socials size:" + socials.size());
+                loadRecyclerView(view, socials);
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -75,7 +73,7 @@ public class PartnersListFragment extends Fragment {
         return view;
     }
 
-    private void loadRecyclerView(View view, List<Partner> partners){
+    private void loadRecyclerView(View view, List<Social> socials){
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -85,16 +83,9 @@ public class PartnersListFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            PartnersRecyclerViewAdapter adapter = new PartnersRecyclerViewAdapter(partners);
+            SocialsRecyclerViewAdapter adapter = new SocialsRecyclerViewAdapter(socials);
             recyclerView.setAdapter(adapter);
-            adapter.setOnPhoneClickListener(this::callPhoneNumber);
         }
-    }
-
-    private void callPhoneNumber(String phoneNumber) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:" + phoneNumber));
-        getContext().startActivity(intent);
     }
 
     @Override

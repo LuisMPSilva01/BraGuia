@@ -1,48 +1,38 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Activitys;
 
 import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import com.example.braguia.R;
 import com.example.braguia.databinding.ActivityMainBinding;
-import com.example.braguia.model.trails.EdgeTip;
+import com.example.braguia.model.user.User;
 import com.example.braguia.viewmodel.UserViewModel;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -50,8 +40,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
@@ -66,39 +54,15 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer_layout;
     private ActionBarDrawerToggle drawerToggle;
     private UserViewModel userViewModel;
-    private LocationManager locationManager;
-
-    NotificationManagerCompat notificationManagerCompat;
-    Notification notification;
-
-
 
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        SharedPreferences sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        boolean localizationSwitchSate = sharedPrefs.getBoolean("locationSwitch", false);
-
-        //createNotification(R.drawable.uminho_logo, "Ganda titulo", "Ganda mensagem");
-
-        Log.e("MainActivity","STARTACTIVITY");
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        try {
-            userViewModel.getUser().observe(this, user -> {
-                Log.e("MainActivity","REFRESH");
-                if (Objects.equals(user.getUser_type(), "loggedOff")) {
-                    changeToLoginActivity();
-                }
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        checkLoggedIn();
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -110,50 +74,68 @@ public class MainActivity extends AppCompatActivity {
         drawerToggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        replaceFragment(new HomeFragment());
-        //Bottom navbar
+        // Set up the Bottom Navigation View with the NavController
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        NavController navController = navHostFragment.getNavController();
+
+        configureBottomNavigation(navController);
+        configureSideBar(navController);
+        configureLocationButton();
+    }
+
+    public void checkLoggedIn(){
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        try {
+            LiveData<User> userLiveData = userViewModel.getUser();
+
+            userLiveData.observe(this, user -> {
+                if(user!=null){
+                    if (Objects.equals(user.getUser_type(), "loggedOff")) {
+                        changeToLoginActivity();
+                    }
+                    userLiveData.removeObservers(this);
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void configureBottomNavigation(NavController navController){
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
             switch (item.getItemId()){
-
                 case R.id.home:
-                    replaceFragment(new HomeFragment());
+                    navController.navigate(R.id.homeFragment);
                     break;
 
                 case R.id.discover:
-                    replaceFragment(new DiscoverFragment());
+                    navController.navigate(R.id.discoverFragment);
                     break;
 
                 case R.id.add_roadmap:
-                    replaceFragment(new AddRoadMapFragment());
+                    navController.navigate(R.id.addRoadMapFragment);
                     break;
             }
-
-            Menu bnv_menu = binding.bottomNavigationView.getMenu();
-            for(int i = 0; i < bnv_menu.size(); i++) {
-                MenuItem bnv_item = bnv_menu.getItem(i);
-                bnv_item.setChecked(!bnv_item.isChecked());
-            }
-
             return true;
         });
+    }
 
-
-        //left side bar
+    private void configureSideBar(NavController navController){
         binding.sidebar.setNavigationItemSelectedListener(
 
                 menuItem -> {
                     switch (menuItem.getItemId()){
                         case R.id.profile:
-                            replaceFragment(new ProfileFragment());
+                            navController.navigate(R.id.profileFragment);
                             break;
                         case R.id.emergency_contacts:
-                            replaceFragment(new ContactsListFragment());
+                            navController.navigate(R.id.contactsListFragment);
                             break;
                         case R.id.socials_contacts:
-                            replaceFragment(new SocialsListFragment());
+                            navController.navigate(R.id.socialsListFragment);
                             break;
                         case R.id.partners_contacts:
-                            replaceFragment(new PartnersListFragment());
+                            navController.navigate(R.id.partnersListFragment);
                             break;
                         case R.id.localization:
                             return false;
@@ -187,14 +169,15 @@ public class MainActivity extends AppCompatActivity {
                     // Close side bar
                     binding.drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
-                });
+                }
+        );
+        //Allows side-bar items to be selected
+        binding.sidebar.bringToFront();
+    }
 
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION},
-                PackageManager.PERMISSION_GRANTED);
-
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+    private void configureLocationButton(){
+        SharedPreferences sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        boolean localizationSwitchSate = sharedPrefs.getBoolean("locationSwitch", false);
 
         // Localization switch event listener
         MenuItem menuItem = binding.sidebar.getMenu().findItem(R.id.localization);
@@ -202,62 +185,47 @@ public class MainActivity extends AppCompatActivity {
         SwitchCompat localization_switch = view.findViewById(R.id.localizationSwitch);
         // Set saved state
         localization_switch.setChecked(localizationSwitchSate);
-        localization_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        localization_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                LocationRequest locationRequest = LocationRequest.create();
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                locationRequest.setInterval(10000);
+                locationRequest.setFastestInterval(10000/2);
 
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    LocationRequest locationRequest = LocationRequest.create();
-                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                    locationRequest.setInterval(10000);
-                    locationRequest.setFastestInterval(10000/2);
+                LocationSettingsRequest.Builder locationSettingsRequestBuilder = new LocationSettingsRequest.Builder();
 
-                    LocationSettingsRequest.Builder locationSettingsRequestBuilder = new LocationSettingsRequest.Builder();
+                locationSettingsRequestBuilder.addLocationRequest(locationRequest);
+                locationSettingsRequestBuilder.setAlwaysShow(true);
 
-                    locationSettingsRequestBuilder.addLocationRequest(locationRequest);
-                    locationSettingsRequestBuilder.setAlwaysShow(true);
+                SettingsClient settingsClient = LocationServices.getSettingsClient(MainActivity.this);
+                Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(locationSettingsRequestBuilder.build());
+                task.addOnSuccessListener(MainActivity.this, locationSettingsResponse -> Toast.makeText(MainActivity.this, "GPS is ON.", Toast.LENGTH_SHORT).show());
 
-                    SettingsClient settingsClient = LocationServices.getSettingsClient(MainActivity.this);
-                    Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(locationSettingsRequestBuilder.build());
-                    task.addOnSuccessListener(MainActivity.this, new OnSuccessListener<LocationSettingsResponse>() {
-                        @Override
-                        public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                            Toast.makeText(MainActivity.this, "GPS is ON.", Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-
-                    task.addOnFailureListener(MainActivity.this, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(MainActivity.this, "GPS is OFF.", Toast.LENGTH_SHORT).show();
-
-                            if (e instanceof ResolvableApiException) {
-                                try {
-                                    ResolvableApiException resolvableApiException = (ResolvableApiException) e;
-                                    resolvableApiException.startResolutionForResult(MainActivity.this, REQUEST_CHECK_SETTINGS);
-                                } catch (IntentSender.SendIntentException sendIntentException) {
-                                    sendIntentException.printStackTrace();
-                                }
-                            }
-                        }
-                    });
-                    // Set switch state
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putBoolean("locationSwitch", isChecked);
-                    editor.apply();
-                }
-                else{
-                    startActivity(new Intent(ACTION_LOCATION_SOURCE_SETTINGS));
+                task.addOnFailureListener(MainActivity.this, e -> {
                     Toast.makeText(MainActivity.this, "GPS is OFF.", Toast.LENGTH_SHORT).show();
 
-                    // Set switch state
-                    SharedPreferences.Editor editor = sharedPrefs.edit();
-                    editor.putBoolean("locationSwitch", isChecked);
-                    editor.apply();
-                }
+                    if (e instanceof ResolvableApiException) {
+                        try {
+                            ResolvableApiException resolvableApiException = (ResolvableApiException) e;
+                            resolvableApiException.startResolutionForResult(MainActivity.this, REQUEST_CHECK_SETTINGS);
+                        } catch (IntentSender.SendIntentException sendIntentException) {
+                            sendIntentException.printStackTrace();
+                        }
+                    }
+                });
+                // Set switch state
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putBoolean("locationSwitch", true);
+                editor.apply();
+            }
+            else{
+                startActivity(new Intent(ACTION_LOCATION_SOURCE_SETTINGS));
+                Toast.makeText(MainActivity.this, "GPS is OFF.", Toast.LENGTH_SHORT).show();
 
-
+                // Set switch state
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putBoolean("locationSwitch", false);
+                editor.apply();
             }
         });
 
@@ -267,13 +235,7 @@ public class MainActivity extends AppCompatActivity {
         spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
         menuItem2.setTitle(spannableString);
         menuItem2.setEnabled(false);
-
-        //Allows side-bar items to be selected
-        binding.sidebar.bringToFront();
-
-
-}
-
+    }
     private void changeToLoginActivity(){
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
@@ -282,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
     public void replaceFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.conteudo,fragment);
+        fragmentTransaction.replace(R.id.nav_host_fragment,fragment);
         fragmentTransaction.commit();
     }
 
@@ -310,26 +272,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-    public void createNotification(int image, String title, String message){
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("channel_id", "channel", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
-                .setSmallIcon(image)
-                .setContentTitle(title)
-                .setContentText(message);
-        notification = builder.build();
-        notificationManagerCompat = NotificationManagerCompat.from(this);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
-            notificationManagerCompat.notify(1, notification);
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
-        }
-
     }
 }

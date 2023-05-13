@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.EmergencyContactsFragment">
+    tools:context=".ui.Fragments.EmergencyContactsFragment">
 
     <TextView
         android:id="@+id/textView3"
@@ -19,7 +19,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/TrailContent"
-        android:name="com.example.braguia.ui.ContactsListFragment"
+        android:name="com.example.braguia.ui.Fragments.ContactsListFragment"
         android:layout_width="410dp"
         android:layout_height="652dp"
         android:layout_marginTop="28dp"

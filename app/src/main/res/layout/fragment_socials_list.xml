@@ -8,6 +8,6 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.SocialsListFragment"
+    tools:context=".ui.Fragments.SocialsListFragment"
     tools:listitem="@layout/fragment_socials_item" />
 

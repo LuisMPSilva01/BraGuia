@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Fragments;
 
 import android.os.Bundle;
 
@@ -8,16 +8,12 @@ import androidx.lifecycle.ViewModelProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.braguia.R;
-import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.user.User;
-import com.example.braguia.viewmodel.TrailViewModel;
+import com.example.braguia.ui.Activitys.MainActivity;
 import com.example.braguia.viewmodel.UserViewModel;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.Objects;

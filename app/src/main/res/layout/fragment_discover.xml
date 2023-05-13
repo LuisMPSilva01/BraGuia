@@ -5,7 +5,7 @@
     android:id="@+id/discover_fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.DiscoverFragment">
+    tools:context=".ui.Fragments.DiscoverFragment">
 
     <!-- Add your SearchView here -->
 

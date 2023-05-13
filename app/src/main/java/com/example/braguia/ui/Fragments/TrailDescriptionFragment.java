@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Fragments;
 
 import android.Manifest;
 import android.app.Notification;
@@ -10,7 +10,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -31,7 +29,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
-import com.example.braguia.ui.Services.LocationTracker;
+import com.example.braguia.ui.Activitys.MainActivity;
+import com.example.braguia.ui.Activitys.NotificationPinScreenActivity;
 import com.example.braguia.ui.Services.Trip;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
@@ -113,6 +112,11 @@ public class TrailDescriptionFragment extends Fragment {
 
     private void startNavigation(Trail trail) {
         // Create a new instance of the destination fragment
+        ActivityCompat.requestPermissions(requireActivity(),
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION},
+                PackageManager.PERMISSION_GRANTED);
+
         createNotification(trail.getRoute().get(0));
         if(MapsFragment.meetsPreRequisites(getContext())){
             List<String> route = trail.getRoute().stream()

@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,6 @@ import com.example.braguia.R;
 import com.example.braguia.viewmodel.UserViewModel;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText Name;

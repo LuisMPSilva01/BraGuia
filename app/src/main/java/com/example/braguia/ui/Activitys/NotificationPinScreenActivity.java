@@ -1,23 +1,15 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Activitys;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
-import com.example.braguia.viewmodel.UserViewModel;
-
-import java.io.IOException;
+import com.example.braguia.ui.Fragments.PinFragment;
 
 public class NotificationPinScreenActivity extends AppCompatActivity {
     public NotificationPinScreenActivity(){

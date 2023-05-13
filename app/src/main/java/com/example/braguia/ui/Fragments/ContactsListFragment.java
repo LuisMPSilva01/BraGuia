@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.app.Contact;
+import com.example.braguia.ui.ContactsRecyclerViewAdapter;
 import com.example.braguia.viewmodel.AppInfoViewModel;
 
 import java.io.IOException;

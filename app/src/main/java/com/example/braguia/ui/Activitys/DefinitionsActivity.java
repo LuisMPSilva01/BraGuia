@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.Activitys;
 
 import android.app.NotificationManager;
 import android.content.Context;

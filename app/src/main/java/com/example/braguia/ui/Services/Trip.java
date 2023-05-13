@@ -1,23 +1,11 @@
 package com.example.braguia.ui.Services;
 
-import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.widget.Toast;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
-import com.example.braguia.ui.MainActivity;
-import com.example.braguia.ui.Services.LocationTracker;
 
 import java.util.ArrayList;
 import java.util.Date;
