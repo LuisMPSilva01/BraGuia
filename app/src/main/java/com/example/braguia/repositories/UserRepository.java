@@ -18,11 +18,11 @@ import androidx.test.core.app.ApplicationProvider;
 import com.example.braguia.model.GuideDatabase;
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.TrailMetrics.TrailMetricsDAO;
-import com.example.braguia.ui.Services.Trip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.user.User;
 import com.example.braguia.model.user.UserAPI;
 import com.example.braguia.model.user.UserDAO;
+import com.example.braguia.ui.Services.Trip;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;

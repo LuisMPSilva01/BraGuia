@@ -7,8 +7,10 @@ import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.LocationManager;
@@ -79,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        SharedPreferences sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        boolean localizationSwitchSate = sharedPrefs.getBoolean("locationSwitch", false);
 
         //createNotification(R.drawable.uminho_logo, "Ganda titulo", "Ganda mensagem");
 
@@ -153,7 +158,8 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.localization:
                             return false;
                         case R.id.definitions:
-                            replaceFragment(new DefinitionsFragment());
+                            Intent intent = new Intent(MainActivity.this, DefinitionsActivity.class);
+                            startActivity(intent);
                             break;
                         case R.id.logout:
                             try {
@@ -194,6 +200,8 @@ public class MainActivity extends AppCompatActivity {
         MenuItem menuItem = binding.sidebar.getMenu().findItem(R.id.localization);
         View view = menuItem.getActionView();
         SwitchCompat localization_switch = view.findViewById(R.id.localizationSwitch);
+        // Set saved state
+        localization_switch.setChecked(localizationSwitchSate);
         localization_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
             @Override
@@ -215,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                             Toast.makeText(MainActivity.this, "GPS is ON.", Toast.LENGTH_SHORT).show();
+
                         }
                     });
 
@@ -233,12 +242,19 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     });
-
-
+                    // Set switch state
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putBoolean("locationSwitch", isChecked);
+                    editor.apply();
                 }
                 else{
                     startActivity(new Intent(ACTION_LOCATION_SOURCE_SETTINGS));
                     Toast.makeText(MainActivity.this, "GPS is OFF.", Toast.LENGTH_SHORT).show();
+
+                    // Set switch state
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putBoolean("locationSwitch", isChecked);
+                    editor.apply();
                 }
 
 
