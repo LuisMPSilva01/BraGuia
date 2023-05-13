@@ -47,7 +47,7 @@ public class UserRepositoryTest {
     @Test
     public void testInsertAndGetUser() throws Throwable {
         CountDownLatch latch = new CountDownLatch(1);
-        User user = new User("John", "Premium", "", "");
+        User user = new User("John", "Premium");
         userRepository.setUsername("John");
         userRepository.insert(user);
 
@@ -66,49 +66,6 @@ public class UserRepositoryTest {
             // Add the observer to the getUser LiveData
             userRepository.getUser().observeForever(userObserver);
         });
-
-        // Wait for the observation to complete
-        latch.await(5, TimeUnit.SECONDS);
-        if (latch.getCount() > 0) {
-            throw new TimeoutException("Latch timed out");
-        }
-    }
-
-
-    @Test
-    public void testUpdateTrailHistory() throws Throwable {
-        CountDownLatch latch = new CountDownLatch(1);
-
-        User user = new User("John", "Premium","","");
-        userRepository.setUsername("John");
-        userRepository.insert(user);
-
-        runOnUiThread(() -> {
-            try {
-                userRepository.updateTrailHistory(1);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        runOnUiThread(() -> {
-            try {
-                userRepository.updateTrailHistory(2);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        List<Integer> testList = new ArrayList<>();
-        testList.add(2);
-        testList.add(1);
-
-        runOnUiThread(() -> userRepository.getUser().observeForever(u -> {
-            if(u.getTrailHistoryList().size()==2) {
-                assertNotNull(u);
-                assertEquals(testList, u.getTrailHistoryList());
-                latch.countDown();
-            }
-        }));
 
         // Wait for the observation to complete
         latch.await(5, TimeUnit.SECONDS);

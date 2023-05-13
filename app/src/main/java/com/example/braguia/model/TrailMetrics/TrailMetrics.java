@@ -13,6 +13,7 @@ import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.user.User;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,6 +70,17 @@ public class TrailMetrics {
 
     public static String formatPinList(List<Integer> pinIds){
         return pinIds.stream().map(String::valueOf).collect(Collectors.joining(";"));
+    }
+
+    public List<Integer> getPinIdList(){
+        List<Integer> pinIds = new ArrayList<>();
+        String[] pinArray = this.vizitedPins.split(";");
+        for(String pinString : pinArray){
+            if(pinString!=""){
+                pinIds.add(Integer.parseInt(pinString));
+            }
+        }
+        return pinIds;
     }
     @NonNull
     public String getUsername() {

@@ -27,6 +27,9 @@ public class Trip {
     public TrailMetrics finish(String username) {
         float percentageCompletion = (float) percorridos.size()/(previstos.size()+percorridos.size());
         float timeTaken = (float) (new Date().getTime() - timeStart)/1000; //returns in seconds
-        return new TrailMetrics(username,trailId,percentageCompletion,timeTaken,percorridos.stream().map(EdgeTip::getId).collect(Collectors.toList()));
+        List<Integer> p= percorridos.stream().map(EdgeTip::getId).collect(Collectors.toList());
+        p.add(2);
+        p.add(4);
+        return new TrailMetrics(username,trailId,percentageCompletion,timeTaken,p);
     }
 }

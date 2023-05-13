@@ -56,7 +56,7 @@ public class TrailMetricsDescriptionFragment extends Fragment {
 
     private void loadView(View view, Trail trail, TrailMetrics metrics){
         FragmentManager childFragmentManager = getChildFragmentManager();
-        PinListFragment childFragment = PinListFragment.newInstanceByTrails(new ArrayList<>(List.of(trail.getId())));
+        PinListFragment childFragment = PinListFragment.newInstanceByPins(metrics.getPinIdList());
         FragmentTransaction transaction1 = childFragmentManager.beginTransaction();
         transaction1.add(R.id.trail_metricspin_list_content, childFragment);
         transaction1.commit();
