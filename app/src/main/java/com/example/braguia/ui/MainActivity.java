@@ -8,6 +8,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.LocationManager;
@@ -19,7 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -29,7 +32,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -39,6 +41,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.braguia.R;
 import com.example.braguia.databinding.ActivityMainBinding;
 import com.example.braguia.viewmodel.UserViewModel;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -46,6 +57,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private Toolbar toolbar;
     private ActivityMainBinding binding;
     private DrawerLayout drawer_layout;
@@ -56,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     NotificationManagerCompat notificationManagerCompat;
     Notification notification;
 
+
+
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        createNotification(R.drawable.uminho_logo, "Ganda titulo", "Ganda mensagem");
+        //createNotification(R.drawable.uminho_logo, "Ganda titulo", "Ganda mensagem");
 
         Log.e("MainActivity","STARTACTIVITY");
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -168,15 +182,65 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 });
 
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION},
+                PackageManager.PERMISSION_GRANTED);
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
         // Localization switch event listener
         MenuItem menuItem = binding.sidebar.getMenu().findItem(R.id.localization);
         View view = menuItem.getActionView();
         SwitchCompat localization_switch = view.findViewById(R.id.localizationSwitch);
         localization_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // Perform actions based on switch state change
-                startActivity(new Intent(ACTION_LOCATION_SOURCE_SETTINGS));
+                if (isChecked){
+                    LocationRequest locationRequest = LocationRequest.create();
+                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                    locationRequest.setInterval(10000);
+                    locationRequest.setFastestInterval(10000/2);
+
+                    LocationSettingsRequest.Builder locationSettingsRequestBuilder = new LocationSettingsRequest.Builder();
+
+                    locationSettingsRequestBuilder.addLocationRequest(locationRequest);
+                    locationSettingsRequestBuilder.setAlwaysShow(true);
+
+                    SettingsClient settingsClient = LocationServices.getSettingsClient(MainActivity.this);
+                    Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(locationSettingsRequestBuilder.build());
+                    task.addOnSuccessListener(MainActivity.this, new OnSuccessListener<LocationSettingsResponse>() {
+                        @Override
+                        public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                            Toast.makeText(MainActivity.this, "GPS is ON.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    task.addOnFailureListener(MainActivity.this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(MainActivity.this, "GPS is OFF.", Toast.LENGTH_SHORT).show();
+
+                            if (e instanceof ResolvableApiException) {
+                                try {
+                                    ResolvableApiException resolvableApiException = (ResolvableApiException) e;
+                                    resolvableApiException.startResolutionForResult(MainActivity.this, REQUEST_CHECK_SETTINGS);
+                                } catch (IntentSender.SendIntentException sendIntentException) {
+                                    sendIntentException.printStackTrace();
+                                }
+                            }
+                        }
+                    });
+
+
+                }
+                else{
+                    startActivity(new Intent(ACTION_LOCATION_SOURCE_SETTINGS));
+                    Toast.makeText(MainActivity.this, "GPS is OFF.", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
 
@@ -247,7 +311,6 @@ public class MainActivity extends AppCompatActivity {
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
             notificationManagerCompat.notify(1, notification);
         } else {
-            // Solicite a permissão para o usuário
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
         }
 
