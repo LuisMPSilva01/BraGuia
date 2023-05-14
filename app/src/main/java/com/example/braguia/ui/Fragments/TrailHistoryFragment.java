@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.braguia.R;
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.trails.Trail;
-import com.example.braguia.ui.Activitys.MainActivity;
 import com.example.braguia.ui.TrailMetricsRecyclerViewAdapter;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
