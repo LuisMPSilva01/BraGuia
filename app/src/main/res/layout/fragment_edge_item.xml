@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    card_view:cardBackgroundColor="@color/white"
+    card_view:cardCornerRadius="15dp"
+    card_view:cardElevation="5dp"
+    card_view:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/pin_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:tag="cards main container">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_pin_view_origem"
+                android:layout_width="185dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                app:layoutManager="LinearLayoutManager"
+                tools:listitem="@layout/fragment_pin_item"
+                card_view:cardBackgroundColor="@color/white"
+                card_view:cardCornerRadius="15dp"
+                card_view:cardElevation="5dp"
+                card_view:cardUseCompatPadding="true">
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_pin_view_destino"
+                android:layout_width="185dp"
+                android:layout_height="192dp"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                tools:listitem="@layout/fragment_pin_item"
+                card_view:cardBackgroundColor="@color/white"
+                card_view:cardCornerRadius="15dp"
+                card_view:cardElevation="5dp"
+                card_view:cardUseCompatPadding="true">
+
+
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="5dp"
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="15dp"
+            card_view:cardElevation="5dp"
+            card_view:cardUseCompatPadding="true">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/baseline_transport_24" />
+
+                    <TextView
+                        android:id="@+id/edge_transport"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Transport" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/baseline_time_24" />
+
+                    <TextView
+                        android:id="@+id/edge_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Duration" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/baseline_info_24" />
+
+                    <TextView
+                        android:id="@+id/edge_road_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Road type" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

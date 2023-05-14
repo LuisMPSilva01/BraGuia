@@ -29,11 +29,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
-import com.example.braguia.ui.Activitys.MainActivity;
-import com.example.braguia.ui.Activitys.NotificationPinScreenActivity;
-import com.example.braguia.ui.Services.Trip;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.ui.Activitys.NotificationPinScreenActivity;
+import com.example.braguia.ui.Services.Trip;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
 import com.squareup.picasso.Picasso;
@@ -92,7 +91,7 @@ public class TrailDescriptionFragment extends Fragment {
 
 
         FragmentManager childFragmentManager = getChildFragmentManager();
-        PinListFragment childFragment = PinListFragment.newInstanceByTrails(new ArrayList<>(List.of(id)));
+        EdgeListFragment childFragment = EdgeListFragment.newInstanceByTrails(new ArrayList<>(List.of(id)));
         FragmentTransaction transaction1 = childFragmentManager.beginTransaction();
         transaction1.add(R.id.pin_list_content, childFragment);
         transaction1.commit();

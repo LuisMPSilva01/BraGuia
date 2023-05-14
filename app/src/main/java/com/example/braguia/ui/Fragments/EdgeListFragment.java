@@ -12,17 +12,18 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
+import com.example.braguia.model.trails.Edge;
 import com.example.braguia.model.trails.EdgeTip;
-import com.example.braguia.ui.PinsRecyclerViewAdapter;
+import com.example.braguia.model.trails.Trail;
+import com.example.braguia.ui.EdgesRecyclerViewAdapter;
 import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class PinListFragment extends Fragment {
+public class EdgeListFragment extends Fragment {
     private TrailViewModel trailViewModel;
     private static final String ARG_TRAIL_LIST = "TRAIL_LIST";
     private static final String ARG_PIN_LIST = "PIN_LIST";
@@ -31,8 +32,8 @@ public class PinListFragment extends Fragment {
 
 
 
-    public static PinListFragment newInstanceByTrails(List<Integer> ids) {
-        PinListFragment fragment = new PinListFragment();
+    public static EdgeListFragment newInstanceByTrails(List<Integer> ids) {
+        EdgeListFragment fragment = new EdgeListFragment();
         Bundle args = new Bundle();
         args.putIntegerArrayList(ARG_TRAIL_LIST, new ArrayList<>(ids));
         fragment.setArguments(args);
@@ -40,8 +41,8 @@ public class PinListFragment extends Fragment {
         return fragment;
     }
 
-    public static PinListFragment newInstanceByPins(List<Integer> ids) {
-        PinListFragment fragment = new PinListFragment();
+    public static EdgeListFragment newInstanceByPins(List<Integer> ids) {
+        EdgeListFragment fragment = new EdgeListFragment();
         Bundle args = new Bundle();
         args.putIntegerArrayList(ARG_PIN_LIST, new ArrayList<>(ids));
         fragment.setArguments(args);
@@ -49,6 +50,7 @@ public class PinListFragment extends Fragment {
         return fragment;
     }
 
+    //TODO: VER A PARTIR DAQUI
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,43 +81,31 @@ public class PinListFragment extends Fragment {
         trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
         if(Objects.equals(type, "trails")){
             trailViewModel.getTrailsById(ids).observe(getViewLifecycleOwner(), trails -> {
-                List<EdgeTip> edgeTips = trails.stream()
-                        .map(e->e.getEdges()
-                                .stream()
-                                .flatMap(es -> Stream.of(es.getEdge_start(), es.getEdge_end()))
-                                .collect(Collectors.toList()))
+                List<Edge> edges = trails.stream()
+                        .map(Trail::getEdges)
                         .flatMap(List::stream)
                         .distinct()
                         .collect(Collectors.toList());
-                loadView(view, edgeTips);
+                loadView(view, edges);
             });
-        } else if (type=="pins") {
-            trailViewModel.getPinsById(ids).observe(getViewLifecycleOwner(), x -> loadView(view, x));
         }
         return view;
     }
 
-    private void loadView(View view, List<EdgeTip> edgeTips){
+    private void loadView(View view, List<Edge> edges){
         if (view instanceof RecyclerView) {
             RecyclerView recyclerView = (RecyclerView) view;
 
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(gridLayoutManager);
 
-            PinsRecyclerViewAdapter adapter = new PinsRecyclerViewAdapter(edgeTips);
+            EdgesRecyclerViewAdapter adapter = new EdgesRecyclerViewAdapter(edges);
             recyclerView.setAdapter(adapter);
 
 
-            adapter.setOnItemClickListener(this::replaceFragment);
+            //adapter.setOnItemClickListener(this::replaceFragment);
         }
     }
 
-    private void replaceFragment(EdgeTip edgeTip) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", edgeTip.getId());
 
-        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        navHostFragment.getNavController().navigate(R.id.pinFragment,bundle);
-    }
 }
-
