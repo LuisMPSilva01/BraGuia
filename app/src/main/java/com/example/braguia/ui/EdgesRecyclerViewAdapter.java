@@ -3,13 +3,14 @@ package com.example.braguia.ui;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.Edge;
+import com.example.braguia.viewAdapters.EdgeTipViewAdapter;
 
 import java.util.List;
 
@@ -43,8 +44,14 @@ public class EdgesRecyclerViewAdapter extends RecyclerView.Adapter<EdgesRecycler
         holder.edge_transport.setText(mValues.get(position).getEdge_transport());
         holder.edge_time.setText(String.valueOf(mValues.get(position).getEdge_duration()) + " minutes");
         holder.edge_road_type.setText(mValues.get(position).getEdge_desc());
-        //TODO: falta associar os pins (origem e destino) aos cards que ainda nao tem nada neste outer_card
-
+        holder.pin_name_origem.setText(mValues.get(position).getEdge_start().getPin_name());
+        if(!EdgeTipViewAdapter.setImageView(mValues.get(position).getEdge_start(),holder.imageView2_origem)){
+            holder.imageView2_origem.setImageResource(R.drawable.no_preview_image);
+        }
+        holder.pin_name_destino.setText(mValues.get(position).getEdge_end().getPin_name());
+        if(!EdgeTipViewAdapter.setImageView(mValues.get(position).getEdge_end(),holder.imageView2_destino)){
+            holder.imageView2_destino.setImageResource(R.drawable.no_preview_image);
+        }
     }
 
     @Override
@@ -57,9 +64,10 @@ public class EdgesRecyclerViewAdapter extends RecyclerView.Adapter<EdgesRecycler
         public final TextView edge_transport;
         public final TextView edge_time;
         public final TextView edge_road_type;
-        public final CardView edge_origem; //TODO: remove?
-        public final CardView edge_destino; //TODO: remove?
-
+        public final TextView pin_name_origem;
+        public final TextView pin_name_destino;
+        public final ImageView imageView2_origem;
+        public final ImageView imageView2_destino;
 
 
         public Edge mItem;
@@ -67,8 +75,10 @@ public class EdgesRecyclerViewAdapter extends RecyclerView.Adapter<EdgesRecycler
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            edge_origem = view.findViewById(R.id.card_pin_view_origem); //TODO: remove?
-            edge_destino = view.findViewById(R.id.card_pin_view_destino); //TODO: remove?
+            pin_name_origem = view.findViewById(R.id.pin_name_origem);
+            imageView2_origem = view.findViewById(R.id.imageView2_origem);
+            pin_name_destino = view.findViewById(R.id.pin_name_destino);
+            imageView2_destino = view.findViewById(R.id.imageView2_destino);
             edge_transport = view.findViewById(R.id.edge_transport);
             edge_time = view.findViewById(R.id.edge_time);
             edge_road_type = view.findViewById(R.id.edge_road_type);

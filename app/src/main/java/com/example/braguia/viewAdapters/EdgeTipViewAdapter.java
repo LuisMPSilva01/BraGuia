@@ -4,11 +4,8 @@ import android.media.MediaPlayer;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
-import com.example.braguia.viewAdapters.MediaViewAdapter;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Medium;
-
-import java.io.IOException;
 
 public class EdgeTipViewAdapter{
     public static boolean setImageView(EdgeTip edgeTip,ImageView view){
