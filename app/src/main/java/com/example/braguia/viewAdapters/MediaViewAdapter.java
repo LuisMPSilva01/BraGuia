@@ -1,8 +1,6 @@
 package com.example.braguia.viewAdapters;
 
-import android.graphics.Bitmap;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,9 +10,7 @@ import android.widget.VideoView;
 
 import com.example.braguia.model.trails.Medium;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.io.IOException;
 import java.util.Objects;
 
 public class MediaViewAdapter {
@@ -52,7 +48,7 @@ public class MediaViewAdapter {
         } else {
             view.setOnTouchListener((view1, event) -> {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Toast.makeText(view1.getContext(), "Não existe um video disponível", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view1.getContext(), "No video available", Toast.LENGTH_SHORT).show();
                 }
                 return true;
             });

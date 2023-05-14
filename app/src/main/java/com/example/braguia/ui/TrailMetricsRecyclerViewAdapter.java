@@ -38,7 +38,7 @@ public class TrailMetricsRecyclerViewAdapter extends RecyclerView.Adapter<TrailM
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_trail_item, parent, false);
+                .inflate(R.layout.fragment_trail_metrics_item, parent, false);
 
         return new ViewHolder(view);
     }
@@ -47,13 +47,15 @@ public class TrailMetricsRecyclerViewAdapter extends RecyclerView.Adapter<TrailM
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = trails.get(position);
         holder.trailName.setText(trails.get(position).getTrail_name());
-        String durationText = trails.get(position).getTrail_duration() + " minutos";
+        String durationText = trails.get(position).getTrail_duration() + " minutes";
         holder.duration.setText(durationText);
         holder.difficulty.setText(trails.get(position).getTrail_difficulty());
         Picasso.get().load(trails.get(position)
                         .getTrail_img().replace("http", "https"))
                 .into(holder.imageView);
 
+        holder.timeUsed.setText(Float.toString(metrics.get(position).getTimeTaken()) + " seconds");
+        holder.percentage.setText(Float.toString(metrics.get(position).getCompletedPercentage()));
         // Set click listener for each item
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
@@ -75,6 +77,11 @@ public class TrailMetricsRecyclerViewAdapter extends RecyclerView.Adapter<TrailM
         public final TextView difficulty;
         public final TextView duration;
         public final ImageView imageView;
+
+        public final TextView percentage;
+        public final TextView timeUsed;
+
+
         public Trail mItem;
 
         public ViewHolder(View view) {
@@ -84,6 +91,8 @@ public class TrailMetricsRecyclerViewAdapter extends RecyclerView.Adapter<TrailM
             difficulty = view.findViewById(R.id.trailDifficulty);
             duration = view.findViewById(R.id.trailTime);
             imageView = view.findViewById(R.id.cardimage);
+            timeUsed = view.findViewById(R.id.trail_metricsTImeTaken);
+            percentage = view.findViewById(R.id.trail_metricsCompletePercentage);
         }
 
         @NonNull

@@ -57,8 +57,13 @@ public class TrailDescriptionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+<<<<<<< Updated upstream
         if (!MapsFragment.meetsPreRequisites(getContext())) {
             Toast toast = Toast.makeText(getContext(), "Instale o Google Maps para poder navegar", Toast.LENGTH_SHORT);
+=======
+        if(!MapsFragment.meetsPreRequisites(getContext())){
+            Toast toast = Toast.makeText(getContext(), "Install Google Maps to navigate", Toast.LENGTH_SHORT);
+>>>>>>> Stashed changes
             toast.show();
         }
         View view = inflater.inflate(R.layout.fragment_trail_description, container, false);
@@ -97,5 +102,88 @@ public class TrailDescriptionFragment extends Fragment {
         transaction2.replace(R.id.maps_trail_overview, mapsFragment);
         transaction2.commit();
     }
+<<<<<<< Updated upstream
+=======
+
+    private void startNavigation(Trail trail) {
+        // Create a new instance of the destination fragment
+        ActivityCompat.requestPermissions(requireActivity(),
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION},
+                PackageManager.PERMISSION_GRANTED);
+
+        createNotification(trail.getRoute().get(0));
+        if(MapsFragment.meetsPreRequisites(getContext())){
+            List<String> route = trail.getRoute().stream()
+                    .map(EdgeTip::getLocationString)
+                    .collect(Collectors.toList());
+
+            int lastIndex = route.size() - 1;
+            String destination = route.get(lastIndex);
+            String waypoints = String.join("|", route.subList(0, lastIndex));
+
+            Uri mapIntentUri = Uri.parse("google.navigation:q=" + destination
+                    + Uri.decode("&waypoints=" + waypoints));
+
+
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            try {
+                startActivity(mapIntent);
+            } catch (ActivityNotFoundException ex) {
+                Toast.makeText(getContext(), "Install Google Maps to navigate", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast toast = Toast.makeText(getContext(), "Install Google Maps to navigate", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    private void endNavigation(Trip trip) {
+        UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        userViewModel.addMetrics(trip);
+        Toast.makeText(getContext(), "Metrics registed in the history", Toast.LENGTH_LONG).show();
+    }
+
+    public void createNotification(EdgeTip edgeTip){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("channel_id", "channel", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = requireActivity().getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(requireActivity(), "channel_id")
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle(edgeTip.getPin_name())
+                .setContentText(edgeTip.getPin_desc());
+
+        // Add action button
+        Intent intent = new Intent(requireActivity(), NotificationPinScreenActivity.class);
+        intent.putExtra("EdgeTip", edgeTip);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(requireActivity());
+        stackBuilder.addNextIntentWithParentStack(intent);
+            // Get the PendingIntent containing the entire back stack
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(0,
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(resultPendingIntent);
+
+
+        Notification notification = builder.build();
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(requireActivity());
+            notificationManagerCompat.notify(1, notification);
+        } else {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Save any necessary data into the outState Bundle object
+    }
+>>>>>>> Stashed changes
 }
 

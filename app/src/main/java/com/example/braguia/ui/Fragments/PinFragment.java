@@ -49,7 +49,7 @@ public class PinFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         if(!MapsFragment.meetsPreRequisites(getContext())){
-            Toast toast = Toast.makeText(getContext(), "Instale o Google Maps para poder navegar", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getContext(), "Install Google Maps to navigate", Toast.LENGTH_SHORT);
             toast.show();
         }
 

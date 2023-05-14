@@ -56,8 +56,12 @@ public class TrailMetricsDescriptionFragment extends Fragment {
         titulo.setText(trail.getTrail_name());
 
         TextView timeTaken = view.findViewById(R.id.trail_metricsTImeTaken);
-        String timeTakenString = "Time Taken: " + metrics.getTimeTaken() + " segundos";
+        String timeTakenString = metrics.getTimeTaken() + " seconds";
         timeTaken.setText(timeTakenString);
+
+        TextView percentageV = view.findViewById(R.id.trail_metricsCompletePercentage);
+        String perc = Double.toString(metrics.getCompletedPercentage());
+        percentageV.setText(perc);
 
         ImageView imagem = view.findViewById(R.id.trail_metricsImageDescription);
         Picasso.get().load(trail.getTrail_img()
