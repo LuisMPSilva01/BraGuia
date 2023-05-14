@@ -7,43 +7,32 @@ import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Trip {
+public class Trip implements Serializable {
     private long timeStart;
     private long distance;
-    private int trailId;
+    private Trail trail;
     private List<EdgeTip> percorridos;
     private List<EdgeTip> previstos;
-    private LocationTracker locationTracker;
-    private LocationTracker.PinCallBack pinCallBack;
 
-    public Trip(Trail trail, LocationTracker.PinCallBack pinCallBack) {
+    public Trip(Trail trail) {
         this.timeStart = new Date().getTime();
         this.distance = 0;
-        this.trailId=trail.getId();
+        this.trail=trail;
         this.percorridos= new ArrayList<>();
         this.previstos=trail.getRoute();
-        this.pinCallBack = pinCallBack;
     }
-
-    public void start(Context context){
-        locationTracker = new LocationTracker(context, this, pinCallBack);
-        if (!locationTracker.canGetLocation()) {
-            locationTracker.showSettingsAlert();
-        }
-    }
-
 
     public TrailMetrics finish(String username) {
         float percentageCompletion = (float) percorridos.size()/(previstos.size()+percorridos.size());
         float timeTaken = (float) (new Date().getTime() - timeStart)/1000; //returns in seconds
         List<Integer> p= percorridos.stream().map(EdgeTip::getId).collect(Collectors.toList());
-        locationTracker.stopListener();
-        return new TrailMetrics(username,trailId,percentageCompletion,timeTaken,p);
+        return new TrailMetrics(username,trail.getId(),percentageCompletion,timeTaken,p);
     }
 
     public EdgeTip verifyPins(Location location) {
@@ -56,5 +45,26 @@ public class Trip {
             }
         }
         return null;
+    }
+
+    public long getTimeStart() {
+        return timeStart;
+    }
+
+    public long getDistance() {
+        return distance;
+    }
+
+
+    public List<EdgeTip> getPercorridos() {
+        return percorridos;
+    }
+
+    public List<EdgeTip> getPrevistos() {
+        return previstos;
+    }
+
+    public Trail getTrail() {
+        return trail;
     }
 }

@@ -29,6 +29,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class PinFragment extends Fragment {
     private int id;
     MediaPlayer mediaPlayer;
+
+    // Factory method to create a new instance of the fragment
+    public static PinFragment newInstance(int id) {
+        PinFragment fragment = new PinFragment();
+        Bundle args = new Bundle();
+        args.putInt("id", id);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

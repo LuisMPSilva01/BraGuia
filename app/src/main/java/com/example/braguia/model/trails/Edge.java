@@ -11,6 +11,7 @@
     import com.example.braguia.model.trails.converters.TrailTypeConverter;
     import com.google.gson.annotations.SerializedName;
 
+    import java.io.Serializable;
     import java.util.Objects;
 
     @Entity(
@@ -27,7 +28,7 @@
                     @Index(value = {"edge_end"}, unique = true)
             })
     @TypeConverters({EdgeConverter.class})
-    public class Edge{
+    public class Edge implements Serializable {
         @PrimaryKey
         @ColumnInfo(name = "id")
         @SerializedName("id")

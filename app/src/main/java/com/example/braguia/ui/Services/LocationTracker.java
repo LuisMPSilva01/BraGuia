@@ -2,7 +2,13 @@ package com.example.braguia.ui.Services;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,14 +16,28 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
+import com.example.braguia.model.trails.Trail;
+import com.example.braguia.ui.Activitys.MainActivity;
+import com.example.braguia.ui.Activitys.NotificationPinScreenActivity;
+import com.example.braguia.ui.Fragments.MapsFragment;
+import com.example.braguia.viewmodel.UserViewModel;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class LocationTracker extends Service implements LocationListener {
 
@@ -26,18 +46,16 @@ public class LocationTracker extends Service implements LocationListener {
 
     boolean checkGPS = false;
 
-
     boolean checkNetwork = false;
 
     boolean canGetLocation = false;
 
-    private Trip trip;
+    private final Trip trip;
 
     Location loc;
     double latitude;
     double longitude;
 
-    PinCallBack pinCallBack;
 
 
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1;
@@ -46,15 +64,11 @@ public class LocationTracker extends Service implements LocationListener {
     private static final long MIN_TIME_BW_UPDATES = 1000;
     protected LocationManager locationManager;
 
-    public LocationTracker(Context mContext,Trip trip, PinCallBack pinCallBack) {
+    public LocationTracker(Context mContext,Trip trip) {
         this.mContext = mContext;
         this.trip = trip;
-        this.pinCallBack = pinCallBack;
+        createNotification(trip.getTrail().getRoute().get(0));
         getLocation();
-    }
-
-    public interface PinCallBack {
-        void passedNewPin(EdgeTip edgeTip);
     }
     private Location getLocation() {
 
@@ -189,13 +203,6 @@ public class LocationTracker extends Service implements LocationListener {
         if (locationManager != null) {
 
             if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             locationManager.removeUpdates(LocationTracker.this);
@@ -211,23 +218,34 @@ public class LocationTracker extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         EdgeTip edgeTip = trip.verifyPins(location);
         if(edgeTip!=null){
-            pinCallBack.passedNewPin(edgeTip);
+            createNotification(edgeTip);
         }
     }
 
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
+    public void createNotification(EdgeTip edgeTip) {
+        Intent intent = new Intent(mContext, MainActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        //Intent intent = new Intent(mContext, NotificationPinScreenActivity.class);
+        //intent.putExtra("EdgeTip", edgeTip);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 
+
+        Notification n  = new Notification.Builder(mContext)
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle(edgeTip.getPin_name())
+                .setContentText(edgeTip.getPin_desc())
+                .setContentIntent(pIntent)
+                .setAutoCancel(true).build();
+
+
+        NotificationManager notificationManager =
+                (NotificationManager) mContext.getSystemService(NotificationManager.class);
+
+        notificationManager.notify(0, n);
     }
 
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
+    public Trip getTrip() {
+        return trip;
     }
 }
 
