@@ -9,6 +9,7 @@ import androidx.room.TypeConverters;
 import com.example.braguia.model.trails.converters.TrailTypeConverter;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
 
 @Entity(tableName = "trail",indices = @Index(value = {"id"},unique = true))
 @TypeConverters({TrailTypeConverter.class})
-public class Trail{
+public class Trail implements Serializable {
     @PrimaryKey
     @ColumnInfo(name = "id")
     @SerializedName("id")

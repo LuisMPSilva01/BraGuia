@@ -26,19 +26,16 @@ public class NotificationPinScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_notificationpin);
 
         if(getIntent()!=null) {
-            Log.e("DEBUG","ONE");
             if (getIntent().hasExtra("EdgeTip")) {
-                Log.e("DEBUG", "TWO");
-                // Execute the desired code
                 EdgeTip edgeTip = (EdgeTip) getIntent().getSerializableExtra("EdgeTip");
                 Bundle bundle = new Bundle();
                 bundle.putInt("id", edgeTip.getId());
 
-                //PinFragment fragment = PinFragment.newInstance(edgeTip.getId());
-                //FragmentManager fragmentManager = getSupportFragmentManager();
-                //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                //fragmentTransaction.replace(R.id.conteudo_pin,fragment);
-                //fragmentTransaction.commit();
+                PinFragment fragment = PinFragment.newInstance(edgeTip.getId());
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.conteudo_pin,fragment);
+                fragmentTransaction.commit();
             }
         }
     }
