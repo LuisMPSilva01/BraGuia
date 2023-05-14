@@ -1,19 +1,18 @@
 package com.example.braguia.ui.Fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.example.braguia.R;
 import com.example.braguia.model.user.User;
-import com.example.braguia.ui.Activitys.MainActivity;
 import com.example.braguia.viewmodel.UserViewModel;
 
 import java.io.IOException;
@@ -68,7 +67,7 @@ public class ProfileFragment extends Fragment {
             emailString="No Email";
         email.setText(emailString);
 
-        TextView trailHist = view.findViewById(R.id.profile_trailsHist);
+        Button trailHist = view.findViewById(R.id.profile_trailsHist_button);
         trailHist.setOnClickListener(e->replaceFragment());
     }
 

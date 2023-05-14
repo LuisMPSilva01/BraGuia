@@ -3,7 +3,6 @@ package com.example.braguia.ui.Activitys;
 import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -16,20 +15,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.braguia.R;
 import com.example.braguia.databinding.ActivityMainBinding;
 import com.example.braguia.model.user.User;
@@ -112,9 +109,6 @@ public class MainActivity extends AppCompatActivity {
                     navController.navigate(R.id.discoverFragment);
                     break;
 
-                case R.id.add_roadmap:
-                    navController.navigate(R.id.addRoadMapFragment);
-                    break;
             }
             return true;
         });
