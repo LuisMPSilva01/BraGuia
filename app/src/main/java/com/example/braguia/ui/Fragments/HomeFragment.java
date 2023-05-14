@@ -1,10 +1,12 @@
 package com.example.braguia.ui.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,13 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.braguia.R;
 import com.example.braguia.model.app.AppInfo;
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.model.user.User;
 import com.example.braguia.ui.Activitys.MainActivity;
 import com.example.braguia.ui.TrailsHomeRecyclerViewAdapter;
 import com.example.braguia.viewmodel.AppInfoViewModel;
 import com.example.braguia.viewmodel.TrailViewModel;
+import com.example.braguia.viewmodel.UserViewModel;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,9 +53,18 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         trailsViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
+        UserViewModel userViewModel= new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         try {
             trailsViewModel.getAllTrails().observe(getViewLifecycleOwner(), y -> {
-                loadRecyclerView(view, y);
+                try {
+                    userViewModel.getUser().observe(getViewLifecycleOwner(), user ->{
+                        if(user!=null){
+                            loadRecyclerView(view, y,user);
+                        }
+                    });
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -75,7 +89,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void loadRecyclerView(View view, List<Trail> trails){
+    private void loadRecyclerView(View view, List<Trail> trails, User user){
         RecyclerView recyclerView = view.findViewById(R.id.trail_main_list);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
@@ -84,8 +98,13 @@ public class HomeFragment extends Fragment {
         adapter = new TrailsHomeRecyclerViewAdapter(trails);
         recyclerView.setAdapter(adapter);
 
-
-        adapter.setOnItemClickListener(this::replaceFragment);
+        if(Objects.equals(user.getUser_type(), "Premium") || Objects.equals(user.getUser_type(), "premium")){
+            adapter.setOnItemClickListener(this::replaceFragment);
+        } else {
+            adapter.setOnItemClickListener(e->{
+                Toast.makeText(getContext(),"Only premium users can use this feature",Toast.LENGTH_LONG).show();
+            });
+        }
 
 
     }

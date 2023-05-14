@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,20 +22,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.model.user.User;
 import com.example.braguia.ui.Activitys.MainActivity;
 import com.example.braguia.ui.TrailsRecyclerView;
 import com.example.braguia.ui.TrailsRecyclerViewAdapter;
 import com.example.braguia.viewmodel.TrailViewModel;
+import com.example.braguia.viewmodel.UserViewModel;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class DiscoverFragment extends Fragment {
 
     private SearchView searchView;
-
-
-    private TrailsRecyclerView recyclerView;
     private TrailsRecyclerViewAdapter adapter;
 
 
@@ -47,10 +48,19 @@ public class DiscoverFragment extends Fragment {
 
         // Load trails data
         TrailViewModel trailsViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
+        UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
         try {
-            trailsViewModel.getAllTrails().observe(getViewLifecycleOwner(), x -> {
-                Log.e("Trailist","trails size:" + x.size());
-                loadRecyclerView(view, x);
+            trailsViewModel.getAllTrails().observe(getViewLifecycleOwner(), trails -> {
+                try {
+                    userViewModel.getUser().observe(getViewLifecycleOwner(), user ->{
+                        if(user!=null){
+                            Log.e("Trailist","trails size:" + trails.size());
+                            loadRecyclerView(view, trails, user);
+                        }
+                    });
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -84,7 +94,7 @@ public class DiscoverFragment extends Fragment {
         return rootView;
     }
 
-    private void loadRecyclerView(View view, List<Trail> trails){
+    private void loadRecyclerView(View view, List<Trail> trails, User user){
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -99,7 +109,13 @@ public class DiscoverFragment extends Fragment {
             recyclerView.setAdapter(adapter);
             // Set the item click listener
             // Handle the item click event
-            adapter.setOnItemClickListener(this::replaceFragment);
+            if(Objects.equals(user.getUser_type(), "Premium") || Objects.equals(user.getUser_type(), "premium")){
+                adapter.setOnItemClickListener(this::replaceFragment);
+            } else {
+                adapter.setOnItemClickListener(e->{
+                    Toast.makeText(getContext(),"Only premium users can use this feature",Toast.LENGTH_LONG).show();
+                });
+            }
         }
     }
 

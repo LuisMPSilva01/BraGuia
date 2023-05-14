@@ -97,12 +97,5 @@ public class TrailDescriptionFragment extends Fragment {
         transaction2.replace(R.id.maps_trail_overview, mapsFragment);
         transaction2.commit();
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        // Save any necessary data into the outState Bundle object
-    }
 }
 
