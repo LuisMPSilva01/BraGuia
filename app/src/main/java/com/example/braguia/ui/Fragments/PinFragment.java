@@ -15,27 +15,24 @@ import android.widget.VideoView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
+import com.example.braguia.model.trails.Trail;
 import com.example.braguia.viewAdapters.EdgeTipViewAdapter;
+import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PinFragment extends Fragment {
-    private final EdgeTip edgeTip;
+    private int id;
     MediaPlayer mediaPlayer;
-    public PinFragment(EdgeTip edgeTip){
-        this.edgeTip=edgeTip;
-    }
-
-    public static PinFragment newInstance(EdgeTip edgeTip) {
-        return new PinFragment(edgeTip);
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.id = getArguments().getInt("id");
     }
 
     @Override
@@ -49,8 +46,16 @@ public class PinFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_pin, container, false);
 
+        TrailViewModel trailViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
+        trailViewModel.getPinsById(List.of(id)).observe(getViewLifecycleOwner(), x ->{
+            if(x!=null && x.size()>0){
+                loadView(view, x.get(0));
+            }
+        });
+        return view;
+    }
 
-
+    private void loadView(View view, EdgeTip edgeTip){
         TextView titulo = view.findViewById(R.id.pin_title);
         titulo.setText(edgeTip.getPin_name());
 
@@ -93,9 +98,7 @@ public class PinFragment extends Fragment {
         FragmentTransaction transaction2 = childFragmentManager.beginTransaction();
         transaction2.replace(R.id.pin_mapView, mapsFragment);
         transaction2.commit();
-        return view;
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

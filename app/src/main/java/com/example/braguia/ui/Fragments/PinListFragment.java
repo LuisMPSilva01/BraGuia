@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -111,9 +112,11 @@ public class PinListFragment extends Fragment {
     }
 
     private void replaceFragment(EdgeTip edgeTip) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
-        PinFragment fragment = PinFragment.newInstance(edgeTip);
-        MainActivity mainActivity = (MainActivity) requireActivity();
-        mainActivity.replaceFragment(fragment);
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", edgeTip.getId());
+
+        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navHostFragment.getNavController().navigate(R.id.pinFragment,bundle);
     }
 }
 

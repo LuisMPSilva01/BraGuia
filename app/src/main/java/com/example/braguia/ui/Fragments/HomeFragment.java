@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -90,9 +91,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void replaceFragment(Trail trail) {
-        // Create a new instance of the destination fragment
-        TrailDescriptionFragment fragment = TrailDescriptionFragment.newInstance(trail.getId());
-        MainActivity mainActivity = (MainActivity) requireActivity();
-        mainActivity.replaceFragment(fragment);
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", trail.getId());
+
+        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navHostFragment.getNavController().navigate(R.id.trailDescriptionFragment,bundle);
     }
 }

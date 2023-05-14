@@ -104,14 +104,11 @@ public class DiscoverFragment extends Fragment {
     }
 
     private void replaceFragment(Trail trail) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
-        // Create a new instance of the destination fragment
-        TrailDescriptionFragment fragment = TrailDescriptionFragment.newInstance(trail.getId());
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", trail.getId());
 
         NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-        navHostFragment.getNavController().navigate(R.id.trailDescriptionFragment);
-
-        MainActivity mainActivity = (MainActivity) requireActivity();
-        mainActivity.replaceFragment(fragment);
+        navHostFragment.getNavController().navigate(R.id.trailDescriptionFragment,bundle);
     }
 
 

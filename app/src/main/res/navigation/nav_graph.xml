@@ -27,11 +27,18 @@
         <action
             android:id="@+id/action_homeFragment_to_partnersListFragment"
             app:destination="@id/partnersListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_trailDescriptionFragment"
+            app:destination="@id/trailDescriptionFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.braguia.ui.Fragments.ProfileFragment"
-        android:label="ProfileFragment" />
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_trailHistoryFragment"
+            app:destination="@id/trailHistoryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/discoverFragment"
         android:name="com.example.braguia.ui.Fragments.DiscoverFragment"
@@ -65,8 +72,24 @@
         android:id="@+id/trailDescriptionFragment"
         android:name="com.example.braguia.ui.Fragments.TrailDescriptionFragment"
         android:label="TrailDescriptionFragment" >
-        <argument
-            android:name="trailId"
-            app:argType="integer" />
+        <action
+            android:id="@+id/action_trailDescriptionFragment_to_pinFragment"
+            app:destination="@id/pinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pinFragment"
+        android:name="com.example.braguia.ui.Fragments.PinFragment"
+        android:label="PinFragment" />
+    <fragment
+        android:id="@+id/trailMetricsDescriptionFragment"
+        android:name="com.example.braguia.ui.Fragments.TrailMetricsDescriptionFragment"
+        android:label="TrailMetricsDescriptionFragment" />
+    <fragment
+        android:id="@+id/trailHistoryFragment"
+        android:name="com.example.braguia.ui.Fragments.TrailHistoryFragment"
+        android:label="TrailHistoryFragment" >
+        <action
+            android:id="@+id/action_trailHistoryFragment_to_trailMetricsDescriptionFragment"
+            app:destination="@id/trailMetricsDescriptionFragment" />
     </fragment>
 </navigation>

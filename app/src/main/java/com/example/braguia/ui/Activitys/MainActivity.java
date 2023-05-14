@@ -241,13 +241,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void replaceFragment(Fragment fragment){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment,fragment);
-        fragmentTransaction.commit();
-    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

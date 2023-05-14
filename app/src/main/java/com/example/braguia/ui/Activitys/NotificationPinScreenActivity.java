@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
@@ -30,12 +31,14 @@ public class NotificationPinScreenActivity extends AppCompatActivity {
                 Log.e("DEBUG", "TWO");
                 // Execute the desired code
                 EdgeTip edgeTip = (EdgeTip) getIntent().getSerializableExtra("EdgeTip");
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", edgeTip.getId());
 
-                PinFragment fragment = PinFragment.newInstance(edgeTip);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.conteudo_pin,fragment);
-                fragmentTransaction.commit();
+                //PinFragment fragment = PinFragment.newInstance(edgeTip.getId());
+                //FragmentManager fragmentManager = getSupportFragmentManager();
+                //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                //fragmentTransaction.replace(R.id.conteudo_pin,fragment);
+                //fragmentTransaction.commit();
             }
         }
     }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,9 +73,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void replaceFragment() {
-        // Create a new instance of the destination fragment
-        TrailHistoryFragment fragment = TrailHistoryFragment.newInstance(1);
-        MainActivity mainActivity = (MainActivity) requireActivity();
-        mainActivity.replaceFragment(fragment);
+        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navHostFragment.getNavController().navigate(R.id.trailHistoryFragment);
     }
 }

@@ -44,19 +44,13 @@ import java.util.stream.Collectors;
 
 public class TrailDescriptionFragment extends Fragment {
     private TrailViewModel trailViewModel;
-    private final int id;
+    private int id;
     private Trip trip;
-    public TrailDescriptionFragment(int id){
-        this.id=id;
-    }
-
-    public static TrailDescriptionFragment newInstance(int id) {
-        return new TrailDescriptionFragment(id);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.id = getArguments().getInt("id");
     }
 
     @Override
@@ -188,12 +182,6 @@ public class TrailDescriptionFragment extends Fragment {
         super.onSaveInstanceState(outState);
 
         // Save any necessary data into the outState Bundle object
-    }
-
-    private void replaceFragment(EdgeTip edgeTip) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
-        PinFragment fragment = PinFragment.newInstance(edgeTip);
-        MainActivity mainActivity = (MainActivity) requireActivity();
-        mainActivity.replaceFragment(fragment);
     }
 }
 

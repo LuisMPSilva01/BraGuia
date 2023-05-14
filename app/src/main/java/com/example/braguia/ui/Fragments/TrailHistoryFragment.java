@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -90,9 +91,11 @@ public class TrailHistoryFragment extends Fragment {
     }
 
     private void replaceFragment(TrailMetrics trailMetrics) {
-        TrailMetricsDescriptionFragment fragment = TrailMetricsDescriptionFragment.newInstance(trailMetrics.getMetricId());
-        MainActivity mainActivity = (MainActivity) requireActivity();
-        mainActivity.replaceFragment(fragment);
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", trailMetrics.getMetricId());
+
+        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navHostFragment.getNavController().navigate(R.id.trailMetricsDescriptionFragment,bundle);
     }
 
 

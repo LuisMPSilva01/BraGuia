@@ -20,17 +20,11 @@ import com.example.braguia.viewmodel.UserViewModel;
 import com.squareup.picasso.Picasso;
 
 public class TrailMetricsDescriptionFragment extends Fragment {
-    private final int id;
-    public TrailMetricsDescriptionFragment(int id){
-        this.id=id;
-    }
-
-    public static TrailMetricsDescriptionFragment newInstance(int id) {
-        return new TrailMetricsDescriptionFragment(id);
-    }
+    private int id;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.id = getArguments().getInt("id");
     }
 
     @Override
