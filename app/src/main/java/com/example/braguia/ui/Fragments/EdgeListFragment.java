@@ -48,7 +48,6 @@ public class EdgeListFragment extends Fragment {
         return fragment;
     }
 
-    //TODO: VER A PARTIR DAQUI
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,13 +96,12 @@ public class EdgeListFragment extends Fragment {
             GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(gridLayoutManager);
 
-            EdgesRecyclerViewAdapter adapter = new EdgesRecyclerViewAdapter(edges);
+            EdgesRecyclerViewAdapter adapter = new EdgesRecyclerViewAdapter(edges, requireActivity());
             recyclerView.setAdapter(adapter);
 
-
-            //adapter.setOnItemClickListener(this::replaceFragment);
         }
     }
+
 
 
 }
