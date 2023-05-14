@@ -29,13 +29,19 @@ public class Trip implements Serializable {
     }
 
     public TrailMetrics finish(String username) {
-        float percentageCompletion = (float) percorridos.size()/(previstos.size()+percorridos.size());
+        float percentageCompletion = (float) percorridos.size()/(previstos.size()+percorridos.size())*100;
         float timeTaken = (float) (new Date().getTime() - timeStart)/1000; //returns in seconds
         List<Integer> p= percorridos.stream().map(EdgeTip::getId).collect(Collectors.toList());
         return new TrailMetrics(username,trail.getId(),percentageCompletion,timeTaken,p);
     }
 
     public EdgeTip verifyPins(Location location) {
+        /*
+        for (EdgeTip pin:previstos){
+                percorridos.add(pin);
+                previstos.remove(pin);
+                return pin;
+        }*/
         for (EdgeTip pin:previstos){
             float distance = pin.getLocation().distanceTo(location);
             if(distance <= 50){

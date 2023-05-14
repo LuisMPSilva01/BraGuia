@@ -33,10 +33,10 @@ import com.example.braguia.viewmodel.UserViewModel;
 
 public class Servico extends Service {
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
-    private static final String TAG = "BOOMBOOMTESTGPS";
+    private static final String TAG = "SERVIVETESTGPS";
     private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 1000;
-    private static final float LOCATION_DISTANCE = 10f;
+    private static final float LOCATION_DISTANCE = 1;
     private Trip trip;
 
     private class LocationListener implements android.location.LocationListener {
@@ -88,19 +88,21 @@ public class Servico extends Service {
         Log.e(TAG, "onStartCommand");
         trip = (Trip) intent.getSerializableExtra("trip");
 
-        createNotification(trip.getTrail().getRoute().get(0));
-        createNotificationChannel();
-        Intent notificationIntent = new Intent(this, NavigationActivity.class);
-        notificationIntent.putExtra("trip", trip);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Viagem")
-                .setContentText(trip.getTrail().getTrail_name())
-                .setSmallIcon(R.drawable.uminho_logo)
-                .setContentIntent(pendingIntent)
-                .build();
-        startForeground(1, notification);
+            createNotificationChannel();
+            Intent notificationIntent = new Intent(this, NavigationActivity.class);
+            notificationIntent.putExtra("trip", trip);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                    0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle("Viagem em andamento")
+                    .setContentText(trip.getTrail().getTrail_name())
+                    .setSmallIcon(android.R.drawable.ic_dialog_map)
+                    .setContentIntent(pendingIntent)
+                    .setOngoing(true)
+                    .setAutoCancel(false)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .build();
+            startForeground(1, notification);
 
 
         Log.e(TAG,"Trail name:"+trip.getTrail().getTrail_name());
@@ -161,7 +163,7 @@ public class Servico extends Service {
             manager.createNotificationChannel(channel);
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "channel_id")
-                .setSmallIcon(R.drawable.logo)
+                .setSmallIcon(android.R.drawable.ic_dialog_map)
                 .setContentTitle(edgeTip.getPin_name())
                 .setContentText(edgeTip.getPin_desc());
 

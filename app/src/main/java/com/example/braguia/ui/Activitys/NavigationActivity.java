@@ -1,25 +1,12 @@
 package com.example.braguia.ui.Activitys;
 
 import android.Manifest;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,9 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
@@ -40,15 +24,11 @@ import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.ui.Fragments.MapsFragment;
-import com.example.braguia.ui.Fragments.PinListFragment;
-import com.example.braguia.ui.Services.LocationTracker;
 import com.example.braguia.ui.Services.Servico;
 import com.example.braguia.ui.Services.Trip;
 import com.example.braguia.viewmodel.TrailViewModel;
-import com.example.braguia.viewmodel.UserViewModel;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,33 +39,19 @@ public class NavigationActivity extends AppCompatActivity {
     public static NavigationActivity newInstance() {
         return new NavigationActivity();
     }
-
-    private Integer trailId;
-    private LocationTracker locationTracker;
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        if(trailId!=null){
-            TrailViewModel trailViewModel = new ViewModelProvider(this).get(TrailViewModel.class);
-            LiveData<Trail> trailLiveData=trailViewModel.getTrailById(trailId);
-            trailLiveData.observe(this, trail -> {
-                if(trail!=null){
-                    load(trail);
-                    trailLiveData.removeObservers(this);
-                }
-            });
-        }
         if(getIntent()!=null) {
             if (getIntent().hasExtra("trip")) {
                 Trip trip = (Trip) getIntent().getSerializableExtra("trip");
                 load(trip.getTrail());
             }
             else if (getIntent().hasExtra("id")) {
-                trailId = getIntent().getIntExtra("id",0);
+                int trailId = getIntent().getIntExtra("id",0);
 
                 TrailViewModel trailViewModel = new ViewModelProvider(this).get(TrailViewModel.class);
                 LiveData<Trail> trailLiveData=trailViewModel.getTrailById(trailId);
@@ -166,17 +132,5 @@ public class NavigationActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("id", trailId);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        this.trailId = savedInstanceState.getInt("id");
     }
 }
