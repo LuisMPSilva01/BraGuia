@@ -2,6 +2,7 @@ package com.example.braguia.ui.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -60,10 +62,26 @@ public class TrailDescriptionFragment extends Fragment {
         Button intro = view.findViewById(R.id.start_trip_button);
 
         intro.setOnClickListener(v -> {
-            Intent intent = new Intent(requireActivity(), NavigationActivity.class);
-            intent.putExtra("id", trail.getId()); // add a string extra
-            startActivity(intent);
+            if (NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()) {
+                Intent intent = new Intent(requireActivity(), NavigationActivity.class);
+                intent.putExtra("id", trail.getId()); // add a string extra
+                startActivity(intent);
+            } else {
+                // Create an intent to open app notification settings
+                Intent settingsIntent = new Intent();
+                settingsIntent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+                settingsIntent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
+
+                // Check if the intent can be resolved
+                if (settingsIntent.resolveActivity(requireContext().getPackageManager()) != null) {
+                    startActivity(settingsIntent);
+                } else {
+                    // Provide an alternative action or message if the intent cannot be resolved
+                    Toast.makeText(requireContext(), "Please enable notifications in your device settings", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
+
 
 
         FragmentManager childFragmentManager = getChildFragmentManager();
