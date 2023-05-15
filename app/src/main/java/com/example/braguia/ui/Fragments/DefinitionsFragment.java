@@ -32,7 +32,6 @@ public class DefinitionsFragment extends Fragment {
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
     public DefinitionsFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -120,7 +119,7 @@ public class DefinitionsFragment extends Fragment {
             // Handle the switch state change here
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                Toast.makeText(requireActivity(), "Dark mode enabled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Dark mode enabled", Toast.LENGTH_SHORT).show();
                 // Save switch state
                 SharedPreferences.Editor editor = sharedPrefs.edit();
                 editor.putBoolean("darkModeSwitchState", true);

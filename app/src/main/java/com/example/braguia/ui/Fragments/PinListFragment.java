@@ -64,8 +64,6 @@ public class PinListFragment extends Fragment {
                     throw new IllegalArgumentException("Both trail ID list and pin ID list are null");
                 }
             }
-        } else {
-            throw new IllegalArgumentException("Arguments bundle is null");
         }
     }
 

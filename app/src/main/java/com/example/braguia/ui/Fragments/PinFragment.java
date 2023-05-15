@@ -41,7 +41,9 @@ public class PinFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.id = getArguments().getInt("id");
+        if(getArguments()!=null) {
+            this.id = getArguments().getInt("id");
+        }
     }
 
     @Override

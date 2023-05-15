@@ -31,6 +31,9 @@ public class MapsFragment extends Fragment {
     public MapsFragment(List<EdgeTip> edgeTips){
         this.edgeTips=edgeTips;
     }
+    public MapsFragment(){
+        edgeTips=new ArrayList<>();
+    }
 
     public static MapsFragment newInstance(List<EdgeTip> edgeTips) {
         return new MapsFragment(edgeTips);
@@ -56,25 +59,27 @@ public class MapsFragment extends Fragment {
     public void loadMap(GoogleMap googleMap) {
         mMap = googleMap;
 
-        ArrayList<LatLng> wayPointsAPI = new ArrayList<>();
-        for(EdgeTip edgeTip:edgeTips){
-            wayPointsAPI.add(edgeTip.getMapsCoordinate());
-            mMap.addMarker(new MarkerOptions().position(edgeTip.getMapsCoordinate()).title(edgeTip.getPin_name()));
-        }
-        LatLng source = wayPointsAPI.get(0);
+        if(edgeTips.size()>0) {
+            ArrayList<LatLng> wayPointsAPI = new ArrayList<>();
+            for (EdgeTip edgeTip : edgeTips) {
+                wayPointsAPI.add(edgeTip.getMapsCoordinate());
+                mMap.addMarker(new MarkerOptions().position(edgeTip.getMapsCoordinate()).title(edgeTip.getPin_name()));
+            }
+            LatLng source = wayPointsAPI.get(0);
 
-        if(wayPointsAPI.size()>=2) {
-            LatLng destination = wayPointsAPI.get(wayPointsAPI.size() - 1);
-            wayPointsAPI.remove(0);
-            wayPointsAPI.remove(wayPointsAPI.size() - 1);
+            if (wayPointsAPI.size() >= 2) {
+                LatLng destination = wayPointsAPI.get(wayPointsAPI.size() - 1);
+                wayPointsAPI.remove(0);
+                wayPointsAPI.remove(wayPointsAPI.size() - 1);
 
-            new GetPathFromLocation(getActivity(), source, destination, wayPointsAPI, mMap, false, false, polyLine -> {
-                polyLine.color(R.color.teal_200);
-                mMap.addPolyline(polyLine);
-            }).execute();
+                new GetPathFromLocation(getActivity(), source, destination, wayPointsAPI, mMap, false, false, polyLine -> {
+                    polyLine.color(R.color.teal_200);
+                    mMap.addPolyline(polyLine);
+                }).execute();
+            }
+            mMap.getUiSettings().setZoomControlsEnabled(true);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(source, 12));
         }
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(source, 12));
     }
 
     public static boolean meetsPreRequisites(Context context){
