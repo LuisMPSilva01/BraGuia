@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,8 +92,10 @@ public class MainActivity extends AppCompatActivity {
             userLiveData.observe(this, user -> {
                 if(user!=null){
                     if (Objects.equals(user.getUser_type(), "loggedOff")) {
+                        Log.e("MAIN","failed login");
                         changeToLoginActivity();
                     }
+                    else Log.e("MAIN","login success");
                     userLiveData.removeObservers(this);
                 }
             });
@@ -223,6 +226,7 @@ public class MainActivity extends AppCompatActivity {
         menuItem2.setEnabled(false);
     }
     private void changeToLoginActivity(){
+        Log.e("DEBUG","CHANGE TO LOGIN ACTIVITY");
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
     }
