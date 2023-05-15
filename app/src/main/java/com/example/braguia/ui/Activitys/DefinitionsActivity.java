@@ -51,14 +51,8 @@ public class DefinitionsActivity extends AppCompatActivity {
             locationSwitchState = sharedPrefs.getBoolean("locationSwitchState", false);
         }
 
-        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        boolean isDarkModeOn = nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
-        boolean darkModeSwitchState;
-        //TODO: FIX!
-        if(isDarkModeOn)
-            darkModeSwitchState = sharedPrefs.getBoolean("darkModeSwitchState", true);
-        else
-            darkModeSwitchState = sharedPrefs.getBoolean("darkModeSwitchState", false);
+
+        boolean darkModeSwitchState = sharedPrefs.getBoolean("darkModeSwitchState", false);
 
 
 
@@ -69,7 +63,11 @@ public class DefinitionsActivity extends AppCompatActivity {
         // Initialize switch states
 
         localization_switch.setChecked(locationSwitchState);
-        dark_mode_switch.setChecked(darkModeSwitchState);
+
+        boolean isDarkModeEnabled = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                                    == Configuration.UI_MODE_NIGHT_YES;
+
+        dark_mode_switch.setChecked(isDarkModeEnabled);
 
 
         localization_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -121,14 +119,19 @@ public class DefinitionsActivity extends AppCompatActivity {
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 Toast.makeText(DefinitionsActivity.this, "Dark mode enabled", Toast.LENGTH_SHORT).show();
+                // Save switch state
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putBoolean("darkModeSwitchState", true);
+                editor.apply();
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 Toast.makeText(DefinitionsActivity.this, "Dark mode disabled", Toast.LENGTH_SHORT).show();
+                // Save switch state
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putBoolean("darkModeSwitchState", false);
+                editor.apply();
             }
-            // Save switch state
-            SharedPreferences.Editor editor = sharedPrefs.edit();
-            editor.putBoolean("darkModeSwitchState", isChecked);
-            editor.apply();
+
         });
     }
 
