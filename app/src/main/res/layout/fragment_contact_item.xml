@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/contact_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -25,37 +26,74 @@
             <TextView
                 android:id="@+id/contact_name"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="29dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="TextView" />
+                android:text="TextView"
+                tools:ignore="HardcodedText,InefficientWeight" />
 
-            <TextView
-                android:id="@+id/contact_mail"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@android:drawable/ic_dialog_email"
-                android:drawablePadding="8dp"
                 android:gravity="center_vertical"
-                android:text="example@mail.com" />
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
-            <TextView
-                android:id="@+id/contact_phone"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@android:drawable/ic_dialog_email"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/contact_mail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="example@mail.com"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@android:drawable/ic_menu_call"
-                android:drawablePadding="8dp"
                 android:gravity="center_vertical"
-                android:text="(123) 456-7890" />
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
-            <TextView
-                android:id="@+id/contact_url"
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@android:drawable/ic_menu_call"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/contact_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="(123) 456-7890"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/baseline_web_24"
-                android:drawablePadding="8dp"
                 android:gravity="center_vertical"
-                android:text="https://www.example.com" />
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/baseline_web_24"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/contact_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="https://www.example.com"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
 
         </LinearLayout>
 

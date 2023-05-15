@@ -37,14 +37,16 @@
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:layout_gravity="center"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    tools:srcCompat="@tools:sample/avatars"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/pin_name_origem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    tools:ignore="HardcodedText" />
 
             </androidx.cardview.widget.CardView>
 
@@ -64,14 +66,16 @@
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:layout_gravity="center"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    tools:srcCompat="@tools:sample/avatars"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/pin_name_destino"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    tools:ignore="HardcodedText" />
 
             </androidx.cardview.widget.CardView>
 
@@ -99,54 +103,63 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/baseline_transport_24" />
+                        android:src="@drawable/baseline_transport_24"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:id="@+id/edge_transport"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Transport" />
+                        android:text="Transport"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/baseline_time_24" />
+                        android:src="@drawable/baseline_time_24"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:id="@+id/edge_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Duration" />
+                        android:text="Duration"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/baseline_info_24" />
+                        android:src="@drawable/baseline_info_24"
+                        tools:ignore="ContentDescription" />
 
                     <TextView
                         android:id="@+id/edge_road_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Road type" />
+                        android:text="Road type"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
             </LinearLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/partners_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -28,49 +29,57 @@
                 android:layout_height="29dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="TextView" />
+                android:text="TextView"
+                tools:ignore="HardcodedText,InefficientWeight" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@android:drawable/ic_dialog_email" />
+                    android:src="@android:drawable/ic_dialog_email"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/partner_mail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="example@mail.com" />
+                    android:text="example@mail.com"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:src="@android:drawable/ic_menu_call" />
+                    android:src="@android:drawable/ic_menu_call"
+                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:id="@+id/partner_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="(123) 456-7890" />
+                    android:text="(123) 456-7890"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:layout_width="32dp"
@@ -81,7 +90,8 @@
                     android:id="@+id/partner_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="https://www.example.com" />
+                    android:text="https://www.example.com"
+                    tools:ignore="HardcodedText" />
             </LinearLayout>
 
         </LinearLayout>

@@ -39,7 +39,8 @@
                 android:layout_gravity="start"
                 android:adjustViewBounds="true"
                 android:cropToPadding="false"
-                android:src="@drawable/logo" />
+                android:src="@drawable/logo"
+                tools:ignore="ContentDescription" />
 
         </androidx.appcompat.widget.Toolbar>
 

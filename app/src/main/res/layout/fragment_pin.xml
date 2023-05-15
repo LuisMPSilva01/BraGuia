@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="HardcodedText,MissingConstraints" />
 
 
     <ImageView
@@ -26,7 +26,8 @@
         android:layout_marginTop="60dp"
         android:src="@drawable/no_preview_image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pin_title" />
+        app:layout_constraintTop_toBottomOf="@+id/pin_title"
+        tools:ignore="ContentDescription" />
 
     <VideoView
         android:id="@+id/pin_vid"
@@ -48,7 +49,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.616"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/audio_playbutton" />
+        app:layout_constraintTop_toBottomOf="@+id/audio_playbutton"
+        tools:ignore="HardcodedText" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/pin_mapView"
@@ -79,5 +81,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.179"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pin_img" />
+        app:layout_constraintTop_toBottomOf="@+id/pin_img"
+        tools:ignore="HardcodedText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

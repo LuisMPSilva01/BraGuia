@@ -18,7 +18,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <ImageView
         android:id="@+id/trail_metricsImageDescription"
@@ -33,7 +34,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trail_metrics_description_title" />
+        app:layout_constraintTop_toBottomOf="@+id/trail_metrics_description_title"
+        tools:ignore="ContentDescription,HardcodedText" />
 
 
     <LinearLayout
@@ -74,13 +76,15 @@
                         android:layout_width="156dp"
                         android:layout_height="wrap_content"
                         android:text="Time taken on the trail:"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:id="@+id/trail_metricsTImeTaken"
                         android:layout_width="198dp"
                         android:layout_height="wrap_content"
-                        android:text="Metrics time taken" />
+                        android:text="Metrics time taken"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -93,13 +97,15 @@
                         android:layout_width="126dp"
                         android:layout_height="wrap_content"
                         android:text="Complete trail (%):"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText" />
 
                     <TextView
                         android:id="@+id/trail_metricsCompletePercentage"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Complete Percentage" />
+                        android:text="Complete Percentage"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
 
@@ -133,6 +139,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

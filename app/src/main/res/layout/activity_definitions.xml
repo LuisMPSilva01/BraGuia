@@ -10,7 +10,7 @@
         android:id="@+id/notifications_switch"
         android:layout_width="177dp"
         android:layout_height="45dp"
-        android:text="Allow notifications"
+        android:text="@string/allow_notifications"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
         app:layout_constraintVertical_bias="0.088"
         android:layout_width="177dp"
         android:layout_height="45dp"
-        android:text="Dark mode"
+        android:text="@string/dark_mode"
         tools:layout_editor_absoluteX="117dp"
         tools:layout_editor_absoluteY="218dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
