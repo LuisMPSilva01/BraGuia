@@ -43,9 +43,9 @@ public class UserRepository {
     public UserDAO userDAO;
     public TrailMetricsDAO trailMetricsDAO;
     public MediatorLiveData<String> userName;
-    private GuideDatabase database;
-    private Retrofit retrofit;
-    private UserAPI api;
+    private final GuideDatabase database;
+    private final Retrofit retrofit;
+    private final UserAPI api;
     private String lastUser;
 
     public UserRepository(Application application,Boolean freshDB) {
@@ -285,7 +285,7 @@ public class UserRepository {
 
 
     private static class InsertAsyncTask extends AsyncTask<User,Void,Void> {
-        private UserDAO userDAO;
+        private final UserDAO userDAO;
 
         public InsertAsyncTask(UserDAO catDao) {
             this.userDAO=catDao;
@@ -299,7 +299,7 @@ public class UserRepository {
     }
 
     private static class InsertTrailMetricsAsync extends AsyncTask<TrailMetrics,Void,Void> {
-        private TrailMetricsDAO trailMetricsDAO;
+        private final TrailMetricsDAO trailMetricsDAO;
 
         public InsertTrailMetricsAsync(TrailMetricsDAO trailMetricsDAO) {
             this.trailMetricsDAO=trailMetricsDAO;

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class TrailViewModel extends AndroidViewModel {
 
-    private TrailRepository repository;
+    private final TrailRepository repository;
     public LiveData<List<Trail>> trails;
 
     public TrailViewModel(@NonNull Application application) {

@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Trip implements Serializable {
-    private long timeStart;
-    private long distance;
-    private Trail trail;
-    private List<EdgeTip> percorridos;
-    private List<EdgeTip> previstos;
+    private final long timeStart;
+    private final long distance;
+    private final Trail trail;
+    private final List<EdgeTip> percorridos;
+    private final List<EdgeTip> previstos;
 
     public Trip(Trail trail) {
         this.timeStart = new Date().getTime();

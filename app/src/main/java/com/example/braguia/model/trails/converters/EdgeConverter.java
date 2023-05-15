@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class EdgeConverter {
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     @TypeConverter
     public static EdgeTip fromEdgeTipString(String value) {

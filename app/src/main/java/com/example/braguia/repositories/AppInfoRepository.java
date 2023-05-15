@@ -25,7 +25,7 @@ public class AppInfoRepository {
 
     public AppInfoDAO appInfoDAO;
     public MediatorLiveData<AppInfo> appInfo;
-    private GuideDatabase database;
+    private final GuideDatabase database;
 
     public AppInfoRepository(Application application){
         database = GuideDatabase.getInstance(application);
@@ -86,7 +86,7 @@ public class AppInfoRepository {
     }
 
     private static class InsertAsyncTask extends AsyncTask<AppInfo,Void,Void> {
-        private AppInfoDAO appInfoDAO;
+        private final AppInfoDAO appInfoDAO;
 
         public InsertAsyncTask(AppInfoDAO catDao) {
             this.appInfoDAO=catDao;

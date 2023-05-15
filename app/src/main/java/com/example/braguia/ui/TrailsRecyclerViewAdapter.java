@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecyclerView> {
 
@@ -39,7 +40,7 @@ public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecycl
     public void filterData(String query) {
         filteredData.clear();
         for (Trail data : originalData) {
-            if (data.getTrail_name().toLowerCase().contains(query.toLowerCase())) {
+            if (data.getTrail_name().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))) {
                 filteredData.add(data);
             }
         }

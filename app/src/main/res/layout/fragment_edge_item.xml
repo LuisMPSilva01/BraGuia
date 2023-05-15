@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     card_view:cardBackgroundColor="@color/white"
     card_view:cardCornerRadius="15dp"
     card_view:cardElevation="5dp"

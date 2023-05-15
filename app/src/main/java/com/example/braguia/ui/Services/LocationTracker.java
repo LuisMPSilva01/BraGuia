@@ -31,7 +31,7 @@ public class LocationTracker extends Service implements LocationListener {
 
     boolean canGetLocation = false;
 
-    private Trip trip;
+    private final Trip trip;
 
     Location loc;
     double latitude;

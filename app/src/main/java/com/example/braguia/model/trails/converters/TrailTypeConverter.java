@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class TrailTypeConverter {
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     @TypeConverter
     public static List<RelTrail> fromRelTrailListString(String value) {

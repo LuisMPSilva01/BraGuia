@@ -24,7 +24,7 @@ import java.util.List;
 
 public class MapsFragment extends Fragment {
     private GoogleMap mMap;
-    private String TAG = "MAPS";
+    private final String TAG = "MAPS";
     TrailViewModel trailViewModel;
     final List<EdgeTip> edgeTips;
 

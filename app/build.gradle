@@ -41,7 +41,6 @@ android {
 
 dependencies {
     implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
-    implementation 'androidx.core:core-ktx:1.9.0'
     // Dependencies for working with Architecture components
     // You'll probably have to update the version numbers in build.gradle (Project)
 
@@ -54,10 +53,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'junit:junit:4.13.2'
     implementation 'androidx.test.ext:junit:1.1.5'
-    implementation 'androidx.fragment:fragment:1.4.1'
-    implementation 'androidx.drawerlayout:drawerlayout:1.1.1'
+    implementation 'androidx.fragment:fragment:1.5.7'
+    implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.3.0'
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
@@ -65,9 +64,6 @@ dependencies {
 
     // Lifecycle components
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$rootProject.lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata:$rootProject.lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycleVersion"
 
     // UI
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"

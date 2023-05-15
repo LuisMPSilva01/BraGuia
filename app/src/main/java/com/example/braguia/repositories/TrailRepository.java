@@ -36,7 +36,7 @@ public class TrailRepository {
 
     public TrailDAO trailDAO;
     public MediatorLiveData<List<Trail>> allTrails;
-    private GuideDatabase database;
+    private final GuideDatabase database;
 
     public TrailRepository(Application application,Boolean freshDB){
         if(freshDB){
@@ -160,7 +160,7 @@ public class TrailRepository {
 
 
     private static class InsertAsyncTask extends AsyncTask<List<Trail>,Void,Void> {
-        private TrailDAO trailDAO;
+        private final TrailDAO trailDAO;
 
         public InsertAsyncTask(TrailDAO catDao) {
             this.trailDAO=catDao;

@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class EdgeTipTypeConverter {
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     @TypeConverter
     public static List<RelPin> fromRelPinListString(String value) {

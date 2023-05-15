@@ -100,15 +100,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureBottomNavigation(NavController navController){
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()){
-                case R.id.home:
-                    navController.navigate(R.id.homeFragment);
-                    break;
-
-                case R.id.discover:
-                    navController.navigate(R.id.discoverFragment);
-                    break;
-
+            if(item.getItemId()== R.id.home){
+                navController.navigate(R.id.homeFragment);
+            } else if(item.getItemId()== R.id.discover){
+                navController.navigate(R.id.discoverFragment);
             }
             return true;
         });
@@ -118,45 +113,39 @@ public class MainActivity extends AppCompatActivity {
         binding.sidebar.setNavigationItemSelectedListener(
 
                 menuItem -> {
-                    switch (menuItem.getItemId()){
-                        case R.id.profile:
-                            navController.navigate(R.id.profileFragment);
-                            break;
-                        case R.id.emergency_contacts:
-                            navController.navigate(R.id.contactsListFragment);
-                            break;
-                        case R.id.socials_contacts:
-                            navController.navigate(R.id.socialsListFragment);
-                            break;
-                        case R.id.partners_contacts:
-                            navController.navigate(R.id.partnersListFragment);
-                            break;
-                        case R.id.localization:
-                            return false;
-                        case R.id.definitions:
-                            Intent intent = new Intent(MainActivity.this, DefinitionsActivity.class);
-                            startActivity(intent);
-                            break;
-                        case R.id.logout:
-                            try {
-                                userViewModel.logOut(getApplicationContext(), new UserViewModel.LogOutCallback() {
-                                    @Override
-                                    public void onLogOutSuccess() {
-                                        changeToLoginActivity();
-                                    }
-                                    @Override
-                                    public void onLogOutFailure() {}
-                                });
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                            break;
+                    int itemId = menuItem.getItemId();
+                    if (itemId == R.id.profile) {
+                        navController.navigate(R.id.profileFragment);
+                    } else if (itemId == R.id.emergency_contacts) {
+                        navController.navigate(R.id.contactsListFragment);
+                    } else if (itemId == R.id.socials_contacts) {
+                        navController.navigate(R.id.socialsListFragment);
+                    } else if (itemId == R.id.partners_contacts) {
+                        navController.navigate(R.id.partnersListFragment);
+                    } else if (itemId == R.id.localization) {
+                        return false;
+                    } else if (itemId == R.id.definitions) {
+                        Intent intent = new Intent(MainActivity.this, DefinitionsActivity.class);
+                        startActivity(intent);
+                    } else if (itemId == R.id.logout) {
+                        try {
+                            userViewModel.logOut(getApplicationContext(), new UserViewModel.LogOutCallback() {
+                                @Override
+                                public void onLogOutSuccess() {
+                                    changeToLoginActivity();
+                                }
+                                @Override
+                                public void onLogOutFailure() {}
+                            });
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
 
                     Menu sb_menu = binding.sidebar.getMenu();
-                    for(int i = 0; i < sb_menu.size(); i++) {
+                    for (int i = 0; i < sb_menu.size(); i++) {
                         MenuItem sb_item = sb_menu.getItem(i);
-                        if(sb_item.isChecked()){
+                        if (sb_item.isChecked()) {
                             sb_item.setChecked(false);
                         }
                     }

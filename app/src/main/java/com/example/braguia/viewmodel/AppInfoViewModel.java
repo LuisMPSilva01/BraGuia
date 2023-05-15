@@ -17,7 +17,7 @@ import java.util.List;
 
 public class AppInfoViewModel extends AndroidViewModel {
 
-    private AppInfoRepository repository;
+    private final AppInfoRepository repository;
     public LiveData<AppInfo> appInfo;
 
     public AppInfoViewModel(@NonNull Application application) {

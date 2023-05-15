@@ -50,7 +50,7 @@ public class EdgesRecyclerViewAdapter extends RecyclerView.Adapter<EdgesRecycler
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.edge_transport.setText(mValues.get(position).getEdge_transport());
-        holder.edge_time.setText(String.valueOf(mValues.get(position).getEdge_duration()) + " minutes");
+        holder.edge_time.setText(mValues.get(position).getEdge_duration() + " minutes");
         holder.edge_road_type.setText(mValues.get(position).getEdge_desc());
 
         holder.pin_name_origem.setText(mValues.get(position).getEdge_start().getPin_name());

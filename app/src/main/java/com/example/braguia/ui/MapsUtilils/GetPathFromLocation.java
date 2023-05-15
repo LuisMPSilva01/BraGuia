@@ -34,13 +34,15 @@ import static com.google.android.gms.maps.model.JointType.ROUND;
 
 public class GetPathFromLocation extends AsyncTask<String, Void, PolylineOptions> {
 
-    private Context context;
-    private String TAG = "GetPathFromLocation";
-    private LatLng source, destination;
-    private ArrayList<LatLng> wayPoint;
-    private GoogleMap mMap;
-    private boolean animatePath, repeatDrawingPath;
-    private DirectionPointListener resultCallback;
+    private final Context context;
+    private final String TAG = "GetPathFromLocation";
+    private final LatLng source;
+    private final LatLng destination;
+    private final ArrayList<LatLng> wayPoint;
+    private final GoogleMap mMap;
+    private final boolean animatePath;
+    private final boolean repeatDrawingPath;
+    private final DirectionPointListener resultCallback;
 
     //https://www.mytrendin.com/draw-route-two-locations-google-maps-android/
     //https://www.androidtutorialpoint.com/intermediate/google-maps-draw-path-two-points-using-google-directions-google-map-android-api-v2/
@@ -102,7 +104,7 @@ public class GetPathFromLocation extends AsyncTask<String, Void, PolylineOptions
                 bufferedReader.close();
 
             } catch (Exception e) {
-                Log.e(TAG, "Exception : " + e.toString());
+                Log.e(TAG, "Exception : " + e);
                 return null;
             } finally {
                 inputStream.close();
@@ -234,19 +236,15 @@ public class GetPathFromLocation extends AsyncTask<String, Void, PolylineOptions
                 }
 
                 // Drawing polyline in the Google Map for the i-th route
-                if (lineOptions != null) {
-                    return lineOptions;
-                } else {
-                    return null;
-                }
+                return lineOptions;
 
             } catch (Exception e) {
-                Log.e(TAG, "Exception in Executing Routes : " + e.toString());
+                Log.e(TAG, "Exception in Executing Routes : " + e);
                 return null;
             }
 
         } catch (Exception e) {
-            Log.e(TAG, "Background Task Exception : " + e.toString());
+            Log.e(TAG, "Background Task Exception : " + e);
             return null;
         }
     }

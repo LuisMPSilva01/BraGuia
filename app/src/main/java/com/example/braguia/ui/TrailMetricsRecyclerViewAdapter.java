@@ -54,7 +54,7 @@ public class TrailMetricsRecyclerViewAdapter extends RecyclerView.Adapter<TrailM
                         .getTrail_img().replace("http", "https"))
                 .into(holder.imageView);
 
-        holder.timeUsed.setText(Float.toString(metrics.get(position).getTimeTaken()) + " seconds");
+        holder.timeUsed.setText(metrics.get(position).getTimeTaken() + " seconds");
         holder.percentage.setText(Float.toString(metrics.get(position).getCompletedPercentage()));
         // Set click listener for each item
         holder.itemView.setOnClickListener(v -> {
