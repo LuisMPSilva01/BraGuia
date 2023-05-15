@@ -44,8 +44,6 @@ public class DiscoverFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ConstraintLayout rootView = (ConstraintLayout) inflater.inflate(R.layout.fragment_discover, container, false);
 
-        View view = rootView.findViewById(R.id.trail_recycle_view);
-
         // Load trails data
         TrailViewModel trailsViewModel = new ViewModelProvider(requireActivity()).get(TrailViewModel.class);
         UserViewModel userViewModel = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
@@ -55,7 +53,7 @@ public class DiscoverFragment extends Fragment {
                     userViewModel.getUser().observe(getViewLifecycleOwner(), user ->{
                         if(user!=null){
                             Log.e("Trailist","trails size:" + trails.size());
-                            loadRecyclerView(view, trails, user);
+                            loadRecyclerView(rootView, trails, user);
                         }
                     });
                 } catch (IOException e) {
@@ -65,11 +63,11 @@ public class DiscoverFragment extends Fragment {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
         return rootView;
     }
 
-    private void loadRecyclerView(View view, List<Trail> trails, User user){
+    private void loadRecyclerView(ConstraintLayout rootView, List<Trail> trails, User user){
+        View view = rootView.findViewById(R.id.trail_recycle_view);
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
@@ -92,7 +90,7 @@ public class DiscoverFragment extends Fragment {
                 });
             }
 
-            searchView = view.findViewById(R.id.search_view);
+            searchView = rootView.findViewById(R.id.search_view);
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
