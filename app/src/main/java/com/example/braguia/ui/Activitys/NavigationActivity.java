@@ -116,10 +116,10 @@ public class NavigationActivity extends AppCompatActivity {
             try {
                 startActivity(mapIntent);
             } catch (ActivityNotFoundException ex) {
-                Toast.makeText(this, "Instale o Google Maps para poder navegar", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Install Google Maps to navigate", Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast toast = Toast.makeText(this, "Instale o Google Maps para poder navegar", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(this, "Install Google Maps to navigate", Toast.LENGTH_SHORT);
             toast.show();
         }
     }
@@ -128,7 +128,7 @@ public class NavigationActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(this, Servico.class);
         stopService(serviceIntent);
 
-        Toast.makeText(this, "Métricas registadas no histórico", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Registed metrics in the history", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

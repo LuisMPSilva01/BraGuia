@@ -1,5 +1,7 @@
 package com.example.braguia.ui;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.braguia.R;
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.ui.Activitys.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -43,6 +46,7 @@ public class TrailMetricsRecyclerViewAdapter extends RecyclerView.Adapter<TrailM
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = trails.get(position);
@@ -56,6 +60,21 @@ public class TrailMetricsRecyclerViewAdapter extends RecyclerView.Adapter<TrailM
 
         holder.timeUsed.setText(metrics.get(position).getTimeTaken() + " seconds");
         holder.percentage.setText(Float.toString(metrics.get(position).getCompletedPercentage()));
+
+        // Set text color based on theme mode
+        int textColor;
+        MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
+        if (!mainActivity.isDarkModeEnabled()) {
+            textColor = Color.WHITE; // Cor do texto no modo escuro
+        } else {
+            textColor = Color.BLACK; // Cor do texto no modo claro
+        }
+        holder.trailName.setTextColor(textColor);
+        holder.duration.setTextColor(textColor);
+        holder.difficulty.setTextColor(textColor);
+        holder.timeUsed.setTextColor(textColor);
+        holder.percentage.setTextColor(textColor);
+
         // Set click listener for each item
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {

@@ -1,5 +1,6 @@
 package com.example.braguia.ui.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.braguia.R;
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.ui.Activitys.MainActivity;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
 import com.squareup.picasso.Picasso;
@@ -67,5 +69,29 @@ public class TrailMetricsDescriptionFragment extends Fragment {
         Picasso.get().load(trail.getTrail_img()
                         .replace("http", "https"))
                 .into(imagem);
+
+        TextView hardtext1 = view.findViewById(R.id.trail_metricsDescriptionTitle);
+        TextView hardtext2 = view.findViewById(R.id.trail_percentage_hardtext);
+
+        // Set text color based on theme mode
+        int textColor;
+        if (!isDarkModeEnabled()) {
+            textColor = Color.WHITE; // Text color in dark mode
+        } else {
+            textColor = Color.BLACK; // Text color in light mode
+        }
+        timeTaken.setTextColor(textColor);
+        percentageV.setTextColor(textColor);
+        hardtext1.setTextColor(textColor);
+        hardtext2.setTextColor(textColor);
+    }
+
+
+    private boolean isDarkModeEnabled() {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity != null) {
+            return mainActivity.isDarkModeEnabled();
+        }
+        return false;
     }
 }

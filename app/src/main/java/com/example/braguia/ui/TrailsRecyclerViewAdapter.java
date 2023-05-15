@@ -1,5 +1,6 @@
 package com.example.braguia.ui;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.ui.Activitys.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -71,6 +73,18 @@ public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecycl
         Picasso.get().load(filteredData.get(position)
                 .getTrail_img().replace("http", "https"))
                 .into(holder.imageView);
+
+        // Set text color based on theme mode
+        int textColor;
+        MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
+        if (!mainActivity.isDarkModeEnabled()) {
+            textColor = Color.WHITE; // Cor do texto no modo escuro
+        } else {
+            textColor = Color.BLACK; // Cor do texto no modo claro
+        }
+        holder.trailName.setTextColor(textColor);
+        holder.duration.setTextColor(textColor);
+        holder.difficulty.setTextColor(textColor);
 
         // Set click listener for each item
         holder.itemView.setOnClickListener(v -> {

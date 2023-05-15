@@ -1,5 +1,6 @@
 package com.example.braguia.ui;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.app.Social;
+import com.example.braguia.ui.Activitys.MainActivity;
 
 import java.util.List;
 
@@ -32,6 +34,17 @@ public class SocialsRecyclerViewAdapter extends RecyclerView.Adapter<SocialsRecy
         holder.mItem = mValues.get(position);
         holder.social_name.setText(mValues.get(position).getSocialName());
         holder.social_url.setText(mValues.get(position).getSocialUrl());
+
+        // Set text color based on theme mode
+        int textColor;
+        MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
+        if (!mainActivity.isDarkModeEnabled()) {
+            textColor = Color.WHITE; // Cor do texto no modo escuro
+        } else {
+            textColor = Color.BLACK; // Cor do texto no modo claro
+        }
+        holder.social_name.setTextColor(textColor);
+        holder.social_url.setTextColor(textColor);
 
     }
 

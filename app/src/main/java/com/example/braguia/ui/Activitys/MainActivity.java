@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -218,9 +219,16 @@ public class MainActivity extends AppCompatActivity {
         // Localization item not clickable
         MenuItem menuItem2 = binding.sidebar.getMenu().findItem(R.id.localization);
         SpannableString spannableString = new SpannableString(menuItem2.getTitle());
-        spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
+
+        if (isDarkModeEnabled()) {
+            spannableString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spannableString.length(), 0);
+        } else {
+            spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
+        }
+
         menuItem2.setTitle(spannableString);
         menuItem2.setEnabled(false);
+
     }
     private void changeToLoginActivity(){
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -252,4 +260,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
     }
+
+    public boolean isDarkModeEnabled() {
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        return nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+    }
+
 }
