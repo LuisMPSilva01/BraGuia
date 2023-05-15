@@ -67,10 +67,10 @@ public class EdgesRecyclerViewAdapter extends RecyclerView.Adapter<EdgesRecycler
         // Set text color based on theme mode
         int textColor;
         MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
-        if (!mainActivity.isDarkModeEnabled()) {
-            textColor = Color.WHITE; // Cor do texto no modo escuro
+        if (mainActivity.isDarkModeEnabled()) {
+            textColor = Color.WHITE;
         } else {
-            textColor = Color.BLACK; // Cor do texto no modo claro
+            textColor = Color.BLACK;
         }
         holder.edge_transport.setTextColor(textColor);
         holder.edge_time.setTextColor(textColor);
