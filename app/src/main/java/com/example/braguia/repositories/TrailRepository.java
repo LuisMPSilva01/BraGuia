@@ -76,7 +76,10 @@ public class TrailRepository {
                     }
                 }
         );
-        List<Trail> trails = allTrails.getValue();
+        allTrails.observeForever(this::loadMedia);
+    }
+
+    private void loadMedia(List<Trail> trails){
         List<Thread> threads = new ArrayList<>();
         if (trails != null) {
             for (Trail trail : trails) {
@@ -106,9 +109,7 @@ public class TrailRepository {
                 e.printStackTrace();
             }
         }
-
     }
-
     private void save_media_file(String file_url){
         URL url = null;
         String destinationPath;
