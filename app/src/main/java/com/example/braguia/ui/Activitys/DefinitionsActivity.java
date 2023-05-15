@@ -2,26 +2,15 @@ package com.example.braguia.ui.Activitys;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.Toolbar;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.Fragment;
 
 import com.example.braguia.R;
-import com.example.braguia.databinding.ActivityMainBinding;
-
-import java.util.Objects;
 
 public class DefinitionsActivity extends AppCompatActivity {
 

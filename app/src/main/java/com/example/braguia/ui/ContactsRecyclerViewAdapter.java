@@ -1,5 +1,6 @@
 package com.example.braguia.ui;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.app.Contact;
+import com.example.braguia.ui.Activitys.MainActivity;
 
 import java.util.List;
 
@@ -43,6 +45,19 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         holder.contact_mail.setText(mValues.get(position).getContactMail());
         holder.contact_url.setText(mValues.get(position).getContactUrl());
 
+        // Set text color based on theme mode
+        int textColor;
+        MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
+        if (!mainActivity.isDarkModeEnabled()) {
+            textColor = Color.WHITE; // Cor do texto no modo escuro
+        } else {
+            textColor = Color.BLACK; // Cor do texto no modo claro
+        }
+        holder.contact_name.setTextColor(textColor);
+        holder.contact_phone.setTextColor(textColor);
+        holder.contact_mail.setTextColor(textColor);
+        holder.contact_url.setTextColor(textColor);
+
         // Set click listener for phone
         holder.contact_phone.setOnClickListener(v -> {
             if (listener != null) {
@@ -50,6 +65,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
             }
         });
     }
+
 
     @Override
     public int getItemCount() {
@@ -77,6 +93,7 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         public String toString() {
             return super.toString() + contact_name+contact_phone+contact_url+contact_mail;
         }
+
     }
 }
 

@@ -1,6 +1,7 @@
 package com.example.braguia.ui;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.braguia.R;
 import com.example.braguia.model.trails.Edge;
 import com.example.braguia.model.trails.EdgeTip;
+import com.example.braguia.ui.Activitys.MainActivity;
 import com.example.braguia.viewAdapters.EdgeTipViewAdapter;
 
 import java.util.List;
@@ -52,7 +54,6 @@ public class EdgesRecyclerViewAdapter extends RecyclerView.Adapter<EdgesRecycler
         holder.edge_transport.setText(mValues.get(position).getEdge_transport());
         holder.edge_time.setText(mValues.get(position).getEdge_duration() + " minutes");
         holder.edge_road_type.setText(mValues.get(position).getEdge_desc());
-
         holder.pin_name_origem.setText(mValues.get(position).getEdge_start().getPin_name());
         if(!EdgeTipViewAdapter.setImageView(mValues.get(position).getEdge_start(),holder.imageView2_origem)){
             holder.imageView2_origem.setImageResource(R.drawable.no_preview_image);
@@ -62,6 +63,20 @@ public class EdgesRecyclerViewAdapter extends RecyclerView.Adapter<EdgesRecycler
         if(!EdgeTipViewAdapter.setImageView(mValues.get(position).getEdge_end(),holder.imageView2_destino)){
             holder.imageView2_destino.setImageResource(R.drawable.no_preview_image);
         }
+
+        // Set text color based on theme mode
+        int textColor;
+        MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
+        if (!mainActivity.isDarkModeEnabled()) {
+            textColor = Color.WHITE; // Cor do texto no modo escuro
+        } else {
+            textColor = Color.BLACK; // Cor do texto no modo claro
+        }
+        holder.edge_transport.setTextColor(textColor);
+        holder.edge_time.setTextColor(textColor);
+        holder.edge_road_type.setTextColor(textColor);
+        holder.pin_name_origem.setTextColor(textColor);
+        holder.pin_name_destino.setTextColor(textColor);
 
         holder.card_origem.setOnClickListener(e->{
             replaceFragment(mValues.get(position).getEdge_start());

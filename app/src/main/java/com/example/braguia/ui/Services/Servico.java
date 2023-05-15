@@ -17,19 +17,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.repositories.UserRepository;
-import com.example.braguia.ui.Activitys.MainActivity;
 import com.example.braguia.ui.Activitys.NavigationActivity;
 import com.example.braguia.ui.Activitys.NotificationPinScreenActivity;
-import com.example.braguia.viewmodel.UserViewModel;
 
 public class Servico extends Service {
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
@@ -94,7 +89,7 @@ public class Servico extends Service {
             PendingIntent pendingIntent = PendingIntent.getActivity(this,
                     0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setContentTitle("Viagem em andamento")
+                    .setContentTitle("Trip started")
                     .setContentText(trip.getTrail().getTrail_name())
                     .setSmallIcon(android.R.drawable.ic_dialog_map)
                     .setContentIntent(pendingIntent)
