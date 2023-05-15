@@ -2,6 +2,7 @@ package com.example.braguia.viewAdapters;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,7 +31,7 @@ public class MediaViewAdapter {
         Context context = view.getContext().getApplicationContext();
         if (medium.getMedia_type().equals("I")){
             // Get stored file
-            String filename = medium.getMedia_file().replace("http","").replace("//","").replace("/","");
+            String filename = medium.getMedia_file().replace("http://","").replace("/","");
             File file = new File(context.getFilesDir(), filename);
             Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
             view.setImageBitmap(bitmap);
@@ -38,16 +39,17 @@ public class MediaViewAdapter {
         } else return false;
     }
 
-    public static boolean setVideoView(Medium medium,VideoView view){
+    @SuppressLint("ClickableViewAccessibility")
+    public static boolean setVideoView(Medium medium, VideoView view){
         Context context = view.getContext().getApplicationContext();
         if (medium.getMedia_type().equals("V")){
             // Get stored file
-            String filename = medium.getMedia_file().replace("http","").replace("//","").replace("/","");
+            String filename = medium.getMedia_file().replace("http://","").replace("/","");
             File file = new File(context.getFilesDir(), filename);
             view.seekTo(1);
             //Set video
             view.setVideoPath(file.getAbsolutePath());
-
+            //view.start();
             view.setOnTouchListener(new View.OnTouchListener() {
                 boolean isPaused = true;
 
@@ -67,7 +69,7 @@ public class MediaViewAdapter {
                     return true;
                 }
             });
-            return true;
+
         } else {
             view.setOnTouchListener((view1, event) -> {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -78,15 +80,14 @@ public class MediaViewAdapter {
 
             return false;
         }
+        return true;
     }
 
-    public static boolean setMediaPlayer(Medium medium,MediaPlayer mediaPlayer) {
-        Context context = getApplicationContext();
+    public static boolean setMediaPlayer(Medium medium,View view,MediaPlayer mediaPlayer) {
+        Context context = view.getContext().getApplicationContext();
         if(Objects.equals(medium.getMedia_type(), "R")){
             try {
-                // Get stored file
-                String filename = medium.getMedia_file().replace("http","").replace("//","").replace("/","");
-                Log.d("oi",filename);
+                String filename = medium.getMedia_file().replace("http://","").replace("/","");
                 File file = new File(context.getFilesDir(), filename);
                 mediaPlayer.setDataSource(file.getAbsolutePath());
                 mediaPlayer.prepareAsync();

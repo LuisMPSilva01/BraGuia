@@ -105,7 +105,7 @@ public class TrailRepository {
         try {
             url = new URL(file_url.replace("http", "https"));
             InputStream inputStream = url.openStream();
-            destinationPath = file_url.replace("http","").replace("//","").replace("/","");
+            destinationPath = file_url.replace("http://","").replace("/","");
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 try (FileOutputStream fos = context.openFileOutput(destinationPath, Context.MODE_PRIVATE)) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

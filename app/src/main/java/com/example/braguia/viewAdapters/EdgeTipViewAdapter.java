@@ -1,6 +1,7 @@
 package com.example.braguia.viewAdapters;
 
 import android.media.MediaPlayer;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
@@ -24,9 +25,9 @@ public class EdgeTipViewAdapter{
         }
         return false;
     }
-    public static boolean setMediaPlayer(EdgeTip edgeTip, MediaPlayer mediaPlayer){
+    public static boolean setMediaPlayer(EdgeTip edgeTip, View view, MediaPlayer mediaPlayer){
         for(Medium medium:edgeTip.getMedia()){
-            if(MediaViewAdapter.setMediaPlayer(medium,mediaPlayer)){
+            if(MediaViewAdapter.setMediaPlayer(medium,view,mediaPlayer)){
                 return true;
             }
         }

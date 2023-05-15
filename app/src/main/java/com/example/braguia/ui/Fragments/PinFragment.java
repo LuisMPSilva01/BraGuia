@@ -78,7 +78,7 @@ public class PinFragment extends Fragment {
         mediaPlayer = new MediaPlayer();
         if(edgeTip.hasAudio()){
             playButton.setVisibility(View.VISIBLE);
-            EdgeTipViewAdapter.setMediaPlayer(edgeTip,mediaPlayer);
+            EdgeTipViewAdapter.setMediaPlayer(edgeTip,view,mediaPlayer);
 
             AtomicBoolean isPlaying= new AtomicBoolean(false);
             playButton.setOnClickListener(v -> {
