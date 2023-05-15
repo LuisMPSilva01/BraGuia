@@ -65,13 +65,26 @@ public class EdgesRecyclerViewAdapter extends RecyclerView.Adapter<EdgesRecycler
         }
 
         // Set text color based on theme mode
-        int textColor;
+        int textColor, cardColor;
         MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
         if (mainActivity.isDarkModeEnabled()) {
             textColor = Color.WHITE;
+            cardColor = Color.GRAY;
         } else {
             textColor = Color.BLACK;
+            cardColor = Color.WHITE;
         }
+
+        CardView cd1 = holder.mView.findViewById(R.id.card_pin_view_origem);
+        CardView cd2 = holder.mView.findViewById(R.id.card_pin_view_destino);
+        CardView cd3 = holder.mView.findViewById(R.id.card_view);
+        CardView cd4 = holder.mView.findViewById(R.id.outer_card);
+
+        cd1.setCardBackgroundColor(cardColor);
+        cd2.setCardBackgroundColor(cardColor);
+        cd3.setCardBackgroundColor(cardColor);
+        cd4.setCardBackgroundColor(cardColor);
+
         holder.edge_transport.setTextColor(textColor);
         holder.edge_time.setTextColor(textColor);
         holder.edge_road_type.setTextColor(textColor);

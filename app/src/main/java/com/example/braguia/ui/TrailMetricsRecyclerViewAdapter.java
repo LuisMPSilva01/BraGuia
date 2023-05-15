@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
@@ -62,19 +63,22 @@ public class TrailMetricsRecyclerViewAdapter extends RecyclerView.Adapter<TrailM
         holder.percentage.setText(Float.toString(metrics.get(position).getCompletedPercentage()));
 
         // Set text color based on theme mode
-        int textColor;
+        int textColor, cardColor;
         MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
         if (mainActivity.isDarkModeEnabled()) {
             textColor = Color.WHITE;
+            cardColor = Color.GRAY;
         } else {
             textColor = Color.BLACK;
+            cardColor = Color.WHITE;
         }
         holder.trailName.setTextColor(textColor);
         holder.duration.setTextColor(textColor);
         holder.difficulty.setTextColor(textColor);
         holder.timeUsed.setTextColor(textColor);
         holder.percentage.setTextColor(textColor);
-
+        CardView cd = holder.mView.findViewById(R.id.card_view);
+        cd.setCardBackgroundColor(cardColor);
         // Set click listener for each item
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {

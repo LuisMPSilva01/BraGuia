@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -74,12 +75,17 @@ public class TrailMetricsDescriptionFragment extends Fragment {
         TextView hardtext2 = view.findViewById(R.id.trail_percentage_hardtext);
 
         // Set text color based on theme mode
-        int textColor;
+        int textColor, cardColor;
         if (isDarkModeEnabled()) {
             textColor = Color.WHITE;
+            cardColor = Color.GRAY;
         } else {
             textColor = Color.BLACK;
+            cardColor = Color.WHITE;
         }
+        CardView cd = view.findViewById(R.id.card_view);
+        cd.setCardBackgroundColor(cardColor);
+
         timeTaken.setTextColor(textColor);
         percentageV.setTextColor(textColor);
         hardtext1.setTextColor(textColor);

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
@@ -49,14 +50,18 @@ public class PinsRecyclerViewAdapter extends RecyclerView.Adapter<PinsRecyclerVi
         }
 
         // Set text color based on theme mode
-        int textColor;
+        int textColor, cardColor;
         MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
         if (mainActivity.isDarkModeEnabled()) {
             textColor = Color.WHITE;
+            cardColor = Color.GRAY;
         } else {
             textColor = Color.BLACK;
+            cardColor = Color.WHITE;
         }
         holder.pinName.setTextColor(textColor);
+        CardView cd = holder.mView.findViewById(R.id.card_pin_view);
+        cd.setCardBackgroundColor(cardColor);
 
         // Set click listener for each item
         holder.itemView.setOnClickListener(v -> {

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
@@ -46,13 +47,18 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         holder.contact_url.setText(mValues.get(position).getContactUrl());
 
         // Set text color based on theme mode
-        int textColor;
+        int textColor, cardColor;
         MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
         if (mainActivity.isDarkModeEnabled()) {
             textColor = Color.WHITE;
+            cardColor = Color.GRAY;
         } else {
             textColor = Color.BLACK;
+            cardColor = Color.WHITE;
         }
+
+        CardView cd = holder.mView.findViewById(R.id.contact_card_view);
+        cd.setCardBackgroundColor(cardColor);
         holder.contact_name.setTextColor(textColor);
         holder.contact_phone.setTextColor(textColor);
         holder.contact_mail.setTextColor(textColor);
