@@ -46,6 +46,7 @@ public class UserRepository {
     private GuideDatabase database;
     private Retrofit retrofit;
     private UserAPI api;
+    private String lastUser;
 
     public UserRepository(Application application,Boolean freshDB) {
         if(freshDB){
@@ -67,6 +68,9 @@ public class UserRepository {
         api = retrofit.create(UserAPI.class);
 
         userName = new MediatorLiveData<>();
+        SharedPreferences sharedPreferences = application.getApplicationContext().getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
+        lastUser = sharedPreferences.getString("lastUser", "");
+
         userName.addSource(getCookies(application.getApplicationContext()), updatedCookies ->{
             Log.e("Debug","updated cookiies");
             updateUserAPI(updatedCookies,userName);
@@ -122,8 +126,6 @@ public class UserRepository {
         if(cookies!=""){
             Log.e("DEBUG","Cookies:"+cookies);
             Call<User> call = api.getUser(cookies);
-            List<Trail> trails = new ArrayList<>();
-
             call.enqueue(new Callback<User>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
@@ -142,7 +144,7 @@ public class UserRepository {
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
                     Log.e("Retrofit", "Response error:" + t.getMessage());
-                    userName.postValue("");
+                    userName.postValue(lastUser);
                 }
             });
         } else {
@@ -163,9 +165,6 @@ public class UserRepository {
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
 
-        //TODO comentar isto somehow fixes the code
-        //cookiesLiveData.observeForever(ignored -> sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener));
-
         return cookiesLiveData;
     }
 
@@ -182,7 +181,7 @@ public class UserRepository {
         body.addProperty("username", username);
         body.addProperty("email", "");
         body.addProperty("password", password);
-
+        lastUser=username;
         Call<User> call = api.login(body);
 
         call.enqueue(new retrofit2.Callback<User>() {
@@ -197,6 +196,7 @@ public class UserRepository {
                         String cookieString = TextUtils.join(";", cookies);
                         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putString("cookies", cookieString).apply();
+                        sharedPreferences.edit().putString("lastUser", user.getUsername()).apply();
                     }
                     insert(user); //Insert user into user DataBase
                     callback.onLoginSuccess();
@@ -224,7 +224,7 @@ public class UserRepository {
     public void makeLogOutRequest(Context context,final LogoutCallback callback) throws IOException {
         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
         String storedCookieString = sharedPreferences.getString("cookies", "");
-        List<String> cookieList = Arrays.stream(storedCookieString.split(";")).collect(Collectors.toList());
+        lastUser="";
         Call<User> call = api.logout(storedCookieString);
         call.enqueue(new retrofit2.Callback<User>() {
             @Override
@@ -232,6 +232,7 @@ public class UserRepository {
                 if(response.isSuccessful()) {
                     SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                     sharedPreferences.edit().putString("cookies", "").apply();
+                    sharedPreferences.edit().putString("lastUser", "").apply();
                     Log.e("main", "logged out successfully:");
                     callback.onLogoutSuccess();
                 }
@@ -259,12 +260,11 @@ public class UserRepository {
         MediatorLiveData<User> userLiveData = new MediatorLiveData<>();
         final LiveData<User>[] currentSource = new LiveData[]{null};
         userLiveData.addSource(userName, userName -> {
-            Log.e("DEBUG","USERNAME UPDATE:"+userName);
+
             if (currentSource[0] != null) {
-                Log.e("DEBUG","SOURCE REMOVED"+userName);
                 userLiveData.removeSource(currentSource[0]);
             }
-            if (userName != null && userName!="") {
+            if (userName != null && !userName.equals("")) {
                 currentSource[0] = userDAO.getUserByUsername(userName);
                 userLiveData.addSource(currentSource[0], u -> {
                     if (u != null) {
@@ -283,26 +283,6 @@ public class UserRepository {
         this.userName.postValue(fixedUsername);
     }
 
-
-
-
-/*
-    public void updateTrailHistory(Integer trailId) throws InterruptedException {
-        LiveData<User> userLiveData = getUser();
-        Observer<User> observer = new Observer<>() {
-            @Override
-            public void onChanged(User user) {
-                if (user != null) {
-                    List<Integer> ids = user.getTrailHistoryList();
-                    ids.add(trailId);
-                    new UpdateTrailHistAsyncTask(userDAO).execute(user.getUsername(), User.convertListToString(ids));
-                    userLiveData.removeObserver(this);
-                }
-            }
-        };
-        userLiveData.observeForever(observer);
-    }
-*/
 
     private static class InsertAsyncTask extends AsyncTask<User,Void,Void> {
         private UserDAO userDAO;

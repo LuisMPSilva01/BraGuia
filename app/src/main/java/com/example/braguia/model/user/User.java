@@ -11,12 +11,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity(tableName = "user",indices = @Index(value = {"username"},unique = true))
-public class User {
+public class User{
 
     @PrimaryKey
     @NonNull
