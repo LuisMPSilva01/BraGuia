@@ -48,10 +48,10 @@ public class PartnersRecyclerViewAdapter extends RecyclerView.Adapter<PartnersRe
         // Set text color based on theme mode
         int textColor;
         MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
-        if (!mainActivity.isDarkModeEnabled()) {
-            textColor = Color.WHITE; // Cor do texto no modo escuro
+        if (mainActivity.isDarkModeEnabled()) {
+            textColor = Color.WHITE;
         } else {
-            textColor = Color.BLACK; // Cor do texto no modo claro
+            textColor = Color.BLACK;
         }
         holder.partner_name.setTextColor(textColor);
         holder.partner_phone.setTextColor(textColor);

@@ -51,10 +51,10 @@ public class PinsRecyclerViewAdapter extends RecyclerView.Adapter<PinsRecyclerVi
         // Set text color based on theme mode
         int textColor;
         MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
-        if (!mainActivity.isDarkModeEnabled()) {
-            textColor = Color.WHITE; // Cor do texto no modo escuro
+        if (mainActivity.isDarkModeEnabled()) {
+            textColor = Color.WHITE;
         } else {
-            textColor = Color.BLACK; // Cor do texto no modo claro
+            textColor = Color.BLACK;
         }
         holder.pinName.setTextColor(textColor);
 

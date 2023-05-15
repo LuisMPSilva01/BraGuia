@@ -75,10 +75,10 @@ public class TrailMetricsDescriptionFragment extends Fragment {
 
         // Set text color based on theme mode
         int textColor;
-        if (!isDarkModeEnabled()) {
-            textColor = Color.WHITE; // Text color in dark mode
+        if (isDarkModeEnabled()) {
+            textColor = Color.WHITE;
         } else {
-            textColor = Color.BLACK; // Text color in light mode
+            textColor = Color.BLACK;
         }
         timeTaken.setTextColor(textColor);
         percentageV.setTextColor(textColor);

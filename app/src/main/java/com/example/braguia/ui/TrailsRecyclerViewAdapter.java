@@ -67,7 +67,7 @@ public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecycl
     public void onBindViewHolder(final TrailsRecyclerView holder, int position) {
         holder.mItem = filteredData.get(position);
         holder.trailName.setText(filteredData.get(position).getTrail_name());
-        String durationText = filteredData.get(position).getTrail_duration() + " minutos";
+        String durationText = filteredData.get(position).getTrail_duration() + " minutes";
         holder.duration.setText(durationText);
         holder.difficulty.setText(filteredData.get(position).getTrail_difficulty());
         Picasso.get().load(filteredData.get(position)
@@ -77,10 +77,10 @@ public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecycl
         // Set text color based on theme mode
         int textColor;
         MainActivity mainActivity = (MainActivity) holder.itemView.getContext();
-        if (!mainActivity.isDarkModeEnabled()) {
-            textColor = Color.WHITE; // Cor do texto no modo escuro
+        if (mainActivity.isDarkModeEnabled()) {
+            textColor = Color.WHITE;
         } else {
-            textColor = Color.BLACK; // Cor do texto no modo claro
+            textColor = Color.BLACK;
         }
         holder.trailName.setTextColor(textColor);
         holder.duration.setTextColor(textColor);
