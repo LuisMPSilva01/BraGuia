@@ -1,26 +1,15 @@
 package com.example.braguia.ui.Activitys;
 
-import static android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -33,13 +22,6 @@ import com.example.braguia.R;
 import com.example.braguia.databinding.ActivityMainBinding;
 import com.example.braguia.model.user.User;
 import com.example.braguia.viewmodel.UserViewModel;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -47,7 +29,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int REQUEST_CHECK_SETTINGS = 0x1;
+
     private Toolbar toolbar;
     private ActivityMainBinding binding;
     private DrawerLayout drawer_layout;
@@ -77,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
         configureBottomNavigation(navController);
         configureSideBar(navController);
-        configureLocationButton();
     }
 
     @Override
@@ -129,8 +110,6 @@ public class MainActivity extends AppCompatActivity {
                         navController.navigate(R.id.socialsListFragment);
                     } else if (itemId == R.id.partners_contacts) {
                         navController.navigate(R.id.partnersListFragment);
-                    } else if (itemId == R.id.localization) {
-                        return false;
                     } else if (itemId == R.id.definitions) {
                         Intent intent = new Intent(MainActivity.this, DefinitionsActivity.class);
                         startActivity(intent);
@@ -165,74 +144,6 @@ public class MainActivity extends AppCompatActivity {
         binding.sidebar.bringToFront();
     }
 
-    private void configureLocationButton(){
-        SharedPreferences sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        boolean localizationSwitchSate = sharedPrefs.getBoolean("locationSwitch", false);
-
-        // Localization switch event listener
-        MenuItem menuItem = binding.sidebar.getMenu().findItem(R.id.localization);
-        View view = menuItem.getActionView();
-        SwitchCompat localization_switch = view.findViewById(R.id.localizationSwitch);
-        // Set saved state
-        localization_switch.setChecked(localizationSwitchSate);
-        localization_switch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked){
-                LocationRequest locationRequest = LocationRequest.create();
-                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                locationRequest.setInterval(10000);
-                locationRequest.setFastestInterval(10000/2);
-
-                LocationSettingsRequest.Builder locationSettingsRequestBuilder = new LocationSettingsRequest.Builder();
-
-                locationSettingsRequestBuilder.addLocationRequest(locationRequest);
-                locationSettingsRequestBuilder.setAlwaysShow(true);
-
-                SettingsClient settingsClient = LocationServices.getSettingsClient(MainActivity.this);
-                Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(locationSettingsRequestBuilder.build());
-                task.addOnSuccessListener(MainActivity.this, locationSettingsResponse -> Toast.makeText(MainActivity.this, "GPS is ON.", Toast.LENGTH_SHORT).show());
-
-                task.addOnFailureListener(MainActivity.this, e -> {
-                    Toast.makeText(MainActivity.this, "GPS is OFF.", Toast.LENGTH_SHORT).show();
-
-                    if (e instanceof ResolvableApiException) {
-                        try {
-                            ResolvableApiException resolvableApiException = (ResolvableApiException) e;
-                            resolvableApiException.startResolutionForResult(MainActivity.this, REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException sendIntentException) {
-                            sendIntentException.printStackTrace();
-                        }
-                    }
-                });
-                // Set switch state
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putBoolean("locationSwitch", true);
-                editor.apply();
-            }
-            else{
-                startActivity(new Intent(ACTION_LOCATION_SOURCE_SETTINGS));
-                Toast.makeText(MainActivity.this, "GPS is OFF.", Toast.LENGTH_SHORT).show();
-
-                // Set switch state
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putBoolean("locationSwitch", false);
-                editor.apply();
-            }
-        });
-
-        // Localization item not clickable
-        MenuItem menuItem2 = binding.sidebar.getMenu().findItem(R.id.localization);
-        SpannableString spannableString = new SpannableString(menuItem2.getTitle());
-
-        if (isDarkModeEnabled()) {
-            spannableString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spannableString.length(), 0);
-        } else {
-            spannableString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, spannableString.length(), 0);
-        }
-
-        menuItem2.setTitle(spannableString);
-        menuItem2.setEnabled(false);
-
-    }
     private void changeToLoginActivity(){
         Log.e("DEBUG","CHANGE TO LOGIN ACTIVITY");
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -243,9 +154,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
-        if (item.getItemId() == R.id.localization) {// Return true to indicate that the item was selected, but do not perform any action
-            return true;
-        }// Allow the DrawerToggle to handle the click event if the clicked item is not R.id.identification
         if (drawerToggle.onOptionsItemSelected(item))
             return true;
         // Otherwise, let the default behavior handle the click event
