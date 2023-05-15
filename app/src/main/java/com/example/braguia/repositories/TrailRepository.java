@@ -74,28 +74,38 @@ public class TrailRepository {
                             throw new RuntimeException(e);
                         }
                     }
-                        List<Trail> trails = allTrails.getValue();
-                        if (trails != null) {
-                            for (Trail trail : trails) {
-                                for (Edge e : trail.getEdges()) {
-                                    for (Medium m1 : e.getEdge_start().getMedia()) {
-                                        new Thread(() -> {
-                                            save_media_file(m1.getMedia_file());
-                                        }).start();
-                                    }
-                                    for (Medium m2 : e.getEdge_end().getMedia()) {
-                                        new Thread(() -> {
-                                            save_media_file(m2.getMedia_file());
-                                        }).start();
-                                    }
-
-                                }
-                            }
-                        }
-
                 }
-
         );
+        List<Trail> trails = allTrails.getValue();
+        List<Thread> threads = new ArrayList<>();
+        if (trails != null) {
+            for (Trail trail : trails) {
+                for (Edge e : trail.getEdges()) {
+                    for (Medium m1 : e.getEdge_start().getMedia()) {
+                        Thread thread = new Thread(() -> {
+                            save_media_file(m1.getMedia_file());
+                        });
+                        thread.start();
+                        threads.add(thread);
+                    }
+                    for (Medium m2 : e.getEdge_end().getMedia()) {
+                        Thread thread = new Thread(() -> {
+                            save_media_file(m2.getMedia_file());
+                        });
+                        thread.start();
+                        threads.add(thread);
+                    }
+                }
+            }
+        }
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                // Handle interrupted exception if needed
+                e.printStackTrace();
+            }
+        }
 
     }
 
