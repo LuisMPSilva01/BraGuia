@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+app-crawler/README
+app-crawler/debug.keystore
+app-crawler/crawler_stubapp_androidx.apk
+app-crawler/crawler_app.apk
+app-crawler/crawl_launcher.jar
+.gitignore

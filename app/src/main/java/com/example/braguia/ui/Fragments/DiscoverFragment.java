@@ -66,31 +66,6 @@ public class DiscoverFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
-
-        searchView = rootView.findViewById(R.id.search_view);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if(query==null || query.equals("")){
-                    adapter.reset();
-                }else{
-                    adapter.filterData(query);
-                }
-                searchView.clearFocus();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if(newText==null || newText.equals("")){
-                    adapter.reset();
-                }else{
-                    adapter.filterData(newText);
-                }
-                return true;
-            }
-        });
-
         return rootView;
     }
 
@@ -116,6 +91,30 @@ public class DiscoverFragment extends Fragment {
                     Toast.makeText(getContext(),"Only premium users can use this feature",Toast.LENGTH_LONG).show();
                 });
             }
+
+            searchView = view.findViewById(R.id.search_view);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    if(query==null || query.equals("")){
+                        adapter.reset();
+                    }else{
+                        adapter.filterData(query);
+                    }
+                    searchView.clearFocus();
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    if(newText==null || newText.equals("")){
+                        adapter.reset();
+                    }else{
+                        adapter.filterData(newText);
+                    }
+                    return true;
+                }
+            });
         }
     }
 
