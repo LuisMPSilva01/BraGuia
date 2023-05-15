@@ -11,6 +11,7 @@ import com.example.braguia.model.app.AppInfo;
 import com.example.braguia.model.app.AppInfoAPI;
 import com.example.braguia.model.app.AppInfoDAO;
 import com.example.braguia.model.GuideDatabase;
+import com.example.braguia.model.app.Contact;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +25,7 @@ public class AppInfoRepository {
 
     public AppInfoDAO appInfoDAO;
     public MediatorLiveData<AppInfo> appInfo;
-    private GuideDatabase database;
+    private final GuideDatabase database;
 
     public AppInfoRepository(Application application){
         database = GuideDatabase.getInstance(application);
@@ -80,8 +81,12 @@ public class AppInfoRepository {
         return appInfo;
     }
 
+    public LiveData<List<Contact>> getContacts(){
+        return appInfoDAO.getContacts("BraGuia");
+    }
+
     private static class InsertAsyncTask extends AsyncTask<AppInfo,Void,Void> {
-        private AppInfoDAO appInfoDAO;
+        private final AppInfoDAO appInfoDAO;
 
         public InsertAsyncTask(AppInfoDAO catDao) {
             this.appInfoDAO=catDao;

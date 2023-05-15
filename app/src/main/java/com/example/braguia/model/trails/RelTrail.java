@@ -7,6 +7,9 @@ import androidx.room.Index;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 @Entity(
         tableName = "relTrail",
         foreignKeys = @ForeignKey(
@@ -18,7 +21,7 @@ import com.google.gson.annotations.SerializedName;
         indices = {
                 @Index(value = {"id"}, unique = true)
         })
-public class RelTrail{
+public class RelTrail implements Serializable {
     @ColumnInfo(name = "id")
     @SerializedName("id")
     int id;
@@ -34,4 +37,17 @@ public class RelTrail{
     @ColumnInfo(name = "trail")
     @SerializedName("trail")
     int trail;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RelTrail relTrail = (RelTrail) o;
+        return id == relTrail.id && trail == relTrail.trail && Objects.equals(value, relTrail.value) && Objects.equals(attrib, relTrail.attrib);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, value, attrib, trail);
+    }
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/trail_description_title"
+        android:layout_width="346dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="Tittle"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/trailImageDescription"
+        android:layout_width="377dp"
+        android:layout_height="208dp"
+        android:layout_marginTop="48dp"
+        android:layout_weight="1"
+        android:contentDescription="TODO"
+        android:maxWidth="40dp"
+        android:maxHeight="40dp"
+        android:tag="image_tag"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trail_description_title" />
+
+    <Button
+        android:id="@+id/start_trip_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="Stop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trailImageDescription" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/maps_trail_overview"
+        android:layout_width="332dp"
+        android:layout_height="217dp"
+        android:layout_marginTop="72dp"
+        app:defaultNavHost="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_trip_button"
+        tools:layout="@layout/fragment_maps_overview" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
