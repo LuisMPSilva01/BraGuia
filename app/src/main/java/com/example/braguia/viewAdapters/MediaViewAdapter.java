@@ -1,5 +1,10 @@
 package com.example.braguia.viewAdapters;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -8,23 +13,41 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import androidx.test.core.app.ApplicationProvider;
+
 import com.example.braguia.model.trails.Medium;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Objects;
 
 public class MediaViewAdapter {
-    public static boolean setImageView(Medium medium,ImageView view){
+
+
+    public static boolean setImageView(Medium medium,ImageView view)  {
+        Context context = view.getContext().getApplicationContext();
         if (medium.getMedia_type().equals("I")){
-            Picasso.get().load(medium.getMedia_file().replace("http", "https")).into(view);
+            // Get stored file
+            String filename = medium.getMedia_file().replace("http","").replace("//","").replace("/","");
+            File file = new File(context.getFilesDir(), filename);
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            view.setImageBitmap(bitmap);
             return true;
         } else return false;
     }
 
     public static boolean setVideoView(Medium medium,VideoView view){
+        Context context = view.getContext().getApplicationContext();
         if (medium.getMedia_type().equals("V")){
-            ((VideoView) view).setVideoPath(medium.getMedia_file().replace("http", "https"));
+            // Get stored file
+            String filename = medium.getMedia_file().replace("http","").replace("//","").replace("/","");
+            File file = new File(context.getFilesDir(), filename);
             view.seekTo(1);
+            //Set video
+            view.setVideoPath(file.getAbsolutePath());
+
             view.setOnTouchListener(new View.OnTouchListener() {
                 boolean isPaused = true;
 
@@ -58,9 +81,14 @@ public class MediaViewAdapter {
     }
 
     public static boolean setMediaPlayer(Medium medium,MediaPlayer mediaPlayer) {
+        Context context = getApplicationContext();
         if(Objects.equals(medium.getMedia_type(), "R")){
             try {
-                mediaPlayer.setDataSource(medium.getMedia_file().replace("http", "https"));
+                // Get stored file
+                String filename = medium.getMedia_file().replace("http","").replace("//","").replace("/","");
+                Log.d("oi",filename);
+                File file = new File(context.getFilesDir(), filename);
+                mediaPlayer.setDataSource(file.getAbsolutePath());
                 mediaPlayer.prepareAsync();
             } catch (Exception e) {
                 Log.e("MediaViewAdapter","Erro com media");

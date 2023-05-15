@@ -1,31 +1,40 @@
 package com.example.braguia.repositories;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+
 import android.app.Application;
+import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.example.braguia.model.GuideDatabase;
+import com.example.braguia.model.trails.Edge;
 import com.example.braguia.model.trails.EdgeTip;
+import com.example.braguia.model.trails.Medium;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.trails.TrailAPI;
 import com.example.braguia.model.trails.TrailDAO;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.AbstractMap;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -38,10 +47,13 @@ public class TrailRepository {
     public MediatorLiveData<List<Trail>> allTrails;
     private final GuideDatabase database;
 
+    private final Context context;
+
     public TrailRepository(Application application,Boolean freshDB){
+        this.context = application;
         if(freshDB){
             database = Room.inMemoryDatabaseBuilder(
-                            ApplicationProvider.getApplicationContext(),
+                            getApplicationContext(),
                             GuideDatabase.class)
                     .allowMainThreadQueries()
                     .build();
@@ -62,10 +74,52 @@ public class TrailRepository {
                             throw new RuntimeException(e);
                         }
                     }
+                        List<Trail> trails = allTrails.getValue();
+                        if (trails != null) {
+                            for (Trail trail : trails) {
+                                for (Edge e : trail.getEdges()) {
+                                    for (Medium m1 : e.getEdge_start().getMedia()) {
+                                        new Thread(() -> {
+                                            save_media_file(m1.getMedia_file());
+                                        }).start();
+                                    }
+                                    for (Medium m2 : e.getEdge_end().getMedia()) {
+                                        new Thread(() -> {
+                                            save_media_file(m2.getMedia_file());
+                                        }).start();
+                                    }
+
+                                }
+                            }
+                        }
+
                 }
+
         );
+
     }
 
+    private void save_media_file(String file_url){
+        URL url = null;
+        String destinationPath;
+        try {
+            url = new URL(file_url.replace("http", "https"));
+            InputStream inputStream = url.openStream();
+            destinationPath = file_url.replace("http","").replace("//","").replace("/","");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                try (FileOutputStream fos = context.openFileOutput(destinationPath, Context.MODE_PRIVATE)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        fos.write(inputStream.readAllBytes());
+                    }
+                }
+
+                Log.d("FILE","created");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     public void insert(List<Trail> trails){
         new InsertAsyncTask(trailDAO).execute(trails);
@@ -84,6 +138,7 @@ public class TrailRepository {
             public void onResponse(Call<List<Trail>> call, Response<List<Trail>> response) {
                 if(response.isSuccessful()) {
                     insert(response.body());
+
                 }
                 else{
                     Log.e("main", "onFailure: "+response.errorBody());
@@ -159,6 +214,8 @@ public class TrailRepository {
 
 
 
+
+
     private static class InsertAsyncTask extends AsyncTask<List<Trail>,Void,Void> {
         private final TrailDAO trailDAO;
 
@@ -175,6 +232,8 @@ public class TrailRepository {
             return null;
         }
     }
+
+
 
 }
 
