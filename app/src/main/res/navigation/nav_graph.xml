@@ -16,9 +16,6 @@
             android:id="@+id/action_homeFragment_to_discoverFragment"
             app:destination="@id/discoverFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_addRoadMapFragment"
-            app:destination="@id/addRoadMapFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_contactsListFragment"
             app:destination="@id/contactsListFragment" />
         <action
@@ -30,6 +27,9 @@
         <action
             android:id="@+id/action_homeFragment_to_trailDescriptionFragment"
             app:destination="@id/trailDescriptionFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_definitionsFragment"
+            app:destination="@id/definitionsFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -48,11 +48,6 @@
             android:id="@+id/action_discoverFragment_to_trailDescriptionFragment"
             app:destination="@id/trailDescriptionFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/addRoadMapFragment"
-        android:name="com.example.braguia.ui.Fragments.AddRoadMapFragment"
-        android:label="fragment_add_road_map"
-        tools:layout="@layout/fragment_add_road_map" />
     <fragment
         android:id="@+id/contactsListFragment"
         android:name="com.example.braguia.ui.Fragments.ContactsListFragment"
@@ -75,9 +70,6 @@
         <action
             android:id="@+id/action_trailDescriptionFragment_to_pinFragment"
             app:destination="@id/pinFragment" />
-        <action
-            android:id="@+id/action_trailDescriptionFragment_to_pinNotificationFSFragment"
-            app:destination="@id/pinNotificationFSFragment" />
     </fragment>
     <fragment
         android:id="@+id/pinFragment"
@@ -96,8 +88,7 @@
             app:destination="@id/trailMetricsDescriptionFragment" />
     </fragment>
     <fragment
-        android:id="@+id/pinNotificationFSFragment"
-        android:name="com.example.braguia.pinNotificationFSFragment"
-        android:label="fragment_pin_notification_f_s"
-        tools:layout="@layout/fragment_pin_notification_f_s" />
+        android:id="@+id/definitionsFragment"
+        android:name="com.example.braguia.ui.Fragments.DefinitionsFragment"
+        android:label="DefinitionsFragment" />
 </navigation>

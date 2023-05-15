@@ -111,8 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     } else if (itemId == R.id.partners_contacts) {
                         navController.navigate(R.id.partnersListFragment);
                     } else if (itemId == R.id.definitions) {
-                        Intent intent = new Intent(MainActivity.this, DefinitionsActivity.class);
-                        startActivity(intent);
+                        navController.navigate(R.id.definitionsFragment);
                     } else if (itemId == R.id.logout) {
                         try {
                             userViewModel.logOut(getApplicationContext(), new UserViewModel.LogOutCallback() {
