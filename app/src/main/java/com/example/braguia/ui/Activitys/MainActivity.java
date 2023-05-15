@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        checkLoggedIn();
-
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
@@ -80,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
         configureLocationButton();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        checkLoggedIn();
+    }
     public void checkLoggedIn(){
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         try {
