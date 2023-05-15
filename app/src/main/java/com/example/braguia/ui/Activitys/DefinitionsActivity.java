@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -38,8 +40,26 @@ public class DefinitionsActivity extends AppCompatActivity {
 
         // Retrieve the saved switch states from shared preferences
         SharedPreferences sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        boolean notificationSwitchState = sharedPrefs.getBoolean("notificationSwitchState", false);
-        boolean darkModeSwitchState = sharedPrefs.getBoolean("darkModeSwitchState", false);
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean locationSwitchState;
+        if (isGPSEnabled){
+            locationSwitchState = sharedPrefs.getBoolean("locationSwitchState", true);
+        }
+        else{
+            locationSwitchState = sharedPrefs.getBoolean("locationSwitchState", false);
+        }
+
+        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        boolean isDarkModeOn = nightModeFlags == Configuration.UI_MODE_NIGHT_YES;
+        boolean darkModeSwitchState;
+        //TODO: FIX!
+        if(isDarkModeOn)
+            darkModeSwitchState = sharedPrefs.getBoolean("darkModeSwitchState", true);
+        else
+            darkModeSwitchState = sharedPrefs.getBoolean("darkModeSwitchState", false);
+
 
 
         SwitchCompat localization_switch = findViewById(R.id.localization_switch);
@@ -47,7 +67,8 @@ public class DefinitionsActivity extends AppCompatActivity {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Initialize switch states
-        localization_switch.setChecked(notificationSwitchState);
+
+        localization_switch.setChecked(locationSwitchState);
         dark_mode_switch.setChecked(darkModeSwitchState);
 
 
@@ -82,7 +103,7 @@ public class DefinitionsActivity extends AppCompatActivity {
                 });
                 // Set switch state
                 SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putBoolean("locationSwitch", true);
+                editor.putBoolean("locationSwitchState", true);
                 editor.apply();
             }
             else{
@@ -91,7 +112,7 @@ public class DefinitionsActivity extends AppCompatActivity {
 
                 // Set switch state
                 SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putBoolean("locationSwitch", false);
+                editor.putBoolean("locationSwitchState", false);
                 editor.apply();
             }
         });
@@ -99,8 +120,10 @@ public class DefinitionsActivity extends AppCompatActivity {
             // Handle the switch state change here
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                Toast.makeText(DefinitionsActivity.this, "Dark mode enabled", Toast.LENGTH_SHORT).show();
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                Toast.makeText(DefinitionsActivity.this, "Dark mode disabled", Toast.LENGTH_SHORT).show();
             }
             // Save switch state
             SharedPreferences.Editor editor = sharedPrefs.edit();
