@@ -24,12 +24,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.model.user.User;
 import com.example.braguia.ui.Fragments.MapsFragment;
 import com.example.braguia.ui.Services.Servico;
 import com.example.braguia.ui.Services.Trip;
 import com.example.braguia.viewmodel.TrailViewModel;
+import com.example.braguia.viewmodel.UserViewModel;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,16 +68,28 @@ public class NavigationActivity extends AppCompatActivity {
                 int trailId = getIntent().getIntExtra("id",0);
 
                 TrailViewModel trailViewModel = new ViewModelProvider(this).get(TrailViewModel.class);
+                UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+
                 LiveData<Trail> trailLiveData=trailViewModel.getTrailById(trailId);
                 trailLiveData.observe(this, trail -> {
                     if(trail!=null){
-                        Trip trip = new Trip(trail);
+                        try {
+                            LiveData<User> userLiveData = userViewModel.getUser();
+                            userLiveData.observe(this, user -> {
+                                if (user!=null) {
+                                    Trip trip = new Trip(trail,user.getUsername());
 
-                        Intent serviceIntent = new Intent(this, Servico.class);
-                        serviceIntent.putExtra("trip", trip);
-                        startForegroundService(serviceIntent);
-                        startNavigation(trail);
-                        load(trail);
+                                    Intent serviceIntent = new Intent(this, Servico.class);
+                                    serviceIntent.putExtra("trip", trip);
+                                    startForegroundService(serviceIntent);
+                                    startNavigation(trail);
+                                    load(trail);
+                                    userLiveData.removeObservers(this);
+                                }
+                            });
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         trailLiveData.removeObservers(this);
                     }
                 });

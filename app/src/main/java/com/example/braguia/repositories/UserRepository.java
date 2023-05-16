@@ -91,34 +91,9 @@ public class UserRepository {
         return trailMetricsDAO.getMetricsById(id);
     }
 
-    public void addTrailMetrics(int trailId, float completedPercentage, float timeTaken, String pinIds) {
-        LiveData<User> userLiveData = getUser();
-        Observer<User> observer = new Observer<>() {
-            @Override
-            public void onChanged(User user) {
-                if (user != null) {
-                    TrailMetrics trailMetrics = new TrailMetrics(user.getUsername(),trailId,completedPercentage,timeTaken,pinIds);
-                    new InsertTrailMetricsAsync(trailMetricsDAO).execute(trailMetrics);
-                    userLiveData.removeObserver(this);
-                }
-            }
-        };
-        userLiveData.observeForever(observer);
-    }
-
     public void addTrailMetrics(Trip trip) {
-        LiveData<User> userLiveData = getUser();
-        Observer<User> observer = new Observer<>() {
-            @Override
-            public void onChanged(User user) {
-                if (user != null) {
-                    TrailMetrics trailMetrics = trip.finish(user.getUsername());
-                    new InsertTrailMetricsAsync(trailMetricsDAO).execute(trailMetrics);
-                    userLiveData.removeObserver(this);
-                }
-            }
-        };
-        userLiveData.observeForever(observer);
+        TrailMetrics trailMetrics = trip.finish();
+        new InsertTrailMetricsAsync(trailMetricsDAO).execute(trailMetrics);
     }
 
 

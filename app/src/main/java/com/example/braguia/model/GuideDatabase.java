@@ -22,7 +22,7 @@ import com.example.braguia.model.user.User;
 import com.example.braguia.model.user.UserDAO;
 import com.example.braguia.model.user.UserUpdater;
 
-@Database(entities = {Trail.class, AppInfo.class, User.class, Contact.class, UserUpdater.class, TrailMetrics.class, EdgeTip.class, Edge.class}, version = 1006)
+@Database(entities = {Trail.class, AppInfo.class, User.class, Contact.class, UserUpdater.class, TrailMetrics.class, EdgeTip.class, Edge.class}, version = 1007)
 public abstract class GuideDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "BraGuide";

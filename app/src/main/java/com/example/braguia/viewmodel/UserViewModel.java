@@ -78,13 +78,6 @@ public class UserViewModel extends AndroidViewModel {
         return repository.getTrailMetricsById(id);
     }
 
-    public void addMetrics(int trailId,float completedPercentage,float timeTaken,List<Integer> vizitedPins){
-        repository.addTrailMetrics(trailId,
-                completedPercentage,
-                timeTaken,
-                TrailMetrics.formatPinList(vizitedPins));
-    }
-
     public void addMetrics(Trip trip){
         repository.addTrailMetrics(trip);
     }
