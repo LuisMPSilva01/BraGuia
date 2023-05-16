@@ -83,27 +83,42 @@ public class TrailRepository {
                 ConnectivityManager cm = (ConnectivityManager) application.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
                 boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+                if(isConnected){
+                    Thread thread = new Thread(() -> {
+                        loadMedia(trails);
+                    });
+                    thread.start();
+                    try {
+                        thread.join();
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
 
-                if(isConnected) loadMedia(trails);
             }
         });
     }
 
-    private void loadMedia(List<Trail> trails){
+    private void loadMedia(List<Trail> trails) {
         if (trails != null) {
-            Thread thread = new Thread(() -> {
                 for (Trail trail : trails) {
                     for (Edge e : trail.getEdges()) {
                         for (Medium m1 : e.getEdge_start().getMedia()) {
-                            save_media_file(m1.getMedia_file());
+                            File file = new File(context.getFilesDir(), m1.getMedia_file());
+                            if(!file.exists()){
+                                Log.d("ENTREI AQUI","AQUI");
+                                save_media_file(m1.getMedia_file());
+                            }
                         }
                         for (Medium m2 : e.getEdge_end().getMedia()) {
-                            save_media_file(m2.getMedia_file());
+                            File file = new File(context.getFilesDir(), m2.getMedia_file());
+                            if(!file.exists()){
+                                save_media_file(m2.getMedia_file());
+                            }
+
                         }
                     }
                 }
-            });
-            thread.start();
         }
     }
     private void save_media_file(String file_url){
