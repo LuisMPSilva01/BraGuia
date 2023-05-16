@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -43,8 +44,18 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation);
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                //do nothing
+            }
+        };
+        this.getOnBackPressedDispatcher().addCallback(this, callback);
+
+
+
+        setContentView(R.layout.activity_navigation);
         if(getIntent()!=null) {
             if (getIntent().hasExtra("trip")) {
                 Trip trip = (Trip) getIntent().getSerializableExtra("trip");
