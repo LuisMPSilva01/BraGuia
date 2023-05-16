@@ -105,8 +105,6 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(),"Only premium users can use this feature",Toast.LENGTH_LONG).show();
             });
         }
-
-
     }
 
     private void replaceFragment(Trail trail) {

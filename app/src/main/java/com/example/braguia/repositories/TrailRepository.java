@@ -88,13 +88,7 @@ public class TrailRepository {
                         loadMedia(trails);
                     });
                     thread.start();
-                    try {
-                        thread.join();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
                 }
-
             }
         });
     }
@@ -104,14 +98,13 @@ public class TrailRepository {
                 for (Trail trail : trails) {
                     for (Edge e : trail.getEdges()) {
                         for (Medium m1 : e.getEdge_start().getMedia()) {
-                            File file = new File(context.getFilesDir(), m1.getMedia_file());
+                            File file = new File(context.getFilesDir(), m1.getMedia_file().replace("http://","").replace("/",""));
                             if(!file.exists()){
-                                Log.d("ENTREI AQUI","AQUI");
                                 save_media_file(m1.getMedia_file());
                             }
                         }
                         for (Medium m2 : e.getEdge_end().getMedia()) {
-                            File file = new File(context.getFilesDir(), m2.getMedia_file());
+                            File file = new File(context.getFilesDir(), m2.getMedia_file().replace("http://","").replace("/",""));
                             if(!file.exists()){
                                 save_media_file(m2.getMedia_file());
                             }
