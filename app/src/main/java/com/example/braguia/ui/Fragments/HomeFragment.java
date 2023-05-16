@@ -1,7 +1,6 @@
 package com.example.braguia.ui.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,7 @@ import com.example.braguia.R;
 import com.example.braguia.model.app.AppInfo;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.user.User;
-import com.example.braguia.ui.Activitys.MainActivity;
-import com.example.braguia.ui.TrailsHomeRecyclerViewAdapter;
+import com.example.braguia.ui.viewAdapters.TrailsHomeRecyclerViewAdapter;
 import com.example.braguia.viewmodel.AppInfoViewModel;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;

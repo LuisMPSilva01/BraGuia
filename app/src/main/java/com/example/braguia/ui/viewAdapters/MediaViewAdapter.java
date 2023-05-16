@@ -1,4 +1,4 @@
-package com.example.braguia.viewAdapters;
+package com.example.braguia.ui.viewAdapters;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 

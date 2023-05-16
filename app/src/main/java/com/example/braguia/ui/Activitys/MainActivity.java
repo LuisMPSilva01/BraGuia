@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     if (itemId == R.id.profile) {
                         navController.navigate(R.id.profileFragment);
                     } else if (itemId == R.id.emergency_contacts) {
-                        navController.navigate(R.id.contactsListFragment);
+                        navController.navigate(R.id.emergencyContactsFragment);
                     } else if (itemId == R.id.socials_contacts) {
                         navController.navigate(R.id.socialsListFragment);
                     } else if (itemId == R.id.partners_contacts) {

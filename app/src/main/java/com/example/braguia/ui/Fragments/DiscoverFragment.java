@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.braguia.R;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.user.User;
-import com.example.braguia.ui.TrailsRecyclerViewAdapter;
+import com.example.braguia.ui.viewAdapters.TrailsRecyclerViewAdapter;
 import com.example.braguia.viewmodel.TrailViewModel;
 import com.example.braguia.viewmodel.UserViewModel;
 

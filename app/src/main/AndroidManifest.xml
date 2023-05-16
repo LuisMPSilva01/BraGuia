@@ -60,7 +60,7 @@
         </activity>
 
         <service
-            android:name=".ui.Services.Servico"
+            android:name=".viewmodel.Services.Servico"
             android:enabled="true"
             android:exported="false" />
     </application>

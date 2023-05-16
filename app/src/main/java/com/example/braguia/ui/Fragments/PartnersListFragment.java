@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.app.Partner;
-import com.example.braguia.ui.PartnersRecyclerViewAdapter;
+import com.example.braguia.ui.viewAdapters.PartnersRecyclerViewAdapter;
 import com.example.braguia.viewmodel.AppInfoViewModel;
 
 import java.io.IOException;

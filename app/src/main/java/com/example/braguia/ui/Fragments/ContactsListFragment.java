@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.app.Contact;
-import com.example.braguia.ui.ContactsRecyclerViewAdapter;
+import com.example.braguia.ui.viewAdapters.ContactsRecyclerViewAdapter;
 import com.example.braguia.viewmodel.AppInfoViewModel;
 
 import java.io.IOException;

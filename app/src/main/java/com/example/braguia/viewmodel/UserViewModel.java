@@ -9,7 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
-import com.example.braguia.ui.Services.Trip;
+import com.example.braguia.viewmodel.Services.Trip;
 import com.example.braguia.model.user.User;
 import com.example.braguia.repositories.UserRepository;
 

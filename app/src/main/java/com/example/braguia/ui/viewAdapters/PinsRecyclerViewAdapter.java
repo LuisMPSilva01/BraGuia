@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.viewAdapters;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.ui.Activitys.MainActivity;
-import com.example.braguia.viewAdapters.EdgeTipViewAdapter;
 
 import java.util.List;
 
