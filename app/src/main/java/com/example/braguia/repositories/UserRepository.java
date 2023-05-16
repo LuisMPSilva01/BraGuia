@@ -224,12 +224,12 @@ public class UserRepository {
     public void makeLogOutRequest(Context context,final LogoutCallback callback) throws IOException {
         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
         String storedCookieString = sharedPreferences.getString("cookies", "");
-        lastUser="";
         Call<User> call = api.logout(storedCookieString);
         call.enqueue(new retrofit2.Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
+                    lastUser="";
                     SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                     sharedPreferences.edit().putString("cookies", "").apply();
                     sharedPreferences.edit().putString("lastUser", "").apply();

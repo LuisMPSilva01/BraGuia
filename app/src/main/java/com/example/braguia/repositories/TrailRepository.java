@@ -4,6 +4,8 @@ import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -78,7 +80,11 @@ public class TrailRepository {
         );
         allTrails.observeForever(trails -> {
             if(trails!=null && trails.size()>0) {
-                loadMedia(trails);
+                ConnectivityManager cm = (ConnectivityManager) application.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+                if(isConnected) loadMedia(trails);
             }
         });
     }
