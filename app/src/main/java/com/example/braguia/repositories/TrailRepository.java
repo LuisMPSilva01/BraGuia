@@ -76,38 +76,28 @@ public class TrailRepository {
                     }
                 }
         );
-        allTrails.observeForever(this::loadMedia);
+        allTrails.observeForever(trails -> {
+            if(trails!=null && trails.size()>0) {
+                loadMedia(trails);
+            }
+        });
     }
 
     private void loadMedia(List<Trail> trails){
-        List<Thread> threads = new ArrayList<>();
         if (trails != null) {
-            for (Trail trail : trails) {
-                for (Edge e : trail.getEdges()) {
-                    for (Medium m1 : e.getEdge_start().getMedia()) {
-                        Thread thread = new Thread(() -> {
+            Thread thread = new Thread(() -> {
+                for (Trail trail : trails) {
+                    for (Edge e : trail.getEdges()) {
+                        for (Medium m1 : e.getEdge_start().getMedia()) {
                             save_media_file(m1.getMedia_file());
-                        });
-                        thread.start();
-                        threads.add(thread);
-                    }
-                    for (Medium m2 : e.getEdge_end().getMedia()) {
-                        Thread thread = new Thread(() -> {
+                        }
+                        for (Medium m2 : e.getEdge_end().getMedia()) {
                             save_media_file(m2.getMedia_file());
-                        });
-                        thread.start();
-                        threads.add(thread);
+                        }
                     }
                 }
-            }
-        }
-        for (Thread thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                // Handle interrupted exception if needed
-                e.printStackTrace();
-            }
+            });
+            thread.start();
         }
     }
     private void save_media_file(String file_url){
