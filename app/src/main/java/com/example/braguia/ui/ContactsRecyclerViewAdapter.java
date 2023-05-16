@@ -1,6 +1,7 @@
 package com.example.braguia.ui;
 
 import android.graphics.Color;
+import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +68,10 @@ public class ContactsRecyclerViewAdapter extends RecyclerView.Adapter<ContactsRe
         // Set click listener for phone
         holder.contact_phone.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onPhoneClick(mValues.get(position).getContactPhone());
+                String phoneNumber = mValues.get(position).getContactPhone();
+                if(PhoneNumberUtils.isGlobalPhoneNumber(phoneNumber)){
+                    listener.onPhoneClick(phoneNumber);
+                }
             }
         });
     }
