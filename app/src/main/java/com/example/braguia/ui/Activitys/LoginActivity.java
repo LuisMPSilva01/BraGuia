@@ -1,9 +1,12 @@
 package com.example.braguia.ui.Activitys;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -32,10 +35,22 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        View rootView = findViewById(android.R.id.content);
 
         Name = findViewById(R.id.name_input);
         Password = findViewById(R.id.password_input);
         Login = findViewById(R.id.btnLogin);
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // Hide the keyboard and clear focus from the input form
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+                Name.clearFocus();
+                Password.clearFocus();
+                return false; // Return false to allow touch events to be passed to other views
+            }
+        });
 
         Login.setOnClickListener(view -> {
             try {
