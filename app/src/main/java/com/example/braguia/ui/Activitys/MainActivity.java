@@ -1,7 +1,9 @@
 package com.example.braguia.ui.Activitys;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         checkLoggedIn();
+        checkDarkMode();
     }
     public void checkLoggedIn(){
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -149,6 +153,16 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void checkDarkMode(){
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        boolean wantsDarkMode = userViewModel.getDarkModePreference(this);
+        boolean isDarkModeEnabled = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
+        if(wantsDarkMode && !isDarkModeEnabled){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else if(!wantsDarkMode && isDarkModeEnabled)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
