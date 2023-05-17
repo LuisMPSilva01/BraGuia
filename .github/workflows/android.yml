@@ -24,10 +24,17 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew build
+        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+        with:
+          arguments: lint
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test-Reports
+          path: app/build/reports/lint*
+        if: always()
 
       - name: Create APK
         run: ./gradlew assembleDebug
 
-      - name: Run Android Lint
-        run: ./gradlew lint
