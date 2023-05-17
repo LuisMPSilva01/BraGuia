@@ -62,13 +62,13 @@ public class MainActivity extends AppCompatActivity {
 
         configureBottomNavigation(navController);
         configureSideBar(navController);
+        checkDarkMode();
     }
 
     @Override
     public void onStart() {
         super.onStart();
         checkLoggedIn();
-        checkDarkMode();
     }
     public void checkLoggedIn(){
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureSideBar(NavController navController){
         binding.sidebar.setNavigationItemSelectedListener(
-
                 menuItem -> {
                     int itemId = menuItem.getItemId();
                     if (itemId == R.id.profile) {
