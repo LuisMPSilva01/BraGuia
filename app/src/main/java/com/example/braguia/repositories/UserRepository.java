@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -48,14 +49,14 @@ public class UserRepository {
     private final UserAPI api;
     private String lastUser;
 
-    public UserRepository(Application application,Boolean freshDB) {
-        if(freshDB){
+    public UserRepository(Application application, Boolean freshDB) {
+        if (freshDB) {
             database = Room.inMemoryDatabaseBuilder(
                             ApplicationProvider.getApplicationContext(),
                             GuideDatabase.class)
                     .allowMainThreadQueries()
                     .build();
-        }else {
+        } else {
             database = GuideDatabase.getInstance(application);
         }
 
@@ -71,23 +72,31 @@ public class UserRepository {
 
         SharedPreferences sharedPreferences = application.getApplicationContext().getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
         String cookies = sharedPreferences.getString("cookies", "");
-        updateUserAPI(cookies);
+        updateUserAPI(cookies, new LoginCallback() {
+            @Override
+            public void onLoginSuccess() {
+            }
+
+            @Override
+            public void onLoginFailure() {
+            }
+        }, application.getApplicationContext());
         lastUser = sharedPreferences.getString("lastUser", "");
 
-        if(lastUser==null || lastUser.equals("")){
+        if (lastUser == null || lastUser.equals("")) {
             user.postValue(new User("", "loggedOff"));
         }
         user.addSource(userDAO.getUserByUsername(lastUser),localUser -> {
             if(lastUser==null || lastUser.equals("")){
                 user.postValue(new User("", "loggedOff"));
             }
-            else if(localUser!=null){
+            if(localUser!=null){
                 user.postValue(localUser);
             }
         });
     }
 
-    public LiveData<List<TrailMetrics>> getTrailMetrics(){
+    public LiveData<List<TrailMetrics>> getTrailMetrics() {
         return Transformations.switchMap(user, user -> {
             if (user == null) {
                 return new MutableLiveData<>(Collections.emptyList());
@@ -97,7 +106,7 @@ public class UserRepository {
         });
     }
 
-    public LiveData<TrailMetrics> getTrailMetricsById(int id){
+    public LiveData<TrailMetrics> getTrailMetricsById(int id) {
         return trailMetricsDAO.getMetricsById(id);
     }
 
@@ -118,9 +127,9 @@ public class UserRepository {
     }
 
 
-    public void updateUserAPI(String cookies) {
-        if(cookies!=""){
-            Log.e("DEBUG","Cookies:"+cookies);
+    public void updateUserAPI(String cookies, LoginCallback callback, Context context) {
+        if (cookies != "") {
+            Log.e("DEBUG", "Cookies:" + cookies);
             Call<User> call = api.getUser(cookies);
             call.enqueue(new Callback<>() {
                 @Override
@@ -130,18 +139,25 @@ public class UserRepository {
                         String responseBody = response.body().toString();
                         Log.e("Retrofit", "Response Body: " + responseBody);
                         insert(user);
+                        lastUser = user.getUsername();
+                        SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
+                        sharedPreferences.edit().putString("lastUser", lastUser).apply();
+                        callback.onLoginSuccess();
                     } else {
                         Log.e("Retrofit", "Unsuccessful Response: " + response);
+                        callback.onLoginFailure();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
                     Log.e("Retrofit", "Response error:" + t.getMessage());
+                    callback.onLoginFailure();
                 }
             });
         }
     }
+
     public LiveData<String> getCookies(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
         MutableLiveData<String> cookiesLiveData = new MutableLiveData<>();
@@ -160,14 +176,12 @@ public class UserRepository {
     }
 
 
-    public void insert(User user){
+    public void insert(User user) {
         new UserRepository.InsertAsyncTask(userDAO).execute(user);
     }
 
 
-
-
-    public void makeLoginRequest(String username,String password,Context context,final LoginCallback callback) throws IOException {
+    public void makeLoginRequest(String username, String password, Context context, final LoginCallback callback) throws IOException {
         JsonObject body = new JsonObject();
         body.addProperty("username", username);
         body.addProperty("email", "");
@@ -177,20 +191,16 @@ public class UserRepository {
         call.enqueue(new retrofit2.Callback<>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful() && response.body()!=null) {
-                    User user = new User(username,"notDefined");
+                if (response.isSuccessful() && response.body() != null) {
                     // Store the cookies
                     Headers headers = response.headers();
                     List<String> cookies = headers.values("Set-Cookie").stream().map(e -> e.split(";")[0]).collect(Collectors.toList());
                     if (!cookies.isEmpty()) { //Insert cookie into SharedPreferences
-                        lastUser=username;
                         String cookieString = TextUtils.join(";", cookies);
                         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putString("cookies", cookieString).apply();
-                        updateUserAPI(cookieString);
-                        sharedPreferences.edit().putString("lastUser", username).apply();
+                        updateUserAPI(cookieString,callback,context);
                     }
-                    callback.onLoginSuccess();
                 } else {
                     Log.e("main", "onFailure: " + response.errorBody());
                     callback.onLoginFailure();
@@ -208,26 +218,26 @@ public class UserRepository {
 
     public interface LoginCallback {
         void onLoginSuccess();
+
         void onLoginFailure();
     }
 
-    public void makeLogOutRequest(Context context,final LogoutCallback callback) throws IOException {
+    public void makeLogOutRequest(Context context, final LogoutCallback callback) throws IOException {
         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
         String storedCookieString = sharedPreferences.getString("cookies", "");
         Call<User> call = api.logout(storedCookieString);
         call.enqueue(new retrofit2.Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful()) {
-                    lastUser="";
+                if (response.isSuccessful()) {
+                    lastUser = "";
                     SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                     sharedPreferences.edit().putString("cookies", "").apply();
                     sharedPreferences.edit().putString("lastUser", "").apply();
                     Log.e("main", "logged out successfully:");
                     callback.onLogoutSuccess();
-                }
-                else{
-                    Log.e("main", "onFailure: "+response.errorBody());
+                } else {
+                    Log.e("main", "onFailure: " + response.errorBody());
                     callback.onLogoutFailure();
                 }
             }
@@ -242,6 +252,7 @@ public class UserRepository {
 
     public interface LogoutCallback {
         void onLogoutSuccess();
+
         void onLogoutFailure();
     }
 
@@ -256,25 +267,25 @@ public class UserRepository {
     }
 
 
-    private static class InsertAsyncTask extends AsyncTask<User,Void,Void> {
+    private static class InsertAsyncTask extends AsyncTask<User, Void, Void> {
         private final UserDAO userDAO;
 
         public InsertAsyncTask(UserDAO catDao) {
-            this.userDAO=catDao;
+            this.userDAO = catDao;
         }
 
         @Override
         protected Void doInBackground(User... users) {
-            userDAO.insertOrUpdate(users[0]);
+            userDAO.insert(users[0]);
             return null;
         }
     }
 
-    private static class InsertTrailMetricsAsync extends AsyncTask<TrailMetrics,Void,Void> {
+    private static class InsertTrailMetricsAsync extends AsyncTask<TrailMetrics, Void, Void> {
         private final TrailMetricsDAO trailMetricsDAO;
 
         public InsertTrailMetricsAsync(TrailMetricsDAO trailMetricsDAO) {
-            this.trailMetricsDAO=trailMetricsDAO;
+            this.trailMetricsDAO = trailMetricsDAO;
         }
 
         @Override

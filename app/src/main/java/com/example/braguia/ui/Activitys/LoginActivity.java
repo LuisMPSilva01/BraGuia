@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
     private void validate(String userName, String userPassword) throws IOException {
         getApplicationContext(); //Context is required to right cookies in SharedPreferences
         UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
-        userViewModel.login(userName,userPassword, getApplicationContext(),new UserViewModel.LoginCallback() {
+        userViewModel.login(userName.trim(),userPassword, getApplicationContext(),new UserViewModel.LoginCallback() {
             @Override
             public void onLoginSuccess() {
                 changeToMainActivity();

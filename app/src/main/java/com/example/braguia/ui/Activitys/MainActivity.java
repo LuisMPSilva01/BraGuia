@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -71,10 +73,8 @@ public class MainActivity extends AppCompatActivity {
         checkLoggedIn();
     }
     public void checkLoggedIn(){
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         try {
             LiveData<User> userLiveData = userViewModel.getUser();
-
             userLiveData.observe(this, user -> {
                 if(user!=null){
                     if (Objects.equals(user.getUser_type(), "loggedOff")) {
@@ -153,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void checkDarkMode(){
-        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         boolean wantsDarkMode = userViewModel.getDarkModePreference(this);
         boolean isDarkModeEnabled = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
                 == Configuration.UI_MODE_NIGHT_YES;

@@ -131,7 +131,7 @@ public class TrailRepository {
                 Log.d("FILE", "created");
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Log.e("trailRep","file not loaded");
         }
     }
 
