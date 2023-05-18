@@ -19,3 +19,4 @@ app-crawler/crawler_stubapp_androidx.apk
 app-crawler/crawler_app.apk
 app-crawler/crawl_launcher.jar
 .gitignore
+signing_keystore_base64
