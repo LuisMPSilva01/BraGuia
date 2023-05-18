@@ -1,9 +1,12 @@
 package com.example.braguia.ui.Fragments;
 
+import static android.content.Context.TELEPHONY_SERVICE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.braguia.R;
 import com.example.braguia.model.app.Contact;
-import com.example.braguia.ui.ContactsRecyclerViewAdapter;
+import com.example.braguia.ui.viewAdapters.ContactsRecyclerViewAdapter;
 import com.example.braguia.viewmodel.AppInfoViewModel;
 
 import java.io.IOException;
@@ -86,10 +89,16 @@ public class ContactsListFragment extends Fragment {
 
             ContactsRecyclerViewAdapter adapter = new ContactsRecyclerViewAdapter(contacts);
             recyclerView.setAdapter(adapter);
-            adapter.setOnPhoneClickListener(this::callPhoneNumber);
+            if(isTelephonyEnabled()){
+                adapter.setOnPhoneClickListener(this::callPhoneNumber);
+            }
         }
     }
 
+    private boolean isTelephonyEnabled(){
+        TelephonyManager tm = (TelephonyManager) getContext().getSystemService(TELEPHONY_SERVICE);
+        return tm != null && tm.getSimState()==TelephonyManager.SIM_STATE_READY;
+    }
     private void callPhoneNumber(String phoneNumber) { //TODO maybe adicionar um backtrace a partir da main activity para tornar o fragmento mais fléxivel
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phoneNumber));

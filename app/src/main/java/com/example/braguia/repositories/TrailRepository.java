@@ -4,6 +4,8 @@ import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 import android.app.Application;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -76,61 +78,63 @@ public class TrailRepository {
                     }
                 }
         );
-        allTrails.observeForever(this::loadMedia);
-    }
-
-    private void loadMedia(List<Trail> trails){
-        List<Thread> threads = new ArrayList<>();
-        if (trails != null) {
-            for (Trail trail : trails) {
-                for (Edge e : trail.getEdges()) {
-                    for (Medium m1 : e.getEdge_start().getMedia()) {
-                        Thread thread = new Thread(() -> {
-                            save_media_file(m1.getMedia_file());
-                        });
-                        thread.start();
-                        threads.add(thread);
-                    }
-                    for (Medium m2 : e.getEdge_end().getMedia()) {
-                        Thread thread = new Thread(() -> {
-                            save_media_file(m2.getMedia_file());
-                        });
-                        thread.start();
-                        threads.add(thread);
-                    }
+        allTrails.observeForever(trails -> {
+            if(trails!=null && trails.size()>0) {
+                ConnectivityManager cm = (ConnectivityManager) application.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+                if(isConnected){
+                    Thread thread = new Thread(() -> {
+                        loadMedia(trails);
+                    });
+                    thread.start();
                 }
             }
-        }
-        for (Thread thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                // Handle interrupted exception if needed
-                e.printStackTrace();
-            }
+        });
+    }
+
+    private void loadMedia(List<Trail> trails) {
+        if (trails != null) {
+                for (Trail trail : trails) {
+                    for (Edge e : trail.getEdges()) {
+                        for (Medium m1 : e.getEdge_start().getMedia()) {
+                            File file = new File(context.getFilesDir(), m1.getMedia_file().replace("http://","").replace("/",""));
+                            if(!file.exists()){
+                                save_media_file(m1.getMedia_file());
+                            }
+                        }
+                        for (Medium m2 : e.getEdge_end().getMedia()) {
+                            File file = new File(context.getFilesDir(), m2.getMedia_file().replace("http://","").replace("/",""));
+                            if(!file.exists()){
+                                save_media_file(m2.getMedia_file());
+                            }
+
+                        }
+                    }
+                }
         }
     }
-    private void save_media_file(String file_url){
+    private void save_media_file(String file_url) {
         URL url = null;
         String destinationPath;
         try {
             url = new URL(file_url.replace("http", "https"));
-            InputStream inputStream = url.openStream();
-            destinationPath = file_url.replace("http://","").replace("/","");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                try (FileOutputStream fos = context.openFileOutput(destinationPath, Context.MODE_PRIVATE)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        fos.write(inputStream.readAllBytes());
+            try (InputStream inputStream = url.openStream()) {
+                destinationPath = file_url.replace("http://", "").replace("/", "");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    try (FileOutputStream fos = context.openFileOutput(destinationPath, Context.MODE_PRIVATE)) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            fos.write(inputStream.readAllBytes());
+                        }
                     }
                 }
-
-                Log.d("FILE","created");
+                Log.d("FILE", "created");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
+
 
     public void insert(List<Trail> trails){
         new InsertAsyncTask(trailDAO).execute(trails);
@@ -143,16 +147,15 @@ public class TrailRepository {
                 .build();
         TrailAPI api = retrofit.create(TrailAPI.class);
         Call<List<Trail>> call = api.getTrails();
-        call.enqueue(new retrofit2.Callback<List<Trail>>() {
+        call.enqueue(new retrofit2.Callback<>() {
             @Override
 
             public void onResponse(Call<List<Trail>> call, Response<List<Trail>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     insert(response.body());
 
-                }
-                else{
-                    Log.e("main", "onFailure: "+response.errorBody());
+                } else {
+                    Log.e("main", "onFailure: " + response.errorBody());
                 }
             }
 

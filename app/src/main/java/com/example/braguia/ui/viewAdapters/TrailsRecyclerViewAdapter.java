@@ -1,6 +1,9 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.viewAdapters;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,10 +74,10 @@ public class TrailsRecyclerViewAdapter extends RecyclerView.Adapter<TrailsRecycl
         String durationText = filteredData.get(position).getTrail_duration() + " minutes";
         holder.duration.setText(durationText);
         holder.difficulty.setText(filteredData.get(position).getTrail_difficulty());
-        Picasso.get().load(filteredData.get(position)
-                .getTrail_img().replace("http", "https"))
-                .into(holder.imageView);
 
+        Picasso.get().load(filteredData.get(position).getTrail_img().replace("http", "https"))
+                .error(R.drawable.no_preview_image)
+                    .into(holder.imageView);
         // Set text color based on theme mode
         int textColor, cardColor;
         MainActivity mainActivity = (MainActivity) holder.itemView.getContext();

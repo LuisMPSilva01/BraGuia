@@ -1,4 +1,4 @@
-package com.example.braguia.ui.Services;
+package com.example.braguia.viewmodel.Services;
 
 import android.Manifest;
 import android.app.AlertDialog;

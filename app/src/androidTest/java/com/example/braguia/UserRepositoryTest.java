@@ -48,11 +48,11 @@ public class UserRepositoryTest {
     public void testInsertAndGetUser() throws Throwable {
         CountDownLatch latch = new CountDownLatch(1);
         User user = new User("John", "Premium");
-        userRepository.setUsername("John");
+        userRepository.setUser(user);
         userRepository.insert(user);
 
         // Define an observer to check the result of the getUser method
-        Observer<User> userObserver = new Observer<User>() {
+        Observer<User> userObserver = new Observer<>() {
             @Override
             public void onChanged(User u) {
                 assertNotNull(u);

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.braguia.R;
 import com.example.braguia.model.trails.Edge;
 import com.example.braguia.model.trails.Trail;
-import com.example.braguia.ui.EdgesRecyclerViewAdapter;
+import com.example.braguia.ui.viewAdapters.EdgesRecyclerViewAdapter;
 import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.util.ArrayList;

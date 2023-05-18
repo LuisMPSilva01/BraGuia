@@ -2,14 +2,16 @@ package com.example.braguia.viewmodel;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
-import com.example.braguia.ui.Services.Trip;
+import com.example.braguia.viewmodel.Services.Trip;
 import com.example.braguia.model.user.User;
 import com.example.braguia.repositories.UserRepository;
 
@@ -78,13 +80,10 @@ public class UserViewModel extends AndroidViewModel {
         return repository.getTrailMetricsById(id);
     }
 
-    public void addMetrics(int trailId,float completedPercentage,float timeTaken,List<Integer> vizitedPins){
-        repository.addTrailMetrics(trailId,
-                completedPercentage,
-                timeTaken,
-                TrailMetrics.formatPinList(vizitedPins));
+    public boolean getDarkModePreference(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("darkModeSwitchState",true);
     }
-
     public void addMetrics(Trip trip){
         repository.addTrailMetrics(trip);
     }

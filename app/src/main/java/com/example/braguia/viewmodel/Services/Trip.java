@@ -1,4 +1,4 @@
-package com.example.braguia.ui.Services;
+package com.example.braguia.viewmodel.Services;
 
 import android.content.Context;
 import android.location.Location;
@@ -19,16 +19,22 @@ public class Trip implements Serializable {
     private final Trail trail;
     private final List<EdgeTip> percorridos;
     private final List<EdgeTip> previstos;
+    private final String username;
 
-    public Trip(Trail trail) {
+    public String getUsername() {
+        return username;
+    }
+
+    public Trip(Trail trail, String username) {
         this.timeStart = new Date().getTime();
         this.distance = 0;
         this.trail=trail;
         this.percorridos= new ArrayList<>();
         this.previstos=trail.getRoute();
+        this.username=username;
     }
 
-    public TrailMetrics finish(String username) {
+    public TrailMetrics finish() {
         float percentageCompletion = (float) percorridos.size()/(previstos.size()+percorridos.size())*100;
         float timeTaken = (float) (new Date().getTime() - timeStart)/1000; //returns in seconds
         List<Integer> p= percorridos.stream().map(EdgeTip::getId).collect(Collectors.toList());
@@ -36,12 +42,6 @@ public class Trip implements Serializable {
     }
 
     public EdgeTip verifyPins(Location location) {
-        /*
-        for (EdgeTip pin:previstos){
-                percorridos.add(pin);
-                previstos.remove(pin);
-                return pin;
-        }*/
         for (EdgeTip pin:previstos){
             float distance = pin.getLocation().distanceTo(location);
             if(distance <= 50){

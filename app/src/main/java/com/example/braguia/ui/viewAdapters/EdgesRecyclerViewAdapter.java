@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.viewAdapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -18,7 +18,6 @@ import com.example.braguia.R;
 import com.example.braguia.model.trails.Edge;
 import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.ui.Activitys.MainActivity;
-import com.example.braguia.viewAdapters.EdgeTipViewAdapter;
 
 import java.util.List;
 

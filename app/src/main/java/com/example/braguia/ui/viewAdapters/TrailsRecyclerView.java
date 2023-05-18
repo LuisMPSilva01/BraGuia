@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.viewAdapters;
 
 import android.view.View;
 import android.widget.ImageView;

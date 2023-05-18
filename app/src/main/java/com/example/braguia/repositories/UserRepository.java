@@ -18,18 +18,18 @@ import androidx.test.core.app.ApplicationProvider;
 import com.example.braguia.model.GuideDatabase;
 import com.example.braguia.model.TrailMetrics.TrailMetrics;
 import com.example.braguia.model.TrailMetrics.TrailMetricsDAO;
+import com.example.braguia.model.trails.EdgeTip;
 import com.example.braguia.model.trails.Trail;
 import com.example.braguia.model.user.User;
 import com.example.braguia.model.user.UserAPI;
 import com.example.braguia.model.user.UserDAO;
-import com.example.braguia.ui.Services.Trip;
+import com.example.braguia.viewmodel.Services.Trip;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import okhttp3.Headers;
@@ -42,7 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class UserRepository {
     public UserDAO userDAO;
     public TrailMetricsDAO trailMetricsDAO;
-    public MediatorLiveData<String> userName;
+    public MediatorLiveData<User> user;
     private final GuideDatabase database;
     private final Retrofit retrofit;
     private final UserAPI api;
@@ -67,22 +67,32 @@ public class UserRepository {
                 .build();
         api = retrofit.create(UserAPI.class);
 
-        userName = new MediatorLiveData<>();
+        user = new MediatorLiveData<>();
+
         SharedPreferences sharedPreferences = application.getApplicationContext().getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
+        String cookies = sharedPreferences.getString("cookies", "");
+        updateUserAPI(cookies);
         lastUser = sharedPreferences.getString("lastUser", "");
 
-        userName.addSource(getCookies(application.getApplicationContext()), updatedCookies ->{
-            Log.e("Debug","updated cookiies");
-            updateUserAPI(updatedCookies,userName);
+        if(lastUser==null || lastUser.equals("")){
+            user.postValue(new User("", "loggedOff"));
+        }
+        user.addSource(userDAO.getUserByUsername(lastUser),localUser -> {
+            if(lastUser==null || lastUser.equals("")){
+                user.postValue(new User("", "loggedOff"));
+            }
+            else if(localUser!=null){
+                user.postValue(localUser);
+            }
         });
     }
 
     public LiveData<List<TrailMetrics>> getTrailMetrics(){
-        return Transformations.switchMap(userName, name -> {
-            if (name == null) {
+        return Transformations.switchMap(user, user -> {
+            if (user == null) {
                 return new MutableLiveData<>(Collections.emptyList());
             } else {
-                return trailMetricsDAO.getMetricsByUsername(name);
+                return trailMetricsDAO.getMetricsByUsername(user.getUsername());
             }
         });
     }
@@ -91,64 +101,45 @@ public class UserRepository {
         return trailMetricsDAO.getMetricsById(id);
     }
 
-    public void addTrailMetrics(int trailId, float completedPercentage, float timeTaken, String pinIds) {
-        LiveData<User> userLiveData = getUser();
-        Observer<User> observer = new Observer<>() {
-            @Override
-            public void onChanged(User user) {
-                if (user != null) {
-                    TrailMetrics trailMetrics = new TrailMetrics(user.getUsername(),trailId,completedPercentage,timeTaken,pinIds);
-                    new InsertTrailMetricsAsync(trailMetricsDAO).execute(trailMetrics);
-                    userLiveData.removeObserver(this);
-                }
-            }
-        };
-        userLiveData.observeForever(observer);
-    }
-
     public void addTrailMetrics(Trip trip) {
-        LiveData<User> userLiveData = getUser();
-        Observer<User> observer = new Observer<>() {
+        TrailMetrics trailMetrics = trip.finish();
+        LiveData<User> userLiveData = userDAO.getUserByUsername(trip.getUsername());
+
+        Observer<User> userObserver = new Observer<>() {
             @Override
             public void onChanged(User user) {
                 if (user != null) {
-                    TrailMetrics trailMetrics = trip.finish(user.getUsername());
                     new InsertTrailMetricsAsync(trailMetricsDAO).execute(trailMetrics);
                     userLiveData.removeObserver(this);
                 }
             }
         };
-        userLiveData.observeForever(observer);
+        userLiveData.observeForever(userObserver);
     }
 
 
-    public void updateUserAPI(String cookies,MediatorLiveData<String> userName) {
+    public void updateUserAPI(String cookies) {
         if(cookies!=""){
             Log.e("DEBUG","Cookies:"+cookies);
             Call<User> call = api.getUser(cookies);
-            call.enqueue(new Callback<User>() {
+            call.enqueue(new Callback<>() {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
                     if (response.isSuccessful()) {
                         User user = response.body();
                         String responseBody = response.body().toString();
                         Log.e("Retrofit", "Response Body: " + responseBody);
-                        userName.postValue(user.getUsername());
                         insert(user);
                     } else {
                         Log.e("Retrofit", "Unsuccessful Response: " + response);
-                        userName.postValue("");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<User> call, Throwable t) {
                     Log.e("Retrofit", "Response error:" + t.getMessage());
-                    userName.postValue(lastUser);
                 }
             });
-        } else {
-            userName.postValue("");
         }
     }
     public LiveData<String> getCookies(Context context) {
@@ -181,28 +172,27 @@ public class UserRepository {
         body.addProperty("username", username);
         body.addProperty("email", "");
         body.addProperty("password", password);
-        lastUser=username;
         Call<User> call = api.login(body);
 
-        call.enqueue(new retrofit2.Callback<User>() {
+        call.enqueue(new retrofit2.Callback<>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if(response.isSuccessful()) {
-                    User user =  new User(username,"premium");
+                if (response.isSuccessful() && response.body()!=null) {
+                    User user = new User(username,"notDefined");
                     // Store the cookies
                     Headers headers = response.headers();
-                    List<String> cookies = headers.values("Set-Cookie").stream().map(e->e.split(";")[0]).collect(Collectors.toList());
+                    List<String> cookies = headers.values("Set-Cookie").stream().map(e -> e.split(";")[0]).collect(Collectors.toList());
                     if (!cookies.isEmpty()) { //Insert cookie into SharedPreferences
+                        lastUser=username;
                         String cookieString = TextUtils.join(";", cookies);
                         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putString("cookies", cookieString).apply();
-                        sharedPreferences.edit().putString("lastUser", user.getUsername()).apply();
+                        updateUserAPI(cookieString);
+                        sharedPreferences.edit().putString("lastUser", username).apply();
                     }
-                    insert(user); //Insert user into user DataBase
                     callback.onLoginSuccess();
-                }
-                else{
-                    Log.e("main", "onFailure: "+response.errorBody());
+                } else {
+                    Log.e("main", "onFailure: " + response.errorBody());
                     callback.onLoginFailure();
                 }
             }
@@ -210,7 +200,7 @@ public class UserRepository {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Log.e("main", "onFailure: " + t.getMessage());
-                Log.e("main", "message: "+ t.getCause());
+                Log.e("main", "message: " + t.getCause());
                 callback.onLoginFailure();
             }
         });
@@ -224,12 +214,12 @@ public class UserRepository {
     public void makeLogOutRequest(Context context,final LogoutCallback callback) throws IOException {
         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
         String storedCookieString = sharedPreferences.getString("cookies", "");
-        lastUser="";
         Call<User> call = api.logout(storedCookieString);
         call.enqueue(new retrofit2.Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.isSuccessful()) {
+                    lastUser="";
                     SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                     sharedPreferences.edit().putString("cookies", "").apply();
                     sharedPreferences.edit().putString("lastUser", "").apply();
@@ -257,30 +247,12 @@ public class UserRepository {
 
 
     public LiveData<User> getUser() {
-        MediatorLiveData<User> userLiveData = new MediatorLiveData<>();
-        final LiveData<User>[] currentSource = new LiveData[]{null};
-        userLiveData.addSource(userName, userName -> {
-
-            if (currentSource[0] != null) {
-                userLiveData.removeSource(currentSource[0]);
-            }
-            if (userName != null && !userName.equals("")) {
-                currentSource[0] = userDAO.getUserByUsername(userName);
-                userLiveData.addSource(currentSource[0], u -> {
-                    if (u != null) {
-                        userLiveData.postValue(u);
-                    }
-                });
-            } else {
-                userLiveData.postValue(new User("", "loggedOff"));
-            }
-        });
-        return userLiveData;
+        return user;
     }
 
-    public void setUsername(String fixedUsername) {
-        this.userName = new MediatorLiveData<>();
-        this.userName.postValue(fixedUsername);
+    public void setUser(User fixedUser) {
+        this.user = new MediatorLiveData<>();
+        this.user.postValue(fixedUser);
     }
 
 

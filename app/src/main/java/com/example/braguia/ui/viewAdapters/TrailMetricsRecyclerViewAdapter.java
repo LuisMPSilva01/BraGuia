@@ -1,4 +1,4 @@
-package com.example.braguia.ui;
+package com.example.braguia.ui.viewAdapters;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;

@@ -33,7 +33,6 @@ public class AppInfoRepository {
         appInfo = new MediatorLiveData<>();
         appInfo.addSource(
                 appInfoDAO.getAppInfo(), localAppInfo -> {
-                    // TODO: ADD cache validation logic
                     if (localAppInfo != null) {
                         appInfo.setValue(localAppInfo);
                     } else {
@@ -50,7 +49,6 @@ public class AppInfoRepository {
     public void insert(AppInfo appInfo){
         new InsertAsyncTask(appInfoDAO).execute(appInfo);
     }
-
     private void makeRequest() throws IOException {
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl("https://c5a2-193-137-92-29.eu.ngrok.io/")

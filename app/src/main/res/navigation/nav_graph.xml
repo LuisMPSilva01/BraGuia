@@ -16,9 +16,6 @@
             android:id="@+id/action_homeFragment_to_discoverFragment"
             app:destination="@id/discoverFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_contactsListFragment"
-            app:destination="@id/contactsListFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_socialsListFragment"
             app:destination="@id/socialsListFragment" />
         <action
@@ -30,6 +27,9 @@
         <action
             android:id="@+id/action_homeFragment_to_definitionsFragment"
             app:destination="@id/definitionsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_emergencyContactsFragment"
+            app:destination="@id/emergencyContactsFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -48,11 +48,6 @@
             android:id="@+id/action_discoverFragment_to_trailDescriptionFragment"
             app:destination="@id/trailDescriptionFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/contactsListFragment"
-        android:name="com.example.braguia.ui.Fragments.ContactsListFragment"
-        android:label="fragment_contacts_list"
-        tools:layout="@layout/fragment_contacts_list" />
     <fragment
         android:id="@+id/socialsListFragment"
         android:name="com.example.braguia.ui.Fragments.SocialsListFragment"
@@ -78,7 +73,11 @@
     <fragment
         android:id="@+id/trailMetricsDescriptionFragment"
         android:name="com.example.braguia.ui.Fragments.TrailMetricsDescriptionFragment"
-        android:label="TrailMetricsDescriptionFragment" />
+        android:label="TrailMetricsDescriptionFragment" >
+        <action
+            android:id="@+id/action_trailMetricsDescriptionFragment_to_pinFragment"
+            app:destination="@id/pinFragment" />
+    </fragment>
     <fragment
         android:id="@+id/trailHistoryFragment"
         android:name="com.example.braguia.ui.Fragments.TrailHistoryFragment"
@@ -91,4 +90,9 @@
         android:id="@+id/definitionsFragment"
         android:name="com.example.braguia.ui.Fragments.DefinitionsFragment"
         android:label="DefinitionsFragment" />
+    <fragment
+        android:id="@+id/emergencyContactsFragment"
+        android:name="com.example.braguia.ui.Fragments.EmergencyContactsFragment"
+        android:label="fragment_emergency_contacts"
+        tools:layout="@layout/fragment_emergency_contacts" />
 </navigation>

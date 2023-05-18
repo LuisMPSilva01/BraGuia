@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.braguia.R;
 import com.example.braguia.model.trails.EdgeTip;
-import com.example.braguia.viewAdapters.EdgeTipViewAdapter;
+import com.example.braguia.ui.viewAdapters.EdgeTipViewAdapter;
 import com.example.braguia.viewmodel.TrailViewModel;
 
 import java.util.List;
