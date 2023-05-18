@@ -86,8 +86,14 @@ public class Servico extends Service {
             createNotificationChannel();
             Intent notificationIntent = new Intent(this, NavigationActivity.class);
             notificationIntent.putExtra("trip", trip);
+
+            // Generate a unique request code using current timestamp
+            long timestamp = System.currentTimeMillis();
+            int requestCode = (int) timestamp;
+
             PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                    0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+                    requestCode, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+
             Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("Trip started")
                     .setContentText(trip.getTrail().getTrail_name())
