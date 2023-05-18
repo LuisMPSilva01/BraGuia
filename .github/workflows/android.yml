@@ -15,8 +15,10 @@ jobs:
       with:
         java-version: 17
     - name: Generate Release APK
-      run: ./gradlew assembleRelease
-
+      run: |
+        echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+        ./gradlew assembleRelease
+  
     - name: Sign APK
       uses: r0adkll/sign-android-release@v1
       id: sign_app
