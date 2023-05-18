@@ -101,7 +101,8 @@ public class UserRepository {
             if (user == null) {
                 return new MutableLiveData<>(Collections.emptyList());
             } else {
-                return trailMetricsDAO.getMetricsByUsername(user.getUsername());
+                return trailMetricsDAO.getAllMetrics();
+                //return trailMetricsDAO.getMetricsByUsername(user.getUsername());
             }
         });
     }
@@ -112,18 +113,7 @@ public class UserRepository {
 
     public void addTrailMetrics(Trip trip) {
         TrailMetrics trailMetrics = trip.finish();
-        LiveData<User> userLiveData = userDAO.getUserByUsername(trip.getUsername());
-
-        Observer<User> userObserver = new Observer<>() {
-            @Override
-            public void onChanged(User user) {
-                if (user != null) {
-                    new InsertTrailMetricsAsync(trailMetricsDAO).execute(trailMetrics);
-                    userLiveData.removeObserver(this);
-                }
-            }
-        };
-        userLiveData.observeForever(userObserver);
+        new InsertTrailMetricsAsync(trailMetricsDAO).execute(trailMetrics);
     }
 
 
@@ -226,7 +216,7 @@ public class UserRepository {
         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
         String storedCookieString = sharedPreferences.getString("cookies", "");
         Call<User> call = api.logout(storedCookieString);
-        call.enqueue(new retrofit2.Callback<User>() {
+        call.enqueue(new retrofit2.Callback<>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
@@ -276,7 +266,7 @@ public class UserRepository {
 
         @Override
         protected Void doInBackground(User... users) {
-            userDAO.insert(users[0]);
+            userDAO.insertOrUpdate(users[0]);
             return null;
         }
     }

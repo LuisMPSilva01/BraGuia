@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.braguia.model.trails.Trail;
+import com.example.braguia.model.user.User;
 
 import java.util.List;
 
@@ -14,6 +15,9 @@ import java.util.List;
 public interface TrailMetricsDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(TrailMetrics trailMetrics);
+
+    @Query("SELECT DISTINCT * FROM trail_metrics")
+    LiveData<List<TrailMetrics>> getAllMetrics();
 
     @Query("SELECT * FROM trail_metrics WHERE metricId = :id")
     LiveData<TrailMetrics> getMetricsById(int id);

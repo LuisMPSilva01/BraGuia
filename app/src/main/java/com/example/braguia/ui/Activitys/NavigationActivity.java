@@ -157,6 +157,6 @@ public class NavigationActivity extends AppCompatActivity {
         Toast.makeText(this, "Registed metrics in the history", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-        finish();
+        finishAffinity();
     }
 }
