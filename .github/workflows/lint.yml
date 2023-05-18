@@ -16,4 +16,5 @@ jobs:
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
     - name: Run build with Gradle Wrapper
+      working-directory: ./Braguia
       run: ./gradlew build
