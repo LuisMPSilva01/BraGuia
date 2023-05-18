@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
-        Toast.makeText(getContext(),"Setting up",Toast.LENGTH_LONG).show();
+
         adapter = new TrailsHomeRecyclerViewAdapter(trails);
         recyclerView.setAdapter(adapter);
 

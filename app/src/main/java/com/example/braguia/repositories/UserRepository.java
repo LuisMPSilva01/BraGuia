@@ -172,24 +172,24 @@ public class UserRepository {
         body.addProperty("username", username);
         body.addProperty("email", "");
         body.addProperty("password", password);
-        lastUser=username;
         Call<User> call = api.login(body);
 
         call.enqueue(new retrofit2.Callback<>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                if (response.isSuccessful()) {
-                    User user = new User(username, "premium");
+                if (response.isSuccessful() && response.body()!=null) {
+                    User user = new User(username,"notDefined");
                     // Store the cookies
                     Headers headers = response.headers();
                     List<String> cookies = headers.values("Set-Cookie").stream().map(e -> e.split(";")[0]).collect(Collectors.toList());
                     if (!cookies.isEmpty()) { //Insert cookie into SharedPreferences
+                        lastUser=username;
                         String cookieString = TextUtils.join(";", cookies);
                         SharedPreferences sharedPreferences = context.getSharedPreferences("BraguiaPreferences", Context.MODE_PRIVATE);
                         sharedPreferences.edit().putString("cookies", cookieString).apply();
-                        sharedPreferences.edit().putString("lastUser", user.getUsername()).apply();
+                        updateUserAPI(cookieString);
+                        sharedPreferences.edit().putString("lastUser", username).apply();
                     }
-                    insert(user); //Insert user into user DataBase
                     callback.onLoginSuccess();
                 } else {
                     Log.e("main", "onFailure: " + response.errorBody());
