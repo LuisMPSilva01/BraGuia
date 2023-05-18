@@ -114,27 +114,27 @@ public class TrailRepository {
                 }
         }
     }
-    private void save_media_file(String file_url){
+    private void save_media_file(String file_url) {
         URL url = null;
         String destinationPath;
         try {
             url = new URL(file_url.replace("http", "https"));
-            InputStream inputStream = url.openStream();
-            destinationPath = file_url.replace("http://","").replace("/","");
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                try (FileOutputStream fos = context.openFileOutput(destinationPath, Context.MODE_PRIVATE)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        fos.write(inputStream.readAllBytes());
+            try (InputStream inputStream = url.openStream()) {
+                destinationPath = file_url.replace("http://", "").replace("/", "");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    try (FileOutputStream fos = context.openFileOutput(destinationPath, Context.MODE_PRIVATE)) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            fos.write(inputStream.readAllBytes());
+                        }
                     }
                 }
-
-                Log.d("FILE","created");
+                Log.d("FILE", "created");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
+
 
     public void insert(List<Trail> trails){
         new InsertAsyncTask(trailDAO).execute(trails);
@@ -147,16 +147,15 @@ public class TrailRepository {
                 .build();
         TrailAPI api = retrofit.create(TrailAPI.class);
         Call<List<Trail>> call = api.getTrails();
-        call.enqueue(new retrofit2.Callback<List<Trail>>() {
+        call.enqueue(new retrofit2.Callback<>() {
             @Override
 
             public void onResponse(Call<List<Trail>> call, Response<List<Trail>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     insert(response.body());
 
-                }
-                else{
-                    Log.e("main", "onFailure: "+response.errorBody());
+                } else {
+                    Log.e("main", "onFailure: " + response.errorBody());
                 }
             }
 

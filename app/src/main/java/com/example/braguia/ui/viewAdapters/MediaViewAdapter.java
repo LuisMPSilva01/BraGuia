@@ -40,7 +40,8 @@ public class MediaViewAdapter {
                 Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                 view.setImageBitmap(bitmap);
             }else if(isConnected){
-                Picasso.get().load(medium.getMedia_file().replace("http", "https")).into(view);
+                Picasso.get().load(medium.getMedia_file().replace("http", "https"))
+                        .error(R.drawable.no_preview_image).into(view);
             }else{
                 Drawable defaultDrawable = ContextCompat.getDrawable(context, R.drawable.no_preview_image);
                 view.setImageDrawable(defaultDrawable);
@@ -95,7 +96,6 @@ public class MediaViewAdapter {
                 }
                 return true;
             });
-
             return false;
         }
         return true;

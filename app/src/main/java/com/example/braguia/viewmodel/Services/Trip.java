@@ -21,7 +21,11 @@ public class Trip implements Serializable {
     private final List<EdgeTip> previstos;
     private final String username;
 
-    public Trip(Trail trail,String username) {
+    public String getUsername() {
+        return username;
+    }
+
+    public Trip(Trail trail, String username) {
         this.timeStart = new Date().getTime();
         this.distance = 0;
         this.trail=trail;

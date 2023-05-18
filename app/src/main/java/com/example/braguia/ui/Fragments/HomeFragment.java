@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(gridLayoutManager);
-
+        Toast.makeText(getContext(),"Setting up",Toast.LENGTH_LONG).show();
         adapter = new TrailsHomeRecyclerViewAdapter(trails);
         recyclerView.setAdapter(adapter);
 
@@ -100,7 +100,6 @@ public class HomeFragment extends Fragment {
             adapter.setOnItemClickListener(this::replaceFragment);
         } else {
             adapter.setOnItemClickListener(e->{
-                Toast.makeText(getContext(),"Only premium users can use this feature",Toast.LENGTH_LONG).show();
             });
         }
     }

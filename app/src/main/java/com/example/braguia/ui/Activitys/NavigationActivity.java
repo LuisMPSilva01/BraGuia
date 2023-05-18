@@ -102,8 +102,8 @@ public class NavigationActivity extends AppCompatActivity {
         titulo.setText(trail.getTrail_name());
 
         ImageView imagem = findViewById(R.id.trailImageDescription);
-        Picasso.get().load(trail.getTrail_img()
-                        .replace("http", "https"))
+        Picasso.get().load(trail.getTrail_img().replace("http", "https"))
+                .error(R.drawable.no_preview_image)
                 .into(imagem);
 
         Button stop = findViewById(R.id.start_trip_button);
