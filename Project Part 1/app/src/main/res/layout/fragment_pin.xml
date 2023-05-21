@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/pin_title"
+        android:layout_width="174dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="64dp"
+        android:gravity="center"
+        android:text="Pin title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText,MissingConstraints" />
+
+
+    <ImageView
+        android:id="@+id/pin_img"
+        android:layout_width="159dp"
+        android:layout_height="155dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/no_preview_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pin_title"
+        tools:ignore="ContentDescription" />
+
+    <VideoView
+        android:id="@+id/pin_vid"
+        android:layout_width="159dp"
+        android:layout_height="155dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/start_vid_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/pin_img"
+        app:layout_constraintTop_toBottomOf="@+id/pin_title" />
+
+
+    <TextView
+        android:id="@+id/pin_description"
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Pin description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.616"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/audio_playbutton"
+        tools:ignore="HardcodedText" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/pin_mapView"
+        android:layout_width="325dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="44dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pin_description"
+        tools:ignore="MissingConstraints" />
+
+    <View
+        android:id="@+id/transparent_overlay"
+        android:layout_width="325dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="44dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pin_description" />
+
+    <Button
+        android:id="@+id/audio_playbutton"
+        android:layout_width="115dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="16dp"
+        android:text="Audio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.179"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pin_img"
+        tools:ignore="HardcodedText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

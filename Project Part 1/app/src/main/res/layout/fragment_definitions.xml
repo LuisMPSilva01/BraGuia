@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/definitions_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/localization_switch"
+        android:layout_width="230dp"
+        android:layout_height="40dp"
+        app:actionLayout="@layout/switch_item"
+        android:text="Enable localization service"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.148"
+        tools:ignore="HardcodedText" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/dark_mode_switch"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/localization_switch"
+        app:layout_constraintVertical_bias="0.088"
+        app:actionLayout="@layout/switch_item"
+        android:layout_width="230dp"
+        android:layout_height="40dp"
+        android:text="Enable dark mode"
+        tools:layout_editor_absoluteX="117dp"
+        tools:layout_editor_absoluteY="218dp"
+        tools:ignore="HardcodedText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

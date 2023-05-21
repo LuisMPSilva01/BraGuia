@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.braguia.ui.Fragments.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment2"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_discoverFragment"
+            app:destination="@id/discoverFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_socialsListFragment"
+            app:destination="@id/socialsListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_partnersListFragment"
+            app:destination="@id/partnersListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_trailDescriptionFragment"
+            app:destination="@id/trailDescriptionFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_definitionsFragment"
+            app:destination="@id/definitionsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_emergencyContactsFragment"
+            app:destination="@id/emergencyContactsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.braguia.ui.Fragments.ProfileFragment"
+        android:label="ProfileFragment" >
+        <action
+            android:id="@+id/action_profileFragment_to_trailHistoryFragment"
+            app:destination="@id/trailHistoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/discoverFragment"
+        android:name="com.example.braguia.ui.Fragments.DiscoverFragment"
+        android:label="fragment_discover"
+        tools:layout="@layout/fragment_discover" >
+        <action
+            android:id="@+id/action_discoverFragment_to_trailDescriptionFragment"
+            app:destination="@id/trailDescriptionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/socialsListFragment"
+        android:name="com.example.braguia.ui.Fragments.SocialsListFragment"
+        android:label="fragment_socials_list"
+        tools:layout="@layout/fragment_socials_list" />
+    <fragment
+        android:id="@+id/partnersListFragment"
+        android:name="com.example.braguia.ui.Fragments.PartnersListFragment"
+        android:label="fragment_partners_list"
+        tools:layout="@layout/fragment_partners_list" />
+    <fragment
+        android:id="@+id/trailDescriptionFragment"
+        android:name="com.example.braguia.ui.Fragments.TrailDescriptionFragment"
+        android:label="TrailDescriptionFragment" >
+        <action
+            android:id="@+id/action_trailDescriptionFragment_to_pinFragment"
+            app:destination="@id/pinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pinFragment"
+        android:name="com.example.braguia.ui.Fragments.PinFragment"
+        android:label="PinFragment" />
+    <fragment
+        android:id="@+id/trailMetricsDescriptionFragment"
+        android:name="com.example.braguia.ui.Fragments.TrailMetricsDescriptionFragment"
+        android:label="TrailMetricsDescriptionFragment" >
+        <action
+            android:id="@+id/action_trailMetricsDescriptionFragment_to_pinFragment"
+            app:destination="@id/pinFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trailHistoryFragment"
+        android:name="com.example.braguia.ui.Fragments.TrailHistoryFragment"
+        android:label="TrailHistoryFragment" >
+        <action
+            android:id="@+id/action_trailHistoryFragment_to_trailMetricsDescriptionFragment"
+            app:destination="@id/trailMetricsDescriptionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/definitionsFragment"
+        android:name="com.example.braguia.ui.Fragments.DefinitionsFragment"
+        android:label="DefinitionsFragment" />
+    <fragment
+        android:id="@+id/emergencyContactsFragment"
+        android:name="com.example.braguia.ui.Fragments.EmergencyContactsFragment"
+        android:label="fragment_emergency_contacts"
+        tools:layout="@layout/fragment_emergency_contacts" />
+</navigation>
