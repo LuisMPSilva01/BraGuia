@@ -15,3 +15,12 @@ web-build/
 
 # Temporary files created by Metro to check the health of the file watcher
 .metro-health-check*
+
+Project Part 1/.gradle/
+Project Part 1/.idea/
+Project Part 1/app/build/
+Project Part 1/local.properties
+package.json
+.idea/modules.xml
+.idea/BraGuia.iml
+.idea/vcs.xml
