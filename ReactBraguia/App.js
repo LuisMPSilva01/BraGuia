@@ -1,20 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, FlatList, Text, View} from 'react-native';
+import { Logs } from 'expo'
 
-export default function App() {
+Logs.enableExpoCliLogging()
+
+const App = () => {
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+
+  const getTrails = async () => {
+    try {
+      const response = await fetch('https://c5a2-193-137-92-29.eu.ngrok.io/trails');
+      const json = await response.json();
+      const trail = json[0];
+      setData(json);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      console.log(data);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getTrails();
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Hello World!</Text>
-      <StatusBar style="auto" />
+    <View style={{flex: 1, padding: 24}}>
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        <FlatList
+          data={data}
+        />
+      )}
     </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
