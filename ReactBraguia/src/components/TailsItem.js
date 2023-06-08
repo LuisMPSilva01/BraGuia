@@ -2,7 +2,7 @@ import { TouchableOpacity, View, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 
-const TrailsItem = ({ trail,key }) => {
+const TrailsItem = ({ trail }) => {
 
     const navigation = useNavigation();
 

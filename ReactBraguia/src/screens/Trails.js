@@ -44,7 +44,7 @@ const Trails = () => {
       <ScrollView>
         {searchResults.length > 0 ? (
           searchResults.map((trail,index) => (
-            <TrailsItem trail={trail} key={index}/>
+            <TrailsItem trail={trail} />
           ))
         ) : (
         <View style={{ padding: 20 }}>

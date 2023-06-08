@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Image } from 'react-native';
 import ToggleButton from '../components/ToggleButton';
+import PinsSlide from '../components/PinsSlide';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 
 const Trail = ({ route }) => {
@@ -32,6 +33,8 @@ const Trail = ({ route }) => {
                   title={edge.edge_start.title} />
         ))}
       </MapView>
+      <PinsSlide pins={trail.edges}/>
+      
     </View>
   );
 };
