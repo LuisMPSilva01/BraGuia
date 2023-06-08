@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import Trails from './src/screens/Trails';
 import Home from './src/screens/Home';
-import Trail from './src/screens/Trail'
+import Trail from './src/screens/Trail';
+import Pin from './src/screens/Pin';
 import Login from './src/screens/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -24,6 +25,7 @@ const App = () => {
           <Stack.Screen name="Home"  component={Home}/>
           <Stack.Screen name="Trails"  component={Trails} />
           <Stack.Screen name="Trail"  component={Trail} />
+          <Stack.Screen name="Pin"  component={Pin} />
           {/* Add more screens here */}
           </Stack.Navigator>
         </NavigationContainer>
