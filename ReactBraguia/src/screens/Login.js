@@ -21,84 +21,80 @@ const LoginActivity = () => {
     });
   }, [navigation]);
 
-
   const handleLogin = () => {
-    try {
-      validate();
-    } catch (error) {
-      setLoginFailed(true);
-    }
-  }
-  
-
+    validate()
+      .catch(() => {
+        setLoginFailed(true);
+      });
+  };
 
   const validate = () => {
-    try {
+    return new Promise((resolve, reject) => {
       if (username.trim() === '' || password === '') {
         console.log("invalid name");
-        throw new Error('Login failed');
+        reject(new Error('Login failed'));
       } else {
         console.log("valid name");
-        makeLoginRequest({
-          onLoginSuccess: () => {
-          },
-          onLoginFailure: () => {
+        makeLoginRequest()
+          .then(() => {
+            resolve();
+          })
+          .catch(() => {
             setLoginFailed(true);
-          }
-        });
+            reject(new Error('Login failed'));
+          });
       }
-    } catch (error) {
-      setLoginFailed(true);
-    }
+    });
   };
-  
 
-  const makeLoginRequest = async (callback) => {
+  const makeLoginRequest = () => {
     const body = {
       username: username.trim(),
       email: "",
       password: password,
     };
     console.log(body);
-    try {
-      console.log("Started login request")
-      const response = await fetch('https://c5a2-193-137-92-29.eu.ngrok.io/login', {
-        credentials: 'omit',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
 
-      if (response.ok) {
-        console.log("response ok");
-        const cookies = response.headers.map['set-cookie'];
-        console.log(cookies)
-        const csrfTokenMatch = cookies.match(/csrftoken=([^;]+)/);
-        const sessionIdMatch = cookies.match(/sessionid=([^;]+)/);
-        const csrfToken = csrfTokenMatch ? csrfTokenMatch[0] : null;
-        const sessionId = sessionIdMatch ? sessionIdMatch[0] : null;
-        console.log(csrfToken);
-        console.log(sessionId);
-        
-        if (csrfTokenMatch.length===2) {
-          // Save cookies in Redux store
-          console.log("Saved Cookie")
-          dispatch(setCookies(csrfToken));
-          callback.onLoginSuccess();
+    console.log("Started login request");
+    return fetch('https://c5a2-193-137-92-29.eu.ngrok.io/login', {
+      credentials: 'omit',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log("response ok");
+          const cookies = response.headers.map['set-cookie'];
+          console.log(cookies)
+          const csrfTokenMatch = cookies.match(/csrftoken=([^;]+)/);
+          const sessionIdMatch = cookies.match(/sessionid=([^;]+)/);
+          const csrfToken = csrfTokenMatch ? csrfTokenMatch[0] : null;
+          const sessionId = sessionIdMatch ? sessionIdMatch[0] : null;
+          console.log(csrfToken);
+          console.log(sessionId);
+
+          if (csrfTokenMatch.length === 2) {
+            // Save cookies in Redux store
+            console.log("Saved Cookie")
+            dispatch(setCookies(csrfToken + ';' + sessionId));
+          }
+          else {
+            throw new Error('Login request failed');
+          }
+        } else {
+          console.log('Login request failed:', response.status);
+          throw new Error('Login request failed');
         }
-      } else {
-        console.log('Login request failed:', response.status);
-        callback.onLoginFailure();
-      }
-    } catch (error) {
-      console.log('Login request failed by error:', error);
-      callback.onLoginFailure();
-    }
+      })
+      .catch(error => {
+        console.log('Login request failed by error:', error);
+        throw new Error('Login request failed');
+      });
   };
 
-  
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
