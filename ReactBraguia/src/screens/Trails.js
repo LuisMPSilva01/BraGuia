@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import TrailsItem from '../components/TailsItem';
+import SearchBar from '../components/SearchBar';
+import BottomBar from '../components/BottomBar';
+import { StyleSheet } from 'react-native';
+
 
 const Trails = () => {
-  const [trails, setTrails] = useState([]); // Declare trails in the component's state
+  const [trails, setTrails] = useState([]); 
+  const [searchResults, setSearchResults] = useState([]);
 
   const getTrails = async () => {
     try {
@@ -16,6 +21,7 @@ const Trails = () => {
         difficulty: trail.trail_difficulty
       }));
       setTrails(trailData); // Update the trails state with the trail names and image URLs
+      setSearchResults(trailData);
     } catch (error) {
       console.error(error);
     }
@@ -25,20 +31,48 @@ const Trails = () => {
     getTrails();
   }, []);
 
+  const handleSearch = (query) => {;
+
+    if(query==""){
+      setSearchResults(trails)
+    }else{
+      const filteredData = trails.filter((trail) => {
+        return trail.name.includes(query)
+      });
+      setSearchResults(filteredData);
+    }
+    
+ 
+  };
   return (
-    <ScrollView>
-      {trails.length > 0 ? (
-        trails.map((trail, index) => (
-          <TrailsItem trail={trail}/>
-        ))
-      ) : (
+    <View style={styles.container}>
+      <SearchBar onSearch={handleSearch}/>
+      <ScrollView>
+        {searchResults.length > 0 ? (
+          searchResults.map((trail, index) => (
+            <TrailsItem trail={trail}/>
+          ))
+        ) : (
         <View style={{ padding: 20 }}>
           <Text>No trails available</Text>
         </View>
-      )}
-    </ScrollView>
+        )}
+      </ScrollView>
+      <BottomBar />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 export default Trails;
 
