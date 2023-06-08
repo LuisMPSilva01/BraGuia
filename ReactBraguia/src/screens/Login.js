@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, Text, Keyboard, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCookies } from '../actions/user';
+import { setCookies, updateUsername } from '../actions/user';
 
 const LoginActivity = () => {
   const navigation = useNavigation();
@@ -41,7 +41,6 @@ const LoginActivity = () => {
         console.log("valid name");
         makeLoginRequest({
           onLoginSuccess: () => {
-            navigation.navigate('Home');
           },
           onLoginFailure: () => {
             setLoginFailed(true);
@@ -56,9 +55,9 @@ const LoginActivity = () => {
 
   const makeLoginRequest = async (callback) => {
     const body = {
-      username: "premium_user",//username.trim(),
+      username: username.trim(),
       email: "",
-      password: "paiduser"//password,
+      password: password,
     };
     console.log(body);
     try {
@@ -88,8 +87,6 @@ const LoginActivity = () => {
           console.log("Saved Cookie")
           dispatch(setCookies(csrfToken));
           callback.onLoginSuccess();
-          // Update user API with cookies
-          //updateUserAPI(cookieString, callback);
         }
       } else {
         console.log('Login request failed:', response.status);

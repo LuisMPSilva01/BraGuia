@@ -2,6 +2,8 @@ import { View, Text } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import { StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import LogoutButton from '../components/LogOutButton';
+
 const Home = () => {
   const [appInfo, setAppInfo] = useState(''); 
   const getAppInfo = async () => {
@@ -24,6 +26,7 @@ const Home = () => {
       <Text style={styles.header}>Braguia - Your virtual guide in Braga</Text>
       <Text>{appInfo}</Text>
     </View>
+    <LogoutButton/>
     <BottomBar />
   </View>
   );

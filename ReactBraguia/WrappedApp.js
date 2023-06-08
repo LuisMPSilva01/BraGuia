@@ -6,12 +6,14 @@ import Login from './src/screens/Login';
 import Pin from './src/screens/Pin'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useSelector } from 'react-redux';
+import { useSelector ,useDispatch} from 'react-redux';
+import { resetState } from './src/actions/user';
 
 const Stack = createNativeStackNavigator();
 const WrappedApp = () => {
-  const loggedIn = useSelector((state) => state.cookies !== '');// Access the "loggedIn" variable from Redux state
-
+  const cookieValue = useSelector((state) => state.cookies.cookieVal);
+  const loggedIn = cookieValue !== "";
+  console.log("State:", useSelector((state) => state)); // Add this line
   useEffect(() => {
     // Perform any necessary initialization or side effects here
   }, []);
