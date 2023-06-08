@@ -1,6 +1,8 @@
-import React, { createContext,useEffect, useState , useContext } from 'react';
-import { View, TextInput, Button, Text, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, TextInput, Button, Text, Keyboard, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCookies } from '../actions/user';
 
 const LoginActivity = () => {
   const navigation = useNavigation();
@@ -8,8 +10,7 @@ const LoginActivity = () => {
   const [password, setPassword] = useState('');
   const [loginFailed, setLoginFailed] = useState(false);
 
-  const AppContext = createContext();
-  const appContext = useContext(AppContext);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const backButtonHandler = () => true;
@@ -18,26 +19,29 @@ const LoginActivity = () => {
         e.preventDefault();
       }
     });
-  }, []);
+  }, [navigation]);
+
 
   const handleLogin = () => {
     try {
-      validate(username.trim(), password);
+      validate();
     } catch (error) {
       setLoginFailed(true);
     }
-  };
+  }
+  
 
 
-  const validate = (userName, userPassword) => {
+  const validate = () => {
     try {
-      if (userName === '' || userPassword === '') {
+      if (username.trim() === '' || password === '') {
+        console.log("invalid name");
         throw new Error('Login failed');
       } else {
-        makeLoginRequest(username, password, appContext, {
+        console.log("valid name");
+        makeLoginRequest({
           onLoginSuccess: () => {
-            setLoginFailed(false);
-            changeToMainActivity();
+            navigation.navigate('Home');
           },
           onLoginFailure: () => {
             setLoginFailed(true);
@@ -50,39 +54,53 @@ const LoginActivity = () => {
   };
   
 
-  const makeLoginRequest = async (username, password, context, callback) => {
+  const makeLoginRequest = async (callback) => {
     const body = {
-      username: username,
-      email: '',
-      password: password
+      username: "premium_user",//username.trim(),
+      email: "",
+      password: "paiduser"//password,
     };
-  
+    console.log(body);
     try {
+      console.log("Started login request")
       const response = await fetch('https://c5a2-193-137-92-29.eu.ngrok.io/login', {
+        credentials: 'omit',
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
       });
-  
+
       if (response.ok) {
+        console.log("response ok");
         const cookies = response.headers.map['set-cookie'];
-        if (cookies && cookies.length > 0) {
-          const cookieString = cookies.map(cookie => cookie.split(';')[0]).join(';');
-          const sharedPreferences = context.getSharedPreferences('BraguiaPreferences', Context.MODE_PRIVATE);
-          sharedPreferences.edit().putString('cookies', cookieString).apply();
-          updateUserAPI(cookieString, callback, context);
+        console.log(cookies)
+        const csrfTokenMatch = cookies.match(/csrftoken=([^;]+)/);
+        const sessionIdMatch = cookies.match(/sessionid=([^;]+)/);
+        const csrfToken = csrfTokenMatch ? csrfTokenMatch[0] : null;
+        const sessionId = sessionIdMatch ? sessionIdMatch[0] : null;
+        console.log(csrfToken);
+        console.log(sessionId);
+        
+        if (csrfTokenMatch.length===2) {
+          // Save cookies in Redux store
+          console.log("Saved Cookie")
+          dispatch(setCookies(csrfToken));
+          callback.onLoginSuccess();
+          // Update user API with cookies
+          //updateUserAPI(cookieString, callback);
         }
       } else {
-        console.error('Login request failed:', response.status);
+        console.log('Login request failed:', response.status);
         callback.onLoginFailure();
       }
     } catch (error) {
-      console.error('Login request failed:', error);
+      console.log('Login request failed by error:', error);
       callback.onLoginFailure();
     }
   };
+
   
   const dismissKeyboard = () => {
     Keyboard.dismiss();
