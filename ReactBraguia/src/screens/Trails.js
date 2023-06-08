@@ -14,14 +14,8 @@ const Trails = () => {
     try {
       const response = await fetch('https://c5a2-193-137-92-29.eu.ngrok.io/trails');
       const json = await response.json();
-      const trailData = json.map((trail) => ({
-        name: trail.trail_name,
-        image: trail.trail_img,
-        duration: trail.trail_duration,
-        difficulty: trail.trail_difficulty
-      }));
-      setTrails(trailData); // Update the trails state with the trail names and image URLs
-      setSearchResults(trailData);
+      setTrails(json); // Update the trails state with the trail names and image URLs
+      setSearchResults(json);
     } catch (error) {
       console.error(error);
     }
@@ -49,8 +43,8 @@ const Trails = () => {
       <SearchBar onSearch={handleSearch}/>
       <ScrollView>
         {searchResults.length > 0 ? (
-          searchResults.map((trail, index) => (
-            <TrailsItem trail={trail}/>
+          searchResults.map((trail,index) => (
+            <TrailsItem trail={trail} key={index}/>
           ))
         ) : (
         <View style={{ padding: 20 }}>
