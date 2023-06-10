@@ -6,19 +6,20 @@ import PinsSlide from '../components/PinsSlide';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { useSelector, useDispatch } from 'react-redux';
 import { addTrip } from '../actions/user';
+import LocationTrack from '../backgroundServices/LocationTracker';
 
 const Trail = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
   const { trail } = route.params;
-  const initialRegion = {
+  const initialRegion = { 
     latitude: trail.edges[0].edge_start.pin_lat,
     longitude: trail.edges[0].edge_start.pin_lng,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
-  const coordinates = trail.edges.map((edge) => ({
+  const coordinates = trail.edges.map((edge) => ({//TODO update edges
     latitude: edge.edge_start.pin_lat,
     longitude: edge.edge_start.pin_lng,
   }));
@@ -28,6 +29,56 @@ const Trail = ({ route }) => {
   const handleButtonToggle = () => {
     setToggle(!isToggled);
   };
+
+
+  useEffect(() => {
+    const getLocation = () => { //TODO update edges
+      LocationTrack()
+        .then((location) => {
+          console.log(location);
+  
+          const { latitude, longitude } = location.coords;
+  
+          // Check if the current location is close to any of the trail edges
+  
+          const closeEdges = trail.edges.filter((edge) => {
+            const { pin_lat, pin_lng } = edge.edge_start;
+            const latDiff = Math.abs(pin_lat - latitude);
+            const lngDiff = Math.abs(pin_lng - longitude);
+  
+            // Check if the edge is not already present in the visitedTrips array
+            const isVisited = visitedTrips.some((visitedEdge) => visitedEdge.edge_start.id === edge.edge_start.id);
+            console.log("LatDiff:", latDiff);
+            console.log("LngDiff:", lngDiff);
+            console.log(isVisited);
+            return latDiff <= 0.9 && lngDiff <= 0.9 && !isVisited; // Adjust the tolerance values as needed
+          });
+  
+          // If close edges are found, add them to the visitedTrips state
+          console.log("Close edges:", closeEdges.length);
+          if (closeEdges.length > 0) {
+            setVisitedTrips((prevVisitedTrips) => [...prevVisitedTrips, ...closeEdges]);
+          }
+        })
+        .catch((error) => {
+          console.error("Error getting location:", error);
+        });
+    };
+  
+    const interval = setInterval(() => {
+      if (isToggled) {
+        getLocation();
+      }
+    }, 2000); // Repeat every 2 seconds
+  
+    return () => {
+      clearInterval(interval); // Cleanup the interval when the component unmounts
+    };
+  }, [isToggled,visitedTrips,setVisitedTrips, trail.edges]);
+  
+  
+
+
 
   // Listen for changes in the isToggled state
   useEffect(() => {
@@ -41,14 +92,17 @@ const Trail = ({ route }) => {
       return () => {
         const endTime = new Date().getTime();
         const elapsedTime = endTime - startTime;
+        const completePercentage = (visitedTrips.length/trail.edges.length); //TODO update edges
         const trip = {
+          visitedPlaces : visitedTrips,
+          completePercentage : (completePercentage),
           time : elapsedTime
         }
         dispatch(addTrip(trip));
         unsubscribe();
       };
     }
-  }, [isToggled, navigation]);
+  }, [isToggled, navigation,visitedTrips,setVisitedTrips, trail.edges]);
 
   return (
     <View style={styles.container}>

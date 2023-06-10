@@ -7,7 +7,7 @@ import Pin from './src/screens/Pin'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector ,useDispatch} from 'react-redux';
-
+import PrintLocationOnScreen from './src/screens/PrintLocationOnScreen';
 const Stack = createNativeStackNavigator();
 const WrappedApp = () => {
   const cookieValue = useSelector((state) => state.cookies.cookieVal);
