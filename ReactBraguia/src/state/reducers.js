@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { UPDATE_USERNAME , SET_COOKIES , RESET_STATE} from '../actions/user';
+import { UPDATE_USERNAME , SET_COOKIES , ADD_TRIP, RESET_STATE} from '../actions/user';
 
 const user  = (user = { username: ''}, action) => {
     switch (action.type) {
@@ -23,4 +23,21 @@ const cookies  = (cookies = { cookieVal: ''}, action) => {
     }
 }
 
-export default combineReducers({ user , cookies});
+const trips = (trips = { tripsVal: [] }, action) => {
+  switch (action.type) {
+    case ADD_TRIP:
+      return {
+        tripsVal: [...trips.tripsVal, action.trip]
+      };
+    case RESET_STATE:
+      return {
+        tripsVal: []
+      };
+    default:
+      return trips;
+  }
+};
+  
+  
+
+export default combineReducers({ user , cookies , trips});

@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const ToggleButton = () => {
+const ToggleButton = ({ onToggle }) => {
   const [isRunning, setIsRunning] = useState(false);
 
   const handlePress = () => {
-    setIsRunning(!isRunning);
+    const newValue = !isRunning;
+    setIsRunning(newValue);
+    if (onToggle) {
+      onToggle(newValue);
+    }
   };
 
   return (

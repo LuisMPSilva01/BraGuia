@@ -7,13 +7,13 @@ import Pin from './src/screens/Pin'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector ,useDispatch} from 'react-redux';
-import { resetState } from './src/actions/user';
 
 const Stack = createNativeStackNavigator();
 const WrappedApp = () => {
   const cookieValue = useSelector((state) => state.cookies.cookieVal);
   const loggedIn = cookieValue !== "";
   console.log("State:", useSelector((state) => state)); // Add this line
+  console.log("Trips:",useSelector((state) => JSON.stringify(state.trips.tripsVal))); 
   useEffect(() => {
     // Perform any necessary initialization or side effects here
   }, []);

@@ -10,6 +10,13 @@ export const setCookies = (cookieVal) => ({
   cookieVal
 });
 
+export const ADD_TRIP = 'ADD_TRIP';
+export const addTrip = (trip) => ({
+  type: ADD_TRIP,
+  trip
+});
+
+
 export const RESET_STATE = 'RESET_STATE';
 export const resetState = () => ({
   type: RESET_STATE,
