@@ -7,6 +7,7 @@ import Definitions from './src/screens/Definitions'
 import Contacts from './src/screens/Contacts'
 import Profile from './src/screens/Profile'
 import Pin from './src/screens/Pin'
+import History from './src/screens/History';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
@@ -44,6 +45,7 @@ const WrappedApp = () => {
             <Stack.Screen name="Definitions" component={Definitions} />
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="Contacts" component={Contacts} />
+            <Stack.Screen name="Trails History" component={History} />
             {/* Add more screens here */}
           </>
         ) : (
