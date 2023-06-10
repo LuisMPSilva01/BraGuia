@@ -24,6 +24,7 @@ const Trail = ({ route }) => {
     longitude: edge.edge_start.pin_lng,
   }));
 
+  const [startTime, setStartTime] = useState(null);
   const [isToggled, setToggle] = useState(false);
   const [visitedTrips, setVisitedTrips] = useState([]);
   const handleButtonToggle = () => {
@@ -32,7 +33,7 @@ const Trail = ({ route }) => {
 
 
   useEffect(() => {
-    const getLocation = () => { //TODO update edges
+    const getLocation = () => {
       LocationTrack()
         .then((location) => {
           console.log(location);
@@ -47,7 +48,7 @@ const Trail = ({ route }) => {
             const lngDiff = Math.abs(pin_lng - longitude);
   
             // Check if the edge is not already present in the visitedTrips array
-            const isVisited = visitedTrips.some((visitedEdge) => visitedEdge.edge_start.id === edge.edge_start.id);
+            const isVisited = visitedTrips.some((visitedId) => visitedId == edge.edge_start.id);
             console.log("LatDiff:", latDiff);
             console.log("LngDiff:", lngDiff);
             console.log(isVisited);
@@ -57,7 +58,10 @@ const Trail = ({ route }) => {
           // If close edges are found, add them to the visitedTrips state
           console.log("Close edges:", closeEdges.length);
           if (closeEdges.length > 0) {
-            setVisitedTrips((prevVisitedTrips) => [...prevVisitedTrips, ...closeEdges]);
+            setVisitedTrips((prevVisitedTrips) => {
+              const updatedVisitedTrips = [...prevVisitedTrips, ...closeEdges.map((edge) => edge.edge_start.id)];
+              return updatedVisitedTrips;
+            });
           }
         })
         .catch((error) => {
@@ -74,7 +78,8 @@ const Trail = ({ route }) => {
     return () => {
       clearInterval(interval); // Cleanup the interval when the component unmounts
     };
-  }, [isToggled,visitedTrips,setVisitedTrips, trail.edges]);
+  }, [isToggled, setVisitedTrips, trail.edges, visitedTrips]);
+  
   
   
 
@@ -82,27 +87,35 @@ const Trail = ({ route }) => {
 
   // Listen for changes in the isToggled state
   useEffect(() => {
-    // If isToggled is true, prevent the user from leaving the screen
     if (isToggled) {
-      const startTime = new Date().getTime(); // Start time when button is toggled
-
+      setStartTime(new Date().getTime());
+  
       const unsubscribe = navigation.addListener('beforeRemove', (e) => {
         e.preventDefault();
       });
+  
       return () => {
-        const endTime = new Date().getTime();
-        const elapsedTime = endTime - startTime;
-        const completePercentage = (visitedTrips.length/trail.edges.length); //TODO update edges
-        const trip = {
-          visitedPlaces : visitedTrips,
-          completePercentage : (completePercentage),
-          time : elapsedTime
-        }
-        dispatch(addTrip(trip));
         unsubscribe();
       };
+    } else {
+      if(startTime!=null){
+        const endTime = new Date().getTime();
+        const elapsedTime = endTime - startTime;
+        const completePercentage = (visitedTrips.length / trail.edges.length)*100; // TODO: update edges
+        const trip = {
+          trailId: trail.id,
+          visitedPlaces: visitedTrips,
+          completePercentage: completePercentage,
+          timeTaken: elapsedTime
+        };
+        setStartTime(null);
+        setVisitedTrips([]);
+        dispatch(addTrip(trip));
+      }
+      return () => {};
     }
-  }, [isToggled, navigation,visitedTrips,setVisitedTrips, trail.edges]);
+  }, [isToggled, navigation, visitedTrips, trail.edges]);
+  
 
   return (
     <View style={styles.container}>
