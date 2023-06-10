@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, TextInput, Button, Text, Keyboard, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
+import { View, TextInput, Button, Image, Text, Keyboard, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCookies, updateUsername } from '../actions/user';
@@ -102,6 +102,10 @@ const LoginActivity = () => {
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View style={styles.container}>
+        <Image
+          source={require('../../assets/logo_red.png')}
+          style={styles.image}
+        />
         <TextInput
           style={styles.input}
           placeholder="Name"
@@ -115,7 +119,7 @@ const LoginActivity = () => {
           value={password}
           onChangeText={setPassword}
         />
-        <Button title="Login" onPress={handleLogin} />
+        <Button title="Login" onPress={handleLogin} color="#FF0008" />
         {loginFailed && <Text style={styles.loginFailedText} id="login_failed_txt">Login Failed</Text>}
       </View>
     </TouchableWithoutFeedback>
@@ -139,6 +143,11 @@ const styles = {
   loginFailedText: {
     color: 'red',
     marginTop: 10,
+  },
+  image: {
+    width: 300,
+    height: 200,
+    marginBottom: 30,
   },
 };
 

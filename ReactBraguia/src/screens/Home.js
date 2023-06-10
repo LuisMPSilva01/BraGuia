@@ -1,8 +1,7 @@
-import { View, Text } from 'react-native';
+import { View, Text, Image  } from 'react-native';
 import BottomBar from '../components/BottomBar';
 import { StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import LogoutButton from '../components/LogOutButton';
 import { useSelector, useDispatch } from 'react-redux';
 import { resetState, setCookies, updateUsername } from '../actions/user';
 
@@ -56,29 +55,50 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-    <View style={styles.content}>
-      <Text style={styles.header}>Braguia - Your virtual guide in Braga</Text>
-      <Text>{appInfo}</Text>
+      <View style={styles.content}>
+        <Text style={styles.header}>Braguia - Your virtual guide in Braga</Text>
+        <Image
+          source={require('../../assets/logo_red.png')}
+          style={styles.image}
+        />
+        <Text>{appInfo}</Text>
+      </View>
+      <BottomBar />
     </View>
-    <LogoutButton/>
-    <BottomBar />
-  </View>
   );
 };
 
 const styles = StyleSheet.create({
-  header:{
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: 'black',
-  },
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 60,
+  },
+  gridContainer: {
+    width: '80%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  gridRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  image: {
+    marginTop: 30,
+    width: 300,
+    height: 200,
+    marginBottom: 90,
   },
 });
 
