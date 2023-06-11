@@ -10,13 +10,14 @@ import LocationTrack from '../backgroundServices/LocationTracker';
 import { useNotification } from '../components/NotificationManager';
 import * as Notifications from 'expo-notifications';
 import * as Linking from 'expo-linking';
+import BottomBar from '../components/BottomBar';
 
 const Trail = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const GeoDistance = useSelector((state) => state.distance.distanceVal);
   const { trail } = route.params;
-
+  console.log(trail);
   const pins = trail.edges.map(edge => edge.edge_start).concat(trail.edges[trail.edges.length - 1].edge_end);
 
   const initialRegion = { 
@@ -198,7 +199,7 @@ const Trail = ({ route }) => {
         ))}
       </MapView>
       <PinsSlide pins={pins}/>
-      
+      <BottomBar />
     </View>
   );
 };
