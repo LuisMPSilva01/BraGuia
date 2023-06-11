@@ -10,7 +10,6 @@ import Pin from './src/screens/Pin'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
-import PrintLocationOnScreen from './src/screens/PrintLocationOnScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +21,6 @@ const WrappedApp = () => {
   useEffect(() => {
     // Perform any necessary initialization or side effects here
   }, []);
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -44,7 +42,7 @@ const WrappedApp = () => {
             <Stack.Screen name="Definitions" component={Definitions} />
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="Contacts" component={Contacts} />
-            {/* Add more screens here */}
+
           </>
         ) : (
           <Stack.Screen name="Login" component={Login} />

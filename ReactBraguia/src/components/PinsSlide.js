@@ -3,13 +3,12 @@ import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity } from 'rea
 import { useNavigation } from '@react-navigation/native';
 
 const PinsSlide = ({ pins }) => {
-  const pinInfo = pins.map((edge) => {
-    const startPin = edge.edge_start;
-    const image = startPin.media.find((media) => media.media_type === 'I');
+  const pinInfo = pins.map((pin) => {
+    const image = pin.media.find((media) => media.media_type === 'I');
     return {
-      name: startPin.pin_name,
+      name: pin.pin_name,
       image: image ? image.media_file : null,
-      info: startPin
+      info: pin
     };
   });
 

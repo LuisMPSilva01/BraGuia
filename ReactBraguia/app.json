@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "ReactBraguia",
-    "slug": "ReactBraguia",
+    "slug": "spidilas",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,6 +27,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2699c686-c8e1-428d-a00a-5a9c0ef4f8b1"
+      }
+    },
+    "owner": "spidilas"
   }
 }
