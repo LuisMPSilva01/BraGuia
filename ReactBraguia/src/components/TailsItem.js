@@ -14,7 +14,7 @@ const TrailsItem = ({ trail }) => {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => handleTrailPress(trail)}
+      onPress={() => handleTrailPress({trail})}
     >
       <View style={styles.coolSquare}>
         <View style={styles.imageContainer}>
