@@ -1,12 +1,54 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Switch, TextInput } from 'react-native';
 import BottomBar from '../components/BottomBar';
 
 const Definitions = () => {
+  const [locationEnabled, setLocationEnabled] = useState(false);
+  const [darkModeEnabled, setDarkModeEnabled] = useState(false);
+  const [distance, setDistance] = useState('10'); // Default value of 10 km
+
+  const handleLocationToggle = () => {
+    setLocationEnabled(!locationEnabled);
+    console.log(
+      'TODO: FAZER ALGUMA COISA UTIL COM ISTO!!!!!!!!!! -> Location toggle:',
+      !locationEnabled ? 'enabled' : 'disabled'
+    );
+  };
+
+  const handleDarkModeToggle = () => {
+    setDarkModeEnabled(!darkModeEnabled);
+    console.log(
+      'TODO: FAZER ALGUMA COISA UTIL COM ISTO!!!!!!!!!! -> Dark mode toggle:',
+      !darkModeEnabled ? 'enabled' : 'disabled'
+    );
+  };
+
+  const handleDistanceChange = (value) => {
+    setDistance(value);
+    console.log('Distance value:', value);
+  };
+  
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.text}>Definitions page</Text>
+        <View style={styles.row}>
+          <Text style={styles.label}>Enable Location Service:</Text>
+          <Switch value={locationEnabled} onValueChange={handleLocationToggle} />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Enable Dark Mode:</Text>
+          <Switch value={darkModeEnabled} onValueChange={handleDarkModeToggle} />
+        </View>
+        <View style={styles.row}>
+          <Text style={styles.label}>Distance from pins to your location (km):</Text>
+          <TextInput
+            value={distance}
+            onChangeText={handleDistanceChange}
+            keyboardType="numeric"
+            style={styles.numberInput}
+          />
+        </View>
       </View>
       <BottomBar />
     </View>
@@ -24,9 +66,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginLeft:10,
+    marginRight:10,
+  },
+  label: {
+    flex: 1,
+    marginRight: 10,
+  },
+  numberInput: {
+    marginLeft: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 5,
+    width: 70,
   },
 });
 

@@ -31,7 +31,7 @@ const Trails = () => {
       setSearchResults(trails)
     }else{
       const filteredData = trails.filter((trail) => {
-        return trail.name.includes(query)
+        return trail.trail_name.includes(query)
       });
       setSearchResults(filteredData);
     }
@@ -44,7 +44,7 @@ const Trails = () => {
       <ScrollView>
         {searchResults.length > 0 ? (
           searchResults.map((trail,index) => (
-            <TrailsItem trail={trail} />
+            <TrailsItem trail={trail} key={index}/>
           ))
         ) : (
         <View style={{ padding: 20 }}>
