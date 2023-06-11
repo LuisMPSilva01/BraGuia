@@ -2,17 +2,21 @@ import React, {useContext } from 'react';
 import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-
+import { useSelector, useDispatch } from 'react-redux';
 import themeContext from '../theme/themeContext';
 
 const TrailsItem = ({ trail }) => {
   const navigation = useNavigation();
 
   const theme = useContext(themeContext)
-
+  const userType = useSelector((state) => state.user.username.user_type);
   const handleTrailPress = (trail) => {
-    // Navigate to the details screen with the selected trail
-    navigation.navigate('Trail', { trail });
+    if(userType==="Premium"){
+      // Navigate to the details screen with the selected trail
+      navigation.navigate('Trail', { trail });
+    } else{
+      alert('User is not premium');
+    }
   };
   
 
