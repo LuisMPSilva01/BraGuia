@@ -48,8 +48,6 @@ const History = () => {
         {tripsMetaData.map((trip, index) => {
           const trail = getTrailById(trip.trailId);
           const pins = trail.edges.map(edge => edge.edge_start).concat(trail.edges[trail.edges.length - 1].edge_end);
-          
-          console.log(pins);
           return (
             <View style={styles.coolSquare}>
             <View key={index} style={styles.item}>

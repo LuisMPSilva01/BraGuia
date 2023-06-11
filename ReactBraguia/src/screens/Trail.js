@@ -197,7 +197,6 @@ const Trail = (props) => {
         ))}
       </MapView>
       <PinsSlide pins={pins}/>
-      
     </View>
   );
 };
