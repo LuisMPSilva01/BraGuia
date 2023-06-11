@@ -34,12 +34,13 @@ const Definitions = () => {
   };
 
   const handleDistanceChange = (value) => {
-    const parsedValue = Number(value);
+    const parsedValue = parseFloat(value.replace(',', '.'));
     if (!isNaN(parsedValue)) {
-      setDistance(parsedValue.toString());
+      setDistance(value);
       dispatch(setDistanceRedux(parsedValue));
     }
   };
+  
   
   
 

@@ -15,7 +15,6 @@ const Trail = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const GeoDistance = useSelector((state) => state.distance.distanceVal);
-  console.log(GeoDistance);
   const { trail } = route.params;
 
   const pins = trail.edges.map(edge => edge.edge_start).concat(trail.edges[trail.edges.length - 1].edge_end);
@@ -102,7 +101,7 @@ const Trail = ({ route }) => {
   
             // Check if the pins is not already present in the visitedTrips array
             const isVisited = visitedTrips.some((visitedId) => visitedId == pin.id);
-            return latDiff <= 0.9 && lngDiff <= 0.9 && !isVisited; // Adjust the tolerance values as needed
+            return latDiff <= GeoDistance && lngDiff <= GeoDistance && !isVisited; // Adjust the tolerance values as needed
           });
   
           // If close pins are found, add them to the visitedTrips state
