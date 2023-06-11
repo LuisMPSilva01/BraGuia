@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 
+import themeContext from '../theme/themeContext';
+
 const Emergency = () => {
   const [contacts, setContacts] = useState([]);
+
+  const theme = useContext(themeContext)
 
   const initialData = useSelector((state) => state.appData.appinfo);
   useEffect(() => {
@@ -30,34 +34,34 @@ const Emergency = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor:theme.backgroundColor}]}>
       <View style={styles.content}>
         <View style={styles.contactInfo}>
           {contacts.map((item) => (
             <View key={item.contact_name} style={styles.contactDetail}>
               <View style={styles.contactDetailsContainer}>
-                <Text style={styles.contactName}>{item.contact_name}</Text>
+                <Text style={[styles.contactName, {color:theme.color}]}>{item.contact_name}</Text>
                 {item.contact_phone && (
                   <TouchableOpacity onPress={() => handlePhoneClick(item.contact_phone)}>
                     <View style={styles.contactRow}>
-                      <Ionicons name="call" size={25} color="black" />
-                      <Text style={styles.contactPhone}>{item.contact_phone}</Text>
+                      <Ionicons name="call" size={25} style={{color:theme.color}} />
+                      <Text style={[styles.contactPhone, {color:theme.color}]}>{item.contact_phone}</Text>
                     </View>
                   </TouchableOpacity>
                 )}
                 {item.contact_url && (
                   <TouchableOpacity onPress={() => handleUrlClick(item.contact_url)}>
                     <View style={styles.contactRow}>
-                      <Ionicons name="globe" size={25} color="black" />
-                      <Text style={styles.contactUrl}>{item.contact_url}</Text>
+                      <Ionicons name="globe" size={25} style={{color:theme.color}} />
+                      <Text style={[styles.contactUrl, {color:theme.color}]}>{item.contact_url}</Text>
                     </View>
                   </TouchableOpacity>
                 )}
                 {item.contact_mail && (
                   <TouchableOpacity onPress={() => handleEmailClick(item.contact_mail)}>
                     <View style={styles.contactRow}>
-                      <Ionicons name="mail" size={25} color="black" />
-                      <Text style={styles.contactMail}>{item.contact_mail}</Text>
+                      <Ionicons name="mail" size={25} style={{color:theme.color}} />
+                      <Text style={[styles.contactMail, {color:theme.color}]}>{item.contact_mail}</Text>
                     </View>
                   </TouchableOpacity>
                 )}
@@ -113,11 +117,9 @@ const styles = StyleSheet.create({
   contactUrl: {
     fontSize: 22, // Increase the font size as desired
     marginBottom: 3,
-    color: 'blue',
   },
   contactMail: {
     fontSize: 22, // Increase the font size as desired
-    color: 'blue',
   },
 });
 

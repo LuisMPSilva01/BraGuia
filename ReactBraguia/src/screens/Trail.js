@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity,Image, Dimensions } from 'react-native';
 import ToggleButton from '../components/ToggleButton';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
@@ -11,12 +11,16 @@ import { useNotification } from '../components/NotificationManager';
 import * as Notifications from 'expo-notifications';
 import * as Linking from 'expo-linking';
 
+import themeContext from '../theme/themeContext';
+
 const Trail = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const GeoDistance = useSelector((state) => state.distance.distanceVal);
   const { trail } = props.route.params;
   const pins = trail.edges.map(edge => edge.edge_start).concat(trail.edges[trail.edges.length - 1].edge_end);
+
+  const theme = useContext(themeContext)
 
   const initialRegion = { 
     latitude: pins[0].pin_lat,
@@ -171,8 +175,8 @@ const Trail = (props) => {
   };
   
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{trail.trail_name}</Text>
+    <View style={[styles.container, {backgroundColor:theme.backgroundColor}]}>
+      <Text style={[styles.title, {color:theme.color}]}>{trail.trail_name}</Text>
       <Image source={{ uri: trail.trail_img }} style={{ width: 150, height: 150 }} />
       <ToggleButton onToggle={handleButtonToggle} />
       {isToggled ? (

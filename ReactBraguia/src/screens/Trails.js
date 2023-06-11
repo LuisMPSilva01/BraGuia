@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import TrailsItem from '../components/TailsItem';
 import SearchBar from '../components/SearchBar';
 import { StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
+import themeContext from '../theme/themeContext';
+
 const Trails = () => {
   const [trails, setTrails] = useState([]); 
   const [searchResults, setSearchResults] = useState([]);
   const trailsMetaData = useSelector((state) => state.appData.trails);
+
+  const theme = useContext(themeContext)
 
   useEffect(() => {
     if(trailsMetaData){
@@ -31,7 +35,7 @@ const Trails = () => {
  
   };
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,  {backgroundColor:theme.backgroundColor}]}>
       <SearchBar onSearch={handleSearch}/>
       <ScrollView>
         {searchResults.length > 0 ? (
@@ -40,7 +44,7 @@ const Trails = () => {
           ))
         ) : (
         <View style={{ padding: 20 }}>
-          <Text>No trails available</Text>
+          <Text style =  {{color:theme.color}}>No trails available</Text>
         </View>
         )}
       </ScrollView>

@@ -1,35 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, Switch, TextInput } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { setDistanceRedux } from '../actions/user'
+import { EventRegister } from 'react-native-event-listeners'
+import themeContext from '../theme/themeContext';
 
 const Definitions = () => {
-  const [locationEnabled, setLocationEnabled] = useState(false);
+  const theme = useContext(themeContext)
+
   const [darkModeEnabled, setDarkModeEnabled] = useState(false);
-  const [distance, setDistance] = useState('0'); // Default value of 10 km
+  const [distance, setDistance] = useState('0');
   const initialDistance = useSelector((state) => state.distance.distanceVal);
   const dispatch = useDispatch();
 
   useEffect(() => {
     setDistance(initialDistance.toString())
   }, []);
-
-  
-  const handleLocationToggle = () => {
-    setLocationEnabled(!locationEnabled);
-    console.log(
-      'TODO: FAZER ALGUMA COISA UTIL COM ISTO!!!!!!!!!! -> Location toggle:',
-      !locationEnabled ? 'enabled' : 'disabled'
-    );
-  };
-
-  const handleDarkModeToggle = () => {
-    setDarkModeEnabled(!darkModeEnabled);
-    console.log(
-      'TODO: FAZER ALGUMA COISA UTIL COM ISTO!!!!!!!!!! -> Dark mode toggle:',
-      !darkModeEnabled ? 'enabled' : 'disabled'
-    );
-  };
 
   const handleDistanceChange = (value) => {
     const parsedValue = parseFloat(value.replace(',', '.'));
@@ -38,34 +24,36 @@ const Definitions = () => {
       dispatch(setDistanceRedux(parsedValue));
     }
   };
-  
-  
-  
+
+  const handleDarkModeToggle = (value) => {
+    setDarkModeEnabled(value);
+    EventRegister.emit('ChangeTheme', value);
+  };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor:theme.backgroundColor}]}>
       <View style={styles.content}>
         <View style={styles.row}>
-          <Text style={styles.label}>Enable Location Service:</Text>
-          <Switch value={locationEnabled} onValueChange={handleLocationToggle} />
+          <Text style={[styles.label, {color:theme.color}]}>Enable Dark Mode:</Text>
+          <Switch 
+            value={darkModeEnabled} 
+            onValueChange={handleDarkModeToggle}
+          />
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Enable Dark Mode:</Text>
-          <Switch value={darkModeEnabled} onValueChange={handleDarkModeToggle} />
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>GeoDistance from pins to your location:</Text>
+          <Text style={[styles.label, {color:theme.color}]}>GeoDistance from pins to your location:</Text>
           <TextInput
             value={distance}
             onChangeText={handleDistanceChange}
             keyboardType="numeric"
-            style={styles.numberInput}
+            style={[styles.numberInput, {color:theme.color}]}
           />
         </View>
       </View>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

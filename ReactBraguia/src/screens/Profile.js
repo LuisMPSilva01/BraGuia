@@ -1,14 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 import { useNavigation} from '@react-navigation/native';
+
+import themeContext from '../theme/themeContext';
 
 const Profile = () => {
   const navigation = useNavigation();
   const handleTrailsHistory = () => {
     navigation.navigate('Trails History');
   };
+
+  const theme = useContext(themeContext)
 
   const userMetaData = useSelector((state) => state.user.username);
   const {
@@ -25,33 +29,33 @@ const Profile = () => {
   });
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor:theme.backgroundColor}]}>
       <View style={styles.content}>
         <View style={styles.profileContainer}>
           <View style={styles.backgroundContainer}>
             <Ionicons name="md-person-circle" size={150} color="#FFFFFF" />
-            <Text style={styles.username}>{username}</Text>
-            <Text style={styles.infoTitle}>User type</Text>
-            <Text style={styles.userType}>{user_type}</Text>
+            <Text style={[styles.username, {color:theme.color}]}>{username}</Text>
+            <Text style={[styles.infoTitle, {color:theme.color}]}>User type</Text>
+            <Text style={[styles.userType, {color:theme.color}]}>{user_type}</Text>
           </View>
         </View>
 
         <View style={styles.detailContainer}>
           <View style={styles.detailRow}>
-            <Ionicons name="md-person-outline" size={36} color="#000000" />
-            <Text style={styles.detailText}>{username}</Text>
+            <Ionicons name="md-person-outline" size={36} color="#000000" style={{color:theme.color}} />
+            <Text style={[styles.detailText, {color:theme.color}]}>{username}</Text>
           </View>
           <View style={styles.detailRow}>
-            <Ionicons name="md-mail" size={36} color="#000000" />
+            <Ionicons name="md-mail" size={36} color="#000000" style={{color:theme.color}} />
             {email ? (
-              <Text style={styles.detailText}>{email}</Text>
+              <Text style={[styles.detailText, {color:theme.color}]}>{email}</Text>
             ) : (
-              <Text style={styles.detailText}>No email available</Text>
+              <Text style={[styles.detailText,{color:theme.color}]}>No email available</Text>
             )}
           </View>
           <View style={styles.detailRow}>
-            <Ionicons name="md-calendar" size={36} color="#000000" />
-            <Text style={styles.detailText}>
+            <Ionicons name="md-calendar" size={36} color="#000000" style={{color:theme.color}} />
+            <Text style={[styles.detailText, {color:theme.color}]}>
               Member since {formattedDateJoined}
             </Text>
           </View>

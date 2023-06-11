@@ -12,14 +12,29 @@ import History from "./src/screens/History";
 import Socials from "./src/screens/Socials";
 import Partners from "./src/screens/Partners";
 import BottomBar from "./src/components/BottomBar";
-import { NavigationContainer } from "@react-navigation/native";
+import { DarkTheme, DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useSelector, useDispatch } from "react-redux";
 import Emergency from "./src/screens/Emergency";
 
+import theme from "./src/theme/theme";
+import themeContext from "./src/theme/themeContext";
+
+import { EventRegister } from 'react-native-event-listeners'
+
 const Stack = createNativeStackNavigator();
 
 const WrappedApp = () => {
+  const [darkModeEnabled, setDarkMode] = useState(false);
+  useEffect(() => {
+    const listener = EventRegister.addEventListener('ChangeTheme', (data) => {
+      setDarkMode(data)
+    })
+    return () =>{
+      EventRegister.removeAllListeners(listener);
+    }
+  })
+
   const cookieValue = useSelector((state) => state.cookies.cookieVal);
   const loggedIn = cookieValue !== "";
   useEffect(() => {
@@ -42,7 +57,8 @@ const WrappedApp = () => {
   );
 
   return (
-    <NavigationContainer>
+    <themeContext.Provider value={darkModeEnabled == true ? theme.dark : theme.light}>
+    <NavigationContainer theme={darkModeEnabled == true ? DarkTheme : DefaultTheme}>
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
@@ -65,10 +81,10 @@ const WrappedApp = () => {
                 scrollableScreenWrapperWithBottomBar(() => (<Trails {...props} />))}
             </Stack.Screen>
             <Stack.Screen name="Trail">
-              {(props) => scrollableScreenWrapper(() => <Trail {...props} />)}
+              {(props) => scrollableScreenWrapperWithBottomBar(() => <Trail {...props} />)}
             </Stack.Screen>
             <Stack.Screen name="Pin">
-              {(props) => scrollableScreenWrapper(() => <Pin {...props} />)}
+              {(props) => scrollableScreenWrapperWithBottomBar(() => <Pin {...props} />)}
             </Stack.Screen>
             <Stack.Screen name="Definitions">
               {(props) =>
@@ -105,6 +121,7 @@ const WrappedApp = () => {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+    </themeContext.Provider>
   );
 };
 

@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 
+import themeContext from '../theme/themeContext';
+
 const Socials = () => {
   const [socials, setSocials] = useState([]);
+
+  const theme = useContext(themeContext)
 
   const initialData = useSelector((state) => state.appData.appinfo);
   useEffect(() => {
@@ -12,7 +16,7 @@ const Socials = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor:theme.backgroundColor}]}>
       <View style={styles.content}>
         <View style={styles.socialInfo}>
           {socials.map((item) => (
@@ -22,10 +26,10 @@ const Socials = () => {
             >
               <Ionicons name="logo-facebook" size={50} color="blue" />
               <View style={styles.socialDetailsContainer}>
-                <Text style={styles.socialName}>{item.social_name}</Text>
+                <Text style={[styles.socialName, {color:theme.color}]}>{item.social_name}</Text>
                 {item.social_url && (
                   <TouchableOpacity onPress={() => Linking.openURL(item.social_url)}>
-                    <Text style={styles.socialUrl} selectable={false}>{item.social_url}</Text>
+                    <Text style={[styles.socialUrl, {color:theme.color}]} selectable={false}>{item.social_url}</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -66,7 +70,6 @@ const styles = StyleSheet.create({
   },
   socialUrl: {
     fontSize: 25,
-    color: 'blue',
     textDecorationLine: 'underline',
   },
 });

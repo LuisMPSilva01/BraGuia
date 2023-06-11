@@ -1,9 +1,11 @@
 import { View, Text, Image  } from 'react-native';
 import { StyleSheet } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateUsername } from '../actions/user';
 import { updateAppInfo, setTrails } from '../actions/appData';
+
+import themeContext from '../theme/themeContext';
 
 const Home = () => {
   const [title, setTitle] = useState("Title"); 
@@ -12,6 +14,8 @@ const Home = () => {
   const dispatch = useDispatch();
   const initialData = useSelector((state) => state.appData.appinfo);
   
+  const theme = useContext(themeContext)
+
   useEffect(() => {
     if(initialData){
       setAppInfo(initialData.app_landing_page_text)
@@ -76,14 +80,14 @@ const Home = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor:theme.backgroundColor}]}>
       <View style={styles.content}>
-        <Text style={styles.header}>{title}</Text>
+        <Text style={[styles.header, {color:theme.color}]}>{title}</Text>
         <Image
           source={require('../../assets/logo_red.png')}
           style={styles.image}
         />
-        <Text>{appInfo}</Text>
+        <Text style={{color:theme.color}}>{appInfo}</Text>
       </View>
     </View>
   );
