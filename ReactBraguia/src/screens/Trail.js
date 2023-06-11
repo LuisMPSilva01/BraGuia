@@ -14,7 +14,8 @@ import * as Linking from 'expo-linking';
 const Trail = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-
+  const GeoDistance = useSelector((state) => state.distance.distanceVal);
+  console.log(GeoDistance);
   const { trail } = route.params;
 
   const pins = trail.edges.map(edge => edge.edge_start).concat(trail.edges[trail.edges.length - 1].edge_end);

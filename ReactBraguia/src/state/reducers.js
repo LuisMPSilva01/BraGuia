@@ -41,7 +41,7 @@ const trips = (trips = { tripsVal: [] }, action) => {
 
 const distance = (distance = { distanceVal: 1 }, action) => {
   switch (action.type) {
-    case ADD_TRIP:
+    case SET_DISTANCE:
       return {
         distanceVal: action.dist
       };
