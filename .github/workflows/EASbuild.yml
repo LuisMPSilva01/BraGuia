@@ -29,5 +29,4 @@ jobs:
         run: yarn install
 
       - name: 🚀 Create update
-        working-directory: ReactBraguia
         run: eas update --auto --non-interactive
