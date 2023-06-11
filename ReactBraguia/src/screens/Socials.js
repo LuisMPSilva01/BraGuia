@@ -1,47 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import BottomBar from '../components/BottomBar';
 
 const Socials = () => {
-  const contactData = [
-    {
-      id: 1,
-      icon: 'mail',
-      text: 'example@mail.com',
-    },
-    {
-      id: 2,
-      icon: 'call',
-      text: '(123) 456-7890',
-    },
-    {
-      id: 3,
-      icon: 'globe',
-      text: 'https://www.example.com',
-    },
-  ];
+  const [socials, setSocials] = useState([]);
+
+  useEffect(() => {
+    fetch('https://c5a2-193-137-92-29.eu.ngrok.io/app')
+      .then((response) => response.json())
+      .then((data) => setSocials(data[0].socials))
+      .catch((error) => console.log(error));
+  }, []);
 
   const handleItemClick = (item) => {
-    if (item.icon === 'call') {
-      Linking.openURL(`tel:${item.text}`);
-    } else if (item.icon === 'globe') {
-      Linking.openURL(item.text);
+    if (item.social_url) {
+      Linking.openURL(item.social_url);
     }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <View style={styles.contactInfo}>
-          {contactData.map((item) => (
+        <View style={styles.socialInfo}>
+          {socials.map((item) => (
             <TouchableOpacity
-              key={item.id}
-              style={styles.contactDetail}
+              key={item.social_name}
+              style={styles.socialDetail}
               onPress={() => handleItemClick(item)}
             >
-              <Ionicons name={item.icon} size={24} color="black" />
-              <Text style={styles.contactText}>{item.text}</Text>
+              <Ionicons name="logo-facebook" size={50} color="blue" />
+              <View style={styles.socialDetailsContainer}>
+                <Text style={styles.socialName}>{item.social_name}</Text>
+                <Text style={styles.socialUrl}>{item.social_url}</Text>
+              </View>
             </TouchableOpacity>
           ))}
         </View>
@@ -62,22 +54,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  text: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  contactInfo: {
+  socialInfo: {
     alignItems: 'center',
   },
-  contactDetail: {
+  socialDetail: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 10,
   },
-  contactText: {
+  socialDetailsContainer: {
     marginLeft: 10,
-    fontSize: 16,
+  },
+  socialName: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  socialUrl: {
+    fontSize: 25,
+    color: 'blue',
   },
 });
 
