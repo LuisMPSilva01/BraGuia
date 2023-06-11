@@ -22,8 +22,9 @@ const Stack = createNativeStackNavigator();
 const WrappedApp = () => {
   const cookieValue = useSelector((state) => state.cookies.cookieVal);
   const loggedIn = cookieValue !== "";
-  console.log("State:", useSelector((state) => state)); // Add this line
-  console.log("Trips:", useSelector((state) => JSON.stringify(state.trips.tripsVal)));
+  //console.log("State:", useSelector((state) => state)); // Add this line
+  //console.log("Trips:", useSelector((state) => JSON.stringify(state.trips.tripsVal)));
+  //console.log(useSelector((state) => state.appData.appinfo));
   useEffect(() => {
     // Perform any necessary initialization or side effects here
   }, []);

@@ -4,25 +4,18 @@ import TrailsItem from '../components/TailsItem';
 import SearchBar from '../components/SearchBar';
 import BottomBar from '../components/BottomBar';
 import { StyleSheet } from 'react-native';
-
+import { useSelector } from 'react-redux';
 
 const Trails = () => {
   const [trails, setTrails] = useState([]); 
   const [searchResults, setSearchResults] = useState([]);
-
-  const getTrails = async () => {
-    try {
-      const response = await fetch('https://c5a2-193-137-92-29.eu.ngrok.io/trails');
-      const json = await response.json();
-      setTrails(json); // Update the trails state with the trail names and image URLs
-      setSearchResults(json);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const trailsMetaData = useSelector((state) => state.appData.trails);
 
   useEffect(() => {
-    getTrails();
+    if(trailsMetaData){
+      setTrails(trailsMetaData);
+      setSearchResults(trailsMetaData);
+    }
   }, []);
 
   const handleSearch = (query) => {;
