@@ -28,6 +28,6 @@ jobs:
         working-directory: ReactBraguia
         run: yarn install
 
-      - name: 🚀 Build app
+      - name: 🚀 Create update
         working-directory: ReactBraguia
         run: eas update --auto --non-interactive
