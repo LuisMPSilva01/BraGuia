@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import BottomBar from '../components/BottomBar';
 import { useSelector } from 'react-redux';
 
 
@@ -99,7 +98,6 @@ const History = () => {
           );
         })}
       </View>
-      <BottomBar />
     </View>
   );
 };

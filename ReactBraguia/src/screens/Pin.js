@@ -3,8 +3,8 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Audio } from 'expo-av';
 import { Video } from 'expo-av';
 
-const Pin = ({ route }) => {
-  const { pin } = route.params;
+const Pin = (props) => {
+  const { pin } = props.route.params;
 
   const image = pin.media.find((media) => media.media_type === 'I');
   const video = pin.media.find((media) => media.media_type === 'V');

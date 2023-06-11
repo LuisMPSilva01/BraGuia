@@ -8,13 +8,14 @@ const TrailsItem = ({ trail }) => {
 
   const handleTrailPress = (trail) => {
     // Navigate to the details screen with the selected trail
-    navigation.navigate('Trail', trail);
+    navigation.navigate('Trail', { trail });
   };
+  
 
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => handleTrailPress({trail})}
+      onPress={() => handleTrailPress(trail)}
     >
       <View style={styles.coolSquare}>
         <View style={styles.imageContainer}>

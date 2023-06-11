@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import BottomBar from '../components/BottomBar';
 import { useSelector } from 'react-redux';
+import { useNavigation} from '@react-navigation/native';
 
-const Profile = ({ navigation }) => {
+const Profile = () => {
+  const navigation = useNavigation();
   const handleTrailsHistory = () => {
     navigation.navigate('Trails History');
   };
@@ -61,7 +62,6 @@ const Profile = ({ navigation }) => {
           <Text style={styles.buttonText}>Trails history</Text>
         </TouchableOpacity>
       </View>
-      <BottomBar />
     </View>
   );
 };

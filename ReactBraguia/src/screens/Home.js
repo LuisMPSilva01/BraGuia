@@ -1,5 +1,4 @@
 import { View, Text, Image  } from 'react-native';
-import BottomBar from '../components/BottomBar';
 import { StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -86,7 +85,6 @@ const Home = () => {
         />
         <Text>{appInfo}</Text>
       </View>
-      <BottomBar />
     </View>
   );
 };

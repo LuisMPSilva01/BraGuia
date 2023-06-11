@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import BottomBar from '../components/BottomBar';
 import { useSelector } from 'react-redux';
 
 const Emergency = () => {
@@ -67,7 +66,6 @@ const Emergency = () => {
           ))}
         </View>
       </View>
-      <BottomBar />
     </View>
   );
 };

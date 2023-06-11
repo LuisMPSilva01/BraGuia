@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Switch, TextInput } from 'react-native';
-import BottomBar from '../components/BottomBar';
-import { debounce } from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
 import { setDistanceRedux } from '../actions/user'
 
@@ -65,7 +63,6 @@ const Definitions = () => {
           />
         </View>
       </View>
-      <BottomBar />
     </View>
   );
 };

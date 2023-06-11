@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import BottomBar from '../components/BottomBar';
+import { useNavigation } from '@react-navigation/native';
 
-const Contacts = ({ navigation }) => {
+const Contacts = () => {
+  const navigation = useNavigation();
   const handleButtonPress = (screenName) => {
     navigation.navigate(screenName);
   };
@@ -33,7 +34,6 @@ const Contacts = ({ navigation }) => {
           <Text style={styles.buttonText}>Partners</Text>
         </TouchableOpacity>
       </View>
-      <BottomBar />
     </View>
   );
 };

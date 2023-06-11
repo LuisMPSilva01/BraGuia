@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import TrailsItem from '../components/TailsItem';
 import SearchBar from '../components/SearchBar';
-import BottomBar from '../components/BottomBar';
 import { StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -45,7 +44,6 @@ const Trails = () => {
         </View>
         )}
       </ScrollView>
-      <BottomBar />
     </View>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity,Image } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity,Image, Dimensions } from 'react-native';
 import ToggleButton from '../components/ToggleButton';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import PinsSlide from '../components/PinsSlide';
@@ -11,12 +11,11 @@ import { useNotification } from '../components/NotificationManager';
 import * as Notifications from 'expo-notifications';
 import * as Linking from 'expo-linking';
 
-const Trail = ({ route }) => {
+const Trail = (props) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const GeoDistance = useSelector((state) => state.distance.distanceVal);
-  const { trail } = route.params;
-
+  const { trail } = props.route.params;
   const pins = trail.edges.map(edge => edge.edge_start).concat(trail.edges[trail.edges.length - 1].edge_end);
 
   const initialRegion = { 
@@ -59,7 +58,7 @@ const Trail = ({ route }) => {
       const pin = findPinById(response.notification.request.content.data.id);
       console.log(pin);
       if(pin){
-        navigation.navigate('Pin', { pin: pin});
+        navigation.navigate('Pin', { pin });
       }
       else{
         alert('Old notification, forget to clear?');
@@ -205,10 +204,10 @@ const Trail = ({ route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     backgroundColor: '#F5F5F5',
-    height: 60,
+    height: Dimensions.get('window').height,
+    marginBottom: 20,
   },
   buttonStyle: {
     backgroundColor: 'red',

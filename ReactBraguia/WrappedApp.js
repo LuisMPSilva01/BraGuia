@@ -1,62 +1,107 @@
-import React, { useEffect, useState } from 'react';
-
-import Trails from './src/screens/Trails';
-import Home from './src/screens/Home';
-import Trail from './src/screens/Trail'
-import Login from './src/screens/Login';
-import Definitions from './src/screens/Definitions'
-import Contacts from './src/screens/Contacts'
-import Profile from './src/screens/Profile'
-import Pin from './src/screens/Pin'
-import History from './src/screens/History';
-import Socials from './src/screens/Socials';
-import Partners from './src/screens/Partners';
-
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useSelector, useDispatch } from 'react-redux';
-import Emergency from './src/screens/Emergency';
+import React, { useEffect, useState } from "react";
+import { ScrollView } from "react-native";
+import Trails from "./src/screens/Trails";
+import Home from "./src/screens/Home";
+import Trail from "./src/screens/Trail";
+import Login from "./src/screens/Login";
+import Definitions from "./src/screens/Definitions";
+import Contacts from "./src/screens/Contacts";
+import Profile from "./src/screens/Profile";
+import Pin from "./src/screens/Pin";
+import History from "./src/screens/History";
+import Socials from "./src/screens/Socials";
+import Partners from "./src/screens/Partners";
+import BottomBar from "./src/components/BottomBar";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useSelector, useDispatch } from "react-redux";
+import Emergency from "./src/screens/Emergency";
 
 const Stack = createNativeStackNavigator();
 
 const WrappedApp = () => {
   const cookieValue = useSelector((state) => state.cookies.cookieVal);
   const loggedIn = cookieValue !== "";
-  //console.log("State:", useSelector((state) => state)); // Add this line
-  //console.log("Trips:", useSelector((state) => JSON.stringify(state.trips.tripsVal)));
-  //console.log(useSelector((state) => state.appData.appinfo));
   useEffect(() => {
     // Perform any necessary initialization or side effects here
   }, []);
+
+  const scrollableScreenWrapper = (Component) => (
+    <ScrollView style={{ flex: 1 }}>
+      <Component />
+    </ScrollView>
+  );
+
+  const scrollableScreenWrapperWithBottomBar = (Component) => (
+    <>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <Component />
+      </ScrollView>
+      <BottomBar />
+    </>
+  );
+
   return (
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
-            backgroundColor: '#FF0008', // Set the background color of the header
+            backgroundColor: "#FF0008", // Set the background color of the header
           },
           headerTitleStyle: {
-            color: '#FFFFFF', // Set the color of the screen titles to white
+            color: "#FFFFFF", // Set the color of the screen titles to white
           },
         }}
       >
         {loggedIn ? (
           <>
-            <Stack.Screen name="Home" component={Home} />
-            <Stack.Screen name="Trails" component={Trails} />
-            <Stack.Screen name="Trail" component={Trail} />
-            <Stack.Screen name="Pin" component={Pin} />
-            <Stack.Screen name="Definitions" component={Definitions} />
-            <Stack.Screen name="Profile" component={Profile} />
-            <Stack.Screen name="Contacts" component={Contacts} />
-            <Stack.Screen name="Trails History" component={History} />
-            <Stack.Screen name="Emergency contacts" component={Emergency} />
-            <Stack.Screen name="Socials" component={Socials} />
-            <Stack.Screen name="Partners" component={Partners} />
-            {/* Add more screens here */}
+            <Stack.Screen name="Home">
+              {(props) =>
+                scrollableScreenWrapperWithBottomBar(() => <Home {...props} />)
+              }
+            </Stack.Screen>
+            <Stack.Screen name="Trails">
+              {(props) =>
+                scrollableScreenWrapperWithBottomBar(() => (<Trails {...props} />))}
+            </Stack.Screen>
+            <Stack.Screen name="Trail">
+              {(props) => scrollableScreenWrapper(() => <Trail {...props} />)}
+            </Stack.Screen>
+            <Stack.Screen name="Pin">
+              {(props) => scrollableScreenWrapper(() => <Pin {...props} />)}
+            </Stack.Screen>
+            <Stack.Screen name="Definitions">
+              {(props) =>
+                scrollableScreenWrapperWithBottomBar(() => (<Definitions {...props} />))}
+            </Stack.Screen>
+            <Stack.Screen name="Profile">
+              {(props) =>
+                scrollableScreenWrapperWithBottomBar(() => (<Profile {...props} />))}
+            </Stack.Screen>
+            <Stack.Screen name="Contacts">
+              {(props) =>
+                scrollableScreenWrapperWithBottomBar(() => (<Contacts {...props} />))}
+            </Stack.Screen>
+            <Stack.Screen name="Trails History">
+              {(props) =>
+                scrollableScreenWrapperWithBottomBar(() => (<History {...props} />))}
+            </Stack.Screen>
+            <Stack.Screen name="Emergency contacts">
+              {(props) =>
+                scrollableScreenWrapperWithBottomBar(() => (<Emergency {...props} />))}
+            </Stack.Screen>
+            <Stack.Screen name="Socials">
+              {(props) =>
+                scrollableScreenWrapperWithBottomBar(() => (<Socials {...props} />))}
+            </Stack.Screen>
+            <Stack.Screen name="Partners">
+              {(props) => scrollableScreenWrapperWithBottomBar(() => (<Partners {...props} />))}
+            </Stack.Screen>
           </>
         ) : (
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Login">
+            {(props) => scrollableScreenWrapper(() => <Login {...props} />)}
+          </Stack.Screen>
         )}
       </Stack.Navigator>
     </NavigationContainer>
