@@ -30,4 +30,4 @@ jobs:
 
       - name: 🚀 Build app
         working-directory: ReactBraguia
-        run: eas build --non-interactive
+        run: eas update --auto --non-interactive
