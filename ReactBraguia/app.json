@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "BraGuia",
-    "slug": "BraGuia",
+    "name": "ReactBraguia",
+    "slug": "spidilas",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,16 +15,24 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.ReactBraguia"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.ReactBraguia"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2699c686-c8e1-428d-a00a-5a9c0ef4f8b1"
+      }
+    },
+    "owner": "spidilas"
   }
 }
