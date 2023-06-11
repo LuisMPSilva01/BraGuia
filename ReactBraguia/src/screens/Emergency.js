@@ -1,37 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import BottomBar from '../components/BottomBar';
+import { useSelector } from 'react-redux';
 
 const Emergency = () => {
   const [contacts, setContacts] = useState([]);
 
+  const initialData = useSelector((state) => state.appData.appinfo);
   useEffect(() => {
-    fetch('https://c5a2-193-137-92-29.eu.ngrok.io/app')
-      .then((response) => response.json())
-      .then((data) => setContacts(data[0].contacts))
-      .catch((error) => console.log(error));
+    if (initialData) setContacts(initialData.contacts);
   }, []);
 
-  const handleItemClick = (item, action) => {
-    switch (action) {
-      case 'phone':
-        if (item.contact_phone) {
-          Linking.openURL(`tel:${item.contact_phone}`);
-        }
-        break;
-      case 'url':
-        if (item.contact_url) {
-          Linking.openURL(item.contact_url);
-        }
-        break;
-      case 'email':
-        if (item.contact_mail) {
-          Linking.openURL(`mailto:${item.contact_mail}`);
-        }
-        break;
-      default:
-        break;
+  const handlePhoneClick = (phone) => {
+    if (phone) {
+      Linking.openURL(`tel:${phone}`);
+    }
+  };
+
+  const handleUrlClick = (url) => {
+    if (url) {
+      Linking.openURL(url);
+    }
+  };
+
+  const handleEmailClick = (email) => {
+    if (email) {
+      Linking.openURL(`mailto:${email}`);
     }
   };
 
@@ -40,45 +35,35 @@ const Emergency = () => {
       <View style={styles.content}>
         <View style={styles.contactInfo}>
           {contacts.map((item) => (
-            <TouchableOpacity
-              key={item.contact_name}
-              style={styles.contactDetail}
-            >
+            <View key={item.contact_name} style={styles.contactDetail}>
               <View style={styles.contactDetailsContainer}>
-                <TouchableOpacity
-                  onPress={() => handleItemClick(item, 'phone')}
-                >
-                  <View style={styles.contactRow}>
-                    <Ionicons name="person" size={25} color="black" />
-                    <Text style={styles.contactName}>{item.contact_name}</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleItemClick(item, 'phone')}
-                >
-                  <View style={styles.contactRow}>
-                    <Ionicons name="call" size={25} color="black" />
-                    <Text style={styles.contactPhone}>{item.contact_phone}</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleItemClick(item, 'url')}
-                >
-                  <View style={styles.contactRow}>
-                    <Ionicons name="globe" size={25} color="black" />
-                    <Text style={styles.contactUrl}>{item.contact_url}</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => handleItemClick(item, 'email')}
-                >
-                  <View style={styles.contactRow}>
-                    <Ionicons name="mail" size={25} color="black" />
-                    <Text style={styles.contactMail}>{item.contact_mail}</Text>
-                  </View>
-                </TouchableOpacity>
+                <Text style={styles.contactName}>{item.contact_name}</Text>
+                {item.contact_phone && (
+                  <TouchableOpacity onPress={() => handlePhoneClick(item.contact_phone)}>
+                    <View style={styles.contactRow}>
+                      <Ionicons name="call" size={25} color="black" />
+                      <Text style={styles.contactPhone}>{item.contact_phone}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                {item.contact_url && (
+                  <TouchableOpacity onPress={() => handleUrlClick(item.contact_url)}>
+                    <View style={styles.contactRow}>
+                      <Ionicons name="globe" size={25} color="black" />
+                      <Text style={styles.contactUrl}>{item.contact_url}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                {item.contact_mail && (
+                  <TouchableOpacity onPress={() => handleEmailClick(item.contact_mail)}>
+                    <View style={styles.contactRow}>
+                      <Ionicons name="mail" size={25} color="black" />
+                      <Text style={styles.contactMail}>{item.contact_mail}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
               </View>
-            </TouchableOpacity>
+            </View>
           ))}
         </View>
       </View>
@@ -99,13 +84,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contactInfo: {
-    alignItems: 'flex-start', // Align items to the left
-    marginLeft: 10, // Add left margin to create some spacing
+    alignItems: 'flex-start',
   },
   contactDetail: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 10,
+  },
+  contactImage: {
+    width: 120, // Increase the width as desired
+    height: 60, // Increase the height as desired
+    marginRight: 10,
   },
   contactDetailsContainer: {
     marginLeft: 10,
@@ -115,22 +104,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contactName: {
-    fontSize: 16,
+    fontSize: 25, // Increase the font size as desired
     fontWeight: 'bold',
-    marginLeft: 5,
+    marginBottom: 5,
   },
   contactPhone: {
-    fontSize: 20,
-    marginLeft: 5,
+    fontSize: 22, // Increase the font size as desired
+    marginBottom: 3,
   },
   contactUrl: {
-    fontSize: 20,
-    marginLeft: 5,
+    fontSize: 22, // Increase the font size as desired
+    marginBottom: 3,
     color: 'blue',
   },
   contactMail: {
-    fontSize: 20,
-    marginLeft: 5,
+    fontSize: 22, // Increase the font size as desired
     color: 'blue',
   },
 });

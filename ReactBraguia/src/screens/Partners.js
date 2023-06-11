@@ -2,24 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import BottomBar from '../components/BottomBar';
+import { useSelector } from 'react-redux';
 
 const Partners = () => {
   const [partners, setPartners] = useState([]);
 
+  const initialData = useSelector((state) => state.appData.appinfo);
   useEffect(() => {
-    fetch('https://c5a2-193-137-92-29.eu.ngrok.io/app')
-      .then((response) => response.json())
-      .then((data) => setPartners(data[0].partners))
-      .catch((error) => console.log(error));
+    if (initialData) setPartners(initialData.partners);
   }, []);
 
-  const handleItemClick = (item) => {
-    if (item.partner_phone) {
-      Linking.openURL(`tel:${item.partner_phone}`);
-    } else if (item.partner_url) {
-      Linking.openURL(item.partner_url);
-    } else if (item.partner_mail) {
-      Linking.openURL(`mailto:${item.partner_mail}`);
+  const handlePhoneClick = (phone) => {
+    if (phone) {
+      Linking.openURL(`tel:${phone}`);
+    }
+  };
+
+  const handleUrlClick = (url) => {
+    if (url) {
+      Linking.openURL(url);
+    }
+  };
+
+  const handleEmailClick = (email) => {
+    if (email) {
+      Linking.openURL(`mailto:${email}`);
     }
   };
 
@@ -28,31 +35,33 @@ const Partners = () => {
       <View style={styles.content}>
         <View style={styles.partnerInfo}>
           {partners.map((item) => (
-            <TouchableOpacity
-              key={item.partner_name}
-              style={styles.partnerDetail}
-              onPress={() => handleItemClick(item)}
-            >
+            <View key={item.partner_name} style={styles.partnerDetail}>
               <Image source={require('../../assets/uminho_logo.png')} style={styles.partnerImage} />
               <View style={styles.partnerDetailsContainer}>
                 <Text style={styles.partnerName}>{item.partner_name}</Text>
                 {item.partner_phone && (
-                  <Text style={styles.partnerPhone}>
-                    <Ionicons name="call" size={25} color="black" /> {item.partner_phone}
-                  </Text>
+                  <TouchableOpacity onPress={() => handlePhoneClick(item.partner_phone)}>
+                    <Text style={styles.partnerPhone}>
+                      <Ionicons name="call" size={25} color="black" /> {item.partner_phone}
+                    </Text>
+                  </TouchableOpacity>
                 )}
                 {item.partner_url && (
-                  <Text style={styles.partnerUrl}>
-                    <Ionicons name="globe" size={25} color="black" /> {item.partner_url}
-                  </Text>
+                  <TouchableOpacity onPress={() => handleUrlClick(item.partner_url)}>
+                    <Text style={styles.partnerUrl}>
+                      <Ionicons name="globe" size={25} color="black" /> {item.partner_url}
+                    </Text>
+                  </TouchableOpacity>
                 )}
                 {item.partner_mail && (
-                  <Text style={styles.partnerMail}>
-                    <Ionicons name="mail" size={25} color="black" /> {item.partner_mail}
-                  </Text>
+                  <TouchableOpacity onPress={() => handleEmailClick(item.partner_mail)}>
+                    <Text style={styles.partnerMail}>
+                      <Ionicons name="mail" size={25} color="black" /> {item.partner_mail}
+                    </Text>
+                  </TouchableOpacity>
                 )}
               </View>
-            </TouchableOpacity>
+            </View>
           ))}
         </View>
       </View>
@@ -107,6 +116,5 @@ const styles = StyleSheet.create({
     color: 'blue',
   },
 });
-
 
 export default Partners;

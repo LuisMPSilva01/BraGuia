@@ -2,22 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import BottomBar from '../components/BottomBar';
+import { useSelector } from 'react-redux';
 
 const Socials = () => {
   const [socials, setSocials] = useState([]);
 
+  const initialData = useSelector((state) => state.appData.appinfo);
   useEffect(() => {
-    fetch('https://c5a2-193-137-92-29.eu.ngrok.io/app')
-      .then((response) => response.json())
-      .then((data) => setSocials(data[0].socials))
-      .catch((error) => console.log(error));
+    if (initialData) setSocials(initialData.socials);
   }, []);
-
-  const handleItemClick = (item) => {
-    if (item.social_url) {
-      Linking.openURL(item.social_url);
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -27,12 +20,15 @@ const Socials = () => {
             <TouchableOpacity
               key={item.social_name}
               style={styles.socialDetail}
-              onPress={() => handleItemClick(item)}
             >
               <Ionicons name="logo-facebook" size={50} color="blue" />
               <View style={styles.socialDetailsContainer}>
                 <Text style={styles.socialName}>{item.social_name}</Text>
-                <Text style={styles.socialUrl}>{item.social_url}</Text>
+                {item.social_url && (
+                  <TouchableOpacity onPress={() => Linking.openURL(item.social_url)}>
+                    <Text style={styles.socialUrl} selectable={false}>{item.social_url}</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </TouchableOpacity>
           ))}
@@ -73,7 +69,9 @@ const styles = StyleSheet.create({
   socialUrl: {
     fontSize: 25,
     color: 'blue',
+    textDecorationLine: 'underline',
   },
 });
 
 export default Socials;
+//TODO: CORRIGIR!
