@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { UPDATE_USERNAME , SET_COOKIES , ADD_TRIP, RESET_STATE} from '../actions/user';
+import { UPDATE_USERNAME , SET_COOKIES , ADD_TRIP, SET_DISTANCE,RESET_STATE} from '../actions/user';
 import {SET_APP_INFO, SET_APP_TRAILS, RESET_APP_DATA} from '../actions/appData';
 
 const user  = (user = { username: ''}, action) => {
@@ -38,6 +38,21 @@ const trips = (trips = { tripsVal: [] }, action) => {
       return trips;
   }
 };
+
+const distance = (distance = { distanceVal: 1 }, action) => {
+  switch (action.type) {
+    case ADD_TRIP:
+      return {
+        distanceVal: action.dist
+      };
+    case RESET_STATE:
+      return {
+        distanceVal: 1
+      };
+    default:
+      return distance;
+  }
+};
   
   
 const appData = (state = { appinfo: null, trails: [] }, action) => {
@@ -62,4 +77,4 @@ const appData = (state = { appinfo: null, trails: [] }, action) => {
   }
 };
 
-export default combineReducers({ user, cookies, trips, appData });
+export default combineReducers({ user, cookies, trips, appData,distance });

@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Switch, TextInput } from 'react-native';
 import BottomBar from '../components/BottomBar';
+import { debounce } from 'lodash';
+import { useSelector, useDispatch } from 'react-redux';
+import { setDistanceRedux } from '../actions/user'
 
 const Definitions = () => {
   const [locationEnabled, setLocationEnabled] = useState(false);
   const [darkModeEnabled, setDarkModeEnabled] = useState(false);
-  const [distance, setDistance] = useState('10'); // Default value of 10 km
+  const [distance, setDistance] = useState('0'); // Default value of 10 km
+  const initialDistance = useSelector((state) => state.distance.distanceVal);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    setDistance(initialDistance.toString())
+  }, []);
+
+  
   const handleLocationToggle = () => {
     setLocationEnabled(!locationEnabled);
     console.log(
@@ -24,9 +34,13 @@ const Definitions = () => {
   };
 
   const handleDistanceChange = (value) => {
-    setDistance(value);
-    console.log('Distance value:', value);
+    const parsedValue = Number(value);
+    if (!isNaN(parsedValue)) {
+      setDistance(parsedValue.toString());
+      dispatch(setDistanceRedux(parsedValue));
+    }
   };
+  
   
 
   return (
@@ -41,7 +55,7 @@ const Definitions = () => {
           <Switch value={darkModeEnabled} onValueChange={handleDarkModeToggle} />
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Distance from pins to your location (km):</Text>
+          <Text style={styles.label}>GeoDistance from pins to your location:</Text>
           <TextInput
             value={distance}
             onChangeText={handleDistanceChange}

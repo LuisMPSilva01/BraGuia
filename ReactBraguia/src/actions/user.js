@@ -16,6 +16,12 @@ export const addTrip = (trip) => ({
   trip
 });
 
+export const SET_DISTANCE = 'SET_DISTANCE';
+export const setDistanceRedux = (dist) => ({
+  type: SET_DISTANCE,
+  dist
+});
+
 
 export const RESET_STATE = 'RESET_STATE';
 export const resetState = () => ({
