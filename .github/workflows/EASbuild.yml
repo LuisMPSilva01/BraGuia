@@ -30,9 +30,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
-        working-directory: ./ReactBraguia
         run: yarn install
 
       - name: Publish update
-        working-directory: ./ReactBraguia
         run: eas update --auto
