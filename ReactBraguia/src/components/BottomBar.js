@@ -3,7 +3,7 @@ import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useSelector, useDispatch } from 'react-redux';
-import { resetState, setCookies, updateUsername } from '../actions/user';
+import { resetState } from '../actions/user';
 
 
 

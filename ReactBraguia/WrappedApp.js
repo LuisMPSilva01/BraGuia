@@ -14,7 +14,7 @@ import Partners from "./src/screens/Partners";
 import BottomBar from "./src/components/BottomBar";
 import { DarkTheme, DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Emergency from "./src/screens/Emergency";
 
 import theme from "./src/theme/theme";

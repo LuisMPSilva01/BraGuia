@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Audio } from 'expo-av';
 import { Video } from 'expo-av';
+import PropTypes from 'prop-types';
+
+import noImageAvailable from '../../assets/no_image_available.jpg';
 
 const Pin = (props) => {
   const { pin } = props.route.params;
@@ -17,8 +20,6 @@ const Pin = (props) => {
     video: video ? video.media_file : null,
     audio: audio ? audio.media_file : null
   };
-
-  const noImageAvailable = require('../../assets/no_image_available.jpg');
 
   const [audioPlayback, setAudioPlayback] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -95,43 +96,57 @@ const Pin = (props) => {
   );
 };
 
-
+Pin.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      pin: PropTypes.shape({
+        pin_name: PropTypes.string.isRequired,
+        pin_desc: PropTypes.string.isRequired,
+        media: PropTypes.arrayOf(
+          PropTypes.shape({
+            media_type: PropTypes.string.isRequired,
+            media_file: PropTypes.string.isRequired
+          })
+        ).isRequired
+      }).isRequired
+    }).isRequired
+  }).isRequired
+};
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    header: {
-      fontSize: 24,
-      fontWeight: 'bold',
-      textAlign: 'center',
-      marginBottom: 20
-    },
-    contentContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: 20
-    },
-    image: {
-      width: 150,
-      height: 150
-    },
-    video: {
-      width: 150,
-      height: 150
-    },
-    audioButton: {
-      padding: 10,
-      backgroundColor: '#eaeaea',
-      borderRadius: 5
-    },
-    audioButtonText: {
-      fontSize: 16
-    }
-  });
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20
+  },
+  contentContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20
+  },
+  image: {
+    width: 150,
+    height: 150
+  },
+  video: {
+    width: 150,
+    height: 150
+  },
+  audioButton: {
+    padding: 10,
+    backgroundColor: '#eaeaea',
+    borderRadius: 5
+  },
+  audioButtonText: {
+    fontSize: 16
+  }
+});
 
 export default Pin;
-

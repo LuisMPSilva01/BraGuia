@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, TextInput, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
 
 const SearchBar = ({ onSearch }) => {
-
   const handleChangeText = (text) => {
     onSearch(text);
   };
@@ -16,6 +16,10 @@ const SearchBar = ({ onSearch }) => {
       />
     </View>
   );
+};
+
+SearchBar.propTypes = {
+  onSearch: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

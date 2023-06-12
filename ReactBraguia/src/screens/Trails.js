@@ -21,7 +21,7 @@ const Trails = () => {
     }
   }, []);
 
-  const handleSearch = (query) => {;
+  const handleSearch = (query) => {
 
     if(query==""){
       setSearchResults(trails)

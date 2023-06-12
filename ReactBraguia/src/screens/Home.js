@@ -7,6 +7,8 @@ import { updateAppInfo, setTrails } from '../actions/appData';
 
 import themeContext from '../theme/themeContext';
 
+import redLogo from '../../assets/logo_red.png';
+
 const Home = () => {
   const [title, setTitle] = useState("Title"); 
   const [appInfo, setAppInfo] = useState("Loading"); 
@@ -84,7 +86,7 @@ const Home = () => {
       <View style={styles.content}>
         <Text style={[styles.header, {color:theme.color}]}>{title}</Text>
         <Image
-          source={require('../../assets/logo_red.png')}
+          source={redLogo}
           style={styles.image}
         />
         <Text style={{color:theme.color}}>{appInfo}</Text>

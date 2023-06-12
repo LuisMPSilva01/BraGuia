@@ -4,12 +4,11 @@
     "slug": "spidilas",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/ic_logo-playstore.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/logo_red.png",
+      "resizeMode": "contain"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -20,13 +19,17 @@
     },
     "android": {
       "adaptiveIcon": {
+<<<<<<< Updated upstream
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+=======
+        "foregroundImage": "./assets/ic_logo-playstore.png"
+>>>>>>> Stashed changes
       },
       "package": "com.anonymous.ReactBraguia"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/ic_logo-playstore.png"
     },
     "extra": {
       "eas": {
