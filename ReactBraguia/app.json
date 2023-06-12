@@ -15,18 +15,19 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.ReactBraguia"
+      "runtimeVersion": {
+        "policy": "sdkVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
-<<<<<<< Updated upstream
-        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-=======
         "foregroundImage": "./assets/ic_logo-playstore.png"
->>>>>>> Stashed changes
       },
-      "package": "com.anonymous.ReactBraguia"
+      "package": "com.danyrivas13.AppDeliveryReactNative",
+      "runtimeVersion": {
+        "policy": "sdkVersion"
+      }
     },
     "web": {
       "favicon": "./assets/ic_logo-playstore.png"
@@ -37,7 +38,9 @@
       }
     },
     "owner": "spidilas",
-    "runtimeVersion": "1.0.0",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
     "updates": {
       "url": "https://u.expo.dev/2699c686-c8e1-428d-a00a-5a9c0ef4f8b1"
     }

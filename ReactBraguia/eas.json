@@ -1,5 +1,6 @@
 {
   "cli": {
+    "requireCommit": true,
     "version": ">= 3.13.3"
   },
   "build": {
@@ -10,12 +11,16 @@
       },
       "ios": {
         "buildConfiguration": "Debug"
-      }
+      },
+      "channel": "development"
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "channel": "preview"
     },
-    "production": {}
+    "production": {
+      "channel": "production"
+    }
   },
   "submit": {
     "production": {}
