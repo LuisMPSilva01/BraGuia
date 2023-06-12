@@ -8,11 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check ls
-        run: ls
-      - name: Move to folder
-        run: cd ./ReactBraguia
-        
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
 
@@ -30,7 +25,9 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📦 Install dependencies
+        working-directory: ./ReactBraguia
         run: yarn install
 
       - name: 🚀 Create update
+        working-directory: ./ReactBraguia
         run: eas update --auto --non-interactive
