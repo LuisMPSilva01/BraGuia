@@ -5,10 +5,12 @@ import { useSelector } from 'react-redux';
 
 import themeContext from '../theme/themeContext';
 
-function formatTime(timeInSeconds) {
-  const hours = Math.floor(timeInSeconds / 3600);
-  const minutes = Math.floor((timeInSeconds % 3600) / 60);
-  const seconds = timeInSeconds % 60;
+function formatTime(timeInMilliseconds) {
+  console.log("Initial time", timeInMilliseconds);
+  const seconds = Math.floor(timeInMilliseconds / 1000);
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
 
   let formattedTime = '';
 
@@ -20,12 +22,15 @@ function formatTime(timeInSeconds) {
     formattedTime += `${hours > 0 ? ', ' : ''}${minutes} ${minutes === 1 ? 'Minute' : 'Minutes'}`;
   }
 
-  if (seconds > 0) {
-    formattedTime += `${hours > 0 || minutes > 0 ? ', and ' : ''}${seconds} ${seconds === 1 ? 'Second' : 'Seconds'}`;
+  if (remainingSeconds > 0) {
+    formattedTime += `${hours > 0 || minutes > 0 ? ', and ' : ''}${remainingSeconds} ${remainingSeconds === 1 ? 'Second' : 'Seconds'}`;
   }
+
+  console.log("Final time", formattedTime);
 
   return formattedTime;
 }
+
 
 const History = () => {
   const tripsMetaData = useSelector((state) => state.trips.tripsVal);
