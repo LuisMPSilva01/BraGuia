@@ -22,6 +22,11 @@ export const setDistanceRedux = (dist) => ({
   dist
 });
 
+export const SET_DARK_MODE = 'SET_DARK_MODE';
+export const setDarkMode = (dm) => ({
+  type: SET_DARK_MODE,
+  dm
+});
 
 export const RESET_STATE = 'RESET_STATE';
 export const resetState = () => ({

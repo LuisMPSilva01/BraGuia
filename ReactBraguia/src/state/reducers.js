@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { UPDATE_USERNAME , SET_COOKIES , ADD_TRIP, SET_DISTANCE,RESET_STATE} from '../actions/user';
+import { UPDATE_USERNAME , SET_COOKIES , ADD_TRIP, SET_DISTANCE,RESET_STATE, SET_DARK_MODE} from '../actions/user';
 import {SET_APP_INFO, SET_APP_TRAILS, RESET_APP_DATA} from '../actions/appData';
 
 const user  = (user = { username: ''}, action) => {
@@ -53,6 +53,21 @@ const distance = (distance = { distanceVal: 1 }, action) => {
       return distance;
   }
 };
+
+const darkMode_reducer = (darkMode_reducer = { darkMode: false }, action) => {
+  switch (action.type) {
+    case SET_DARK_MODE:
+      return {
+        darkMode: action.dm
+      };
+    case RESET_STATE:
+      return {
+        darkMode: false
+      };
+    default:
+      return darkMode_reducer;
+  }
+};
   
   
 const appData = (state = { appinfo: null, trails: [] }, action) => {
@@ -77,4 +92,4 @@ const appData = (state = { appinfo: null, trails: [] }, action) => {
   }
 };
 
-export default combineReducers({ user, cookies, trips, appData,distance });
+export default combineReducers({ user, cookies, trips, appData,distance, darkMode_reducer });

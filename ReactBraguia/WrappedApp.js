@@ -24,11 +24,18 @@ import { EventRegister } from 'react-native-event-listeners'
 
 const Stack = createNativeStackNavigator();
 
+
 const WrappedApp = () => {
-  const [darkModeEnabled, setDarkMode] = useState(false);
+  const [darkModeEnabled, setDarkModeEnabled] = useState(false);
+  const initialDm = useSelector((state) => state.darkMode_reducer.darkMode);
+
+  useEffect(() => {
+    setDarkModeEnabled(initialDm)
+  }, []);
+  
   useEffect(() => {
     const listener = EventRegister.addEventListener('ChangeTheme', (data) => {
-      setDarkMode(data)
+      setDarkModeEnabled(data)
     })
     return () =>{
       EventRegister.removeAllListeners(listener);
@@ -81,10 +88,10 @@ const WrappedApp = () => {
                 scrollableScreenWrapperWithBottomBar(() => (<Trails {...props} />))}
             </Stack.Screen>
             <Stack.Screen name="Trail">
-              {(props) => scrollableScreenWrapperWithBottomBar(() => <Trail {...props} />)}
+              {(props) => scrollableScreenWrapper(() => <Trail {...props} />)}
             </Stack.Screen>
             <Stack.Screen name="Pin">
-              {(props) => scrollableScreenWrapperWithBottomBar(() => <Pin {...props} />)}
+              {(props) => scrollableScreenWrapper(() => <Pin {...props} />)}
             </Stack.Screen>
             <Stack.Screen name="Definitions">
               {(props) =>
