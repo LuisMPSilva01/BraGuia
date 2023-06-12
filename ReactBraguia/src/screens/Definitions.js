@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, Switch, TextInput } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { setDistanceRedux } from '../actions/user'
+import { setDistanceRedux, setDarkMode } from '../actions/user'
 import { EventRegister } from 'react-native-event-listeners'
 import themeContext from '../theme/themeContext';
 
@@ -13,8 +13,11 @@ const Definitions = () => {
   const initialDistance = useSelector((state) => state.distance.distanceVal);
   const dispatch = useDispatch();
 
+  const initialDm = useSelector((state) => state.darkMode_reducer.darkMode);
+
   useEffect(() => {
     setDistance(initialDistance.toString())
+    setDarkModeEnabled(initialDm)
   }, []);
 
   const handleDistanceChange = (value) => {
@@ -27,6 +30,7 @@ const Definitions = () => {
 
   const handleDarkModeToggle = (value) => {
     setDarkModeEnabled(value);
+    dispatch(setDarkMode(value));
     EventRegister.emit('ChangeTheme', value);
   };
 
