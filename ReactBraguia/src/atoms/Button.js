@@ -1,14 +1,20 @@
 import React from 'react';
-import { Text, View, StyleSheet, Pressable } from 'react-native';
+import { Text, StyleSheet, Pressable } from 'react-native';
+import PropTypes from 'prop-types';
 
 export default function Button(props) {
-  const { onPress, title = 'Save' } = props;
+  const { onPress, title } = props;
   return (
     <Pressable style={styles.button} onPress={onPress}>
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
 }
+
+Button.propTypes = {
+  onPress: PropTypes.func.isRequired,
+  title: PropTypes.string,
+};
 
 const styles = StyleSheet.create({
   button: {

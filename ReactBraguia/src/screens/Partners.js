@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 
 import themeContext from '../theme/themeContext';
 
+import uminhoLogo from '../../assets/uminho_logo.png';
+
 const Partners = () => {
   const [partners, setPartners] = useState([]);
 
@@ -39,7 +41,7 @@ const Partners = () => {
         <View style={styles.partnerInfo}>
           {partners.map((item) => (
             <View key={item.partner_name} style={styles.partnerDetail}>
-              <Image source={require('../../assets/uminho_logo.png')} style={styles.partnerImage} />
+              <Image source={uminhoLogo} style={styles.partnerImage} />
               <View style={styles.partnerDetailsContainer}>
                 <Text style={[styles.partnerName, {color:theme.color}]}>{item.partner_name}</Text>
                 {item.partner_phone && (

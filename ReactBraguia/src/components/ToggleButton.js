@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types';
 
 const ToggleButton = ({ onToggle }) => {
   const [isRunning, setIsRunning] = useState(false);
@@ -17,6 +18,10 @@ const ToggleButton = ({ onToggle }) => {
       <Text style={styles.text}>{isRunning ? 'Stop' : 'Start'}</Text>
     </TouchableOpacity>
   );
+};
+
+ToggleButton.propTypes = {
+  onToggle: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

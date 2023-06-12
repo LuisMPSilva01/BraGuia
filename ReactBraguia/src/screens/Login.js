@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, TextInput, Button, Image, Text, Keyboard, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
+import { View, TextInput, Button, Image, Text, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
-import { setCookies, updateUsername } from '../actions/user';
+import { useDispatch } from 'react-redux';
+import { setCookies } from '../actions/user';
 
 import themeContext from '../theme/themeContext';
+
+import redLogo from '../../assets/logo_red.png';
 
 const LoginActivity = () => {
   const navigation = useNavigation();
@@ -107,7 +109,7 @@ const LoginActivity = () => {
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <View style={[styles.container, {backgroundColor:theme.backgroundColor}]}>
         <Image
-          source={require('../../assets/logo_red.png')}
+          source={redLogo}
           style={styles.image}
         />
         <TextInput

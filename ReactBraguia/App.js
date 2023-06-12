@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import WrappedApp from './WrappedApp';
 import { Logs } from 'expo'
 import { Provider } from 'react-redux';

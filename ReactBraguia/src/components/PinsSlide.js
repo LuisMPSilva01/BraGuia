@@ -1,6 +1,8 @@
 import React from 'react';
-import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import PropTypes from 'prop-types';
+import noImageAvailable from '../../assets/no_image_available.jpg';
 
 const PinsSlide = ({ pins }) => {
   const pinInfo = pins.map((pin) => {
@@ -12,13 +14,11 @@ const PinsSlide = ({ pins }) => {
     };
   });
 
-  const noImageAvailable = require('../../assets/no_image_available.jpg');
-
   const navigation = useNavigation();
 
   const handlePinPress = (pin) => {
     // Navigate to the Pin page
-    navigation.navigate('Pin', { pin: pin.info});
+    navigation.navigate('Pin', { pin: pin.info });
   };
 
   return (
@@ -41,6 +41,20 @@ const PinsSlide = ({ pins }) => {
   );
 };
 
+PinsSlide.propTypes = {
+  pins: PropTypes.arrayOf(
+    PropTypes.shape({
+      pin_name: PropTypes.string.isRequired,
+      media: PropTypes.arrayOf(
+        PropTypes.shape({
+          media_type: PropTypes.string.isRequired,
+          media_file: PropTypes.string.isRequired
+        })
+      ).isRequired
+    })
+  ).isRequired
+};
+
 const styles = StyleSheet.create({
   scrollContainer: {
     marginBottom: 20,
@@ -55,9 +69,8 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    marginBottom: 5,
-    marginLeft: 20,
     marginBottom: 20,
+    marginLeft: 20,
   },
   pinName: {
     fontSize: 16,
