@@ -2,12 +2,6 @@ name: Test
 
 on:
   push:
-    tags-ignore:
-      - '*'
-    branches:
-      - 'master'
-  pull_request:
-  workflow_dispatch:
 
 jobs:
   list-files:
