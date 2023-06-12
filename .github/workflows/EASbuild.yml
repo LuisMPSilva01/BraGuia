@@ -11,7 +11,7 @@ jobs:
       - name: Check ls
         run: ls
       - name: Move to folder
-        run: cd ReactBraguia/
+        run: cd ./ReactBraguia
         
       - name: 🏗 Setup repo
         uses: actions/checkout@v3
