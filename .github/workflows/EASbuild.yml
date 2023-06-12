@@ -6,6 +6,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./ReactBraguia
+    defaults:
+      run:
+        working-directory: ${{ env.working-directory }}
 
     steps:
       - name: 🏗 Setup repo
@@ -25,9 +30,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📦 Install dependencies
-        working-directory: ./ReactBraguia
         run: yarn install
 
       - name: 🚀 Create update
-        working-directory: ./ReactBraguia
         run: eas update --auto --non-interactive
