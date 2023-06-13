@@ -1,22 +1,17 @@
 {
   "cli": {
-    "requireCommit": true,
-    "version": ">= 3.13.3"
+    "version": ">= 0.54.1"
   },
   "build": {
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "ios": {
-        "buildConfiguration": "Debug"
-      },
-      "channel": "development"
+      "android": {
+        "image": "ubuntu-18.04-jdk-11-ndk-r19c"
+      }
     },
     "preview": {
-      "android": {
-        "image": "latest",
-        "buildType": "apk"
-      }
+      "distribution": "internal"
     },
     "production": {}
   },
