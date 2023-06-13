@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "53091843821",
+    "project_id": "reactbraguia",
+    "storage_bucket": "reactbraguia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53091843821:android:c26070aaba5a8b996996e4",
+        "android_client_info": {
+          "package_name": "com.danyrivas13.AppDeliveryReactNative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53091843821-9s191gdmkjgfvm2oplpal2m7hjpqjg4t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danyrivas13.AppDeliveryReactNative",
+            "certificate_hash": "55fc63c8bedd8bc7fbd9142915e000df8c339e29"
+          }
+        },
+        {
+          "client_id": "53091843821-qvdnjhrijg4pbd3h4ftsp4tvp7aiv302.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHSiuSxhGGS5VnTM0Nim0-wBQXYukN8lI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53091843821-qvdnjhrijg4pbd3h4ftsp4tvp7aiv302.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
