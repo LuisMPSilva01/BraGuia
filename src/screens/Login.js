@@ -55,9 +55,9 @@ const LoginActivity = () => {
 
   const makeLoginRequest = () => {
     const body = {
-      username: username.trim(),
+      username: 'premium_user',//username.trim(),
       email: "",
-      password: password,
+      password: 'paiduser',//password,
     };
     console.log(body);
 
