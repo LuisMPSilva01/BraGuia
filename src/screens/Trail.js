@@ -38,7 +38,10 @@ const Trail = (props) => {
   const [startTime, setStartTime] = useState(null);
   const [isToggled, setToggle] = useState(false);
   const [visitedTrips, setVisitedTrips] = useState([]);
-  const [notificationQueue, setNotificationQueue] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+
+
+
   const handleButtonToggle = () => {
     setToggle(!isToggled);
   };
@@ -69,16 +72,24 @@ const Trail = (props) => {
 
   useEffect(() => {
     const processNotificationQueue = async () => {
-      if (notificationQueue.length > 0) {
-        for (const item of notificationQueue) {
+      const newNotifications = visitedTrips.filter((visitedTrip) => {
+        // Check if visited trip ID is not present in notifications
+        return !notifications.some((notification) => notification === visitedTrip);
+      });
+      if(newNotifications.length>0){
+        // Iterate over new notifications and send push notifications
+        for (const visitedTrip of newNotifications) {
+          const item = findPinById(visitedTrip); // Replace with your logic to find the pin details
           await sendPushNotification(expoPushToken, item.pin_name, item.pin_desc, item.id);
         }
-        setNotificationQueue([]);
+        setNotifications((prevNotifications) => [...prevNotifications, ...newNotifications]);
       }
     };
-
+  
     processNotificationQueue();
-  }, [setNotificationQueue, notificationQueue]);
+  }, [visitedTrips, notifications]);
+  
+
 
   useEffect(() => {
     const getLocation = () => {
@@ -90,20 +101,23 @@ const Trail = (props) => {
             const { pin_lat, pin_lng } = pin;
             const latDiff = Math.abs(pin_lat - latitude);
             const lngDiff = Math.abs(pin_lng - longitude);
-
-            const isVisited = visitedTrips.some((visitedId) => visitedId == pin.id);
-            return latDiff <= GeoDistance && lngDiff <= GeoDistance && !isVisited;
+            return latDiff <= GeoDistance && lngDiff <= GeoDistance;
           });
-
+          console.log(visitedTrips);
           if (closePins.length > 0) {
             setVisitedTrips((prevVisitedTrips) => {
-              const updatedVisitedTrips = [...prevVisitedTrips, ...closePins.map((pin) => pin.id)];
+              const updatedVisitedTrips = [
+                ...prevVisitedTrips,
+                ...closePins.reduce((acc, pin) => {
+                  const isVisited = prevVisitedTrips.some((visitedId) => visitedId === pin.id);
+                  if (!isVisited) {
+                    acc.push(pin.id);
+                  }
+                  return acc;
+                }, [])
+              ];
               return updatedVisitedTrips;
-            });
-            setNotificationQueue((prevQueue) => {
-              const updatedQueue = [...prevQueue, ...closePins];
-              return updatedQueue;
-            });
+            }); 
           }
         })
         .catch((error) => {
@@ -120,7 +134,7 @@ const Trail = (props) => {
     return () => {
       clearInterval(interval);
     };
-  }, [isToggled, setVisitedTrips, visitedTrips, notificationQueue]);
+  }, [isToggled, visitedTrips]);
 
   useEffect(() => {
     if (isToggled) {
@@ -150,7 +164,7 @@ const Trail = (props) => {
       }
       return () => {};
     }
-  }, [isToggled, navigation, visitedTrips, notificationQueue]);
+  }, [isToggled, navigation, visitedTrips]);
 
   const startNavigation = () => {
     const route = pins.map((pin) => pin.pin_lat + ',' + pin.pin_lng);

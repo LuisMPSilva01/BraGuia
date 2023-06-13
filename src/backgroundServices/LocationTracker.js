@@ -8,7 +8,6 @@ export default async function LocationTrack() {
     return null;
   }
   try {
-    console.log("Location updated")
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       console.log('Permission to access location was denied');
