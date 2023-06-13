@@ -5,33 +5,6 @@ import { useSelector } from 'react-redux';
 
 import themeContext from '../theme/themeContext';
 
-function formatTime(timeInMilliseconds) {
-  console.log("Initial time", timeInMilliseconds);
-  const seconds = Math.floor(timeInMilliseconds / 1000);
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const remainingSeconds = seconds % 60;
-
-  let formattedTime = '';
-
-  if (hours > 0) {
-    formattedTime += `${hours} ${hours === 1 ? 'Hour' : 'Hours'}`;
-  }
-
-  if (minutes > 0) {
-    formattedTime += `${hours > 0 ? ', ' : ''}${minutes} ${minutes === 1 ? 'Minute' : 'Minutes'}`;
-  }
-
-  if (remainingSeconds > 0) {
-    formattedTime += `${hours > 0 || minutes > 0 ? ', and ' : ''}${remainingSeconds} ${remainingSeconds === 1 ? 'Second' : 'Seconds'}`;
-  }
-
-  console.log("Final time", formattedTime);
-
-  return formattedTime;
-}
-
-
 const History = () => {
   const tripsMetaData = useSelector((state) => state.trips.tripsVal);
   const trailsMetaData = useSelector((state) => state.appData.trails);
@@ -84,7 +57,7 @@ const History = () => {
 
                   <View style={styles.trailInfo}>
                     <Ionicons name="time-outline" size={20} color="black" style={[styles.icon, { color: theme.color }]} />
-                    <Text style={[styles.label, { color: theme.color }]}>Time spent: {formatTime(trip.timeTaken)}</Text>
+                    <Text style={[styles.label, { color: theme.color }]}>Time spent: {trip.timeTaken} miliseconds</Text>
                   </View>
 
                   <View style={styles.trailInfo}>
