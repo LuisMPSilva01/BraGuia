@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Audio } from 'expo-av';
 import { Video } from 'expo-av';
 import PropTypes from 'prop-types';
 
+import themeContext from '../theme/themeContext';
+
 import noImageAvailable from '../../assets/no_image_available.jpg';
 
 const Pin = (props) => {
   const { pin } = props.route.params;
+
+  const theme = useContext(themeContext);
 
   const image = pin.media.find((media) => media.media_type === 'I');
   const video = pin.media.find((media) => media.media_type === 'V');
@@ -66,8 +70,8 @@ const Pin = (props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>{pinInfo.name}</Text>
+    <View style={[styles.container, { backgroundColor: theme.backgroundColor }]}>
+      <Text style={[styles.header, { color: theme.color }]}>{pinInfo.name}</Text>
 
       <View style={styles.contentContainer}>
         {pinInfo.image != null ? (
@@ -91,7 +95,7 @@ const Pin = (props) => {
           <Text style={styles.audioButtonText}>{isPlaying ? 'Stop Audio' : 'Play Audio'}</Text>
         </TouchableOpacity>
       )}
-      <Text>{pinInfo.desc}</Text>
+      <Text style={{ color: theme.color }}>{pinInfo.desc}</Text>
     </View>
   );
 };
@@ -141,11 +145,12 @@ const styles = StyleSheet.create({
   },
   audioButton: {
     padding: 10,
-    backgroundColor: '#eaeaea',
+    backgroundColor: '#FF0008',
     borderRadius: 5
   },
   audioButtonText: {
-    fontSize: 16
+    fontSize: 16,
+    color: '#FFFFFF'
   }
 });
 
