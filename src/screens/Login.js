@@ -117,6 +117,8 @@ const LoginActivity = () => {
           placeholder="Name"
           value={username}
           onChangeText={setUsername}
+          accessible={true}
+          accessibilityLabel="userName-id"
         />
         <TextInput
           style={[styles.input, {color:theme.color}]}
@@ -124,6 +126,8 @@ const LoginActivity = () => {
           secureTextEntry
           value={password}
           onChangeText={setPassword}
+          accessible={true}
+          accessibilityLabel="password-id"
         />
         <Button title="Login" onPress={handleLogin} color="#FF0008" />
         {loginFailed && <Text style={[styles.loginFailedText, {color:theme.color}]} id="login_failed_txt">Login Failed</Text>}
