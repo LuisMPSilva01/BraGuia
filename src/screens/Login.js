@@ -10,8 +10,8 @@ import redLogo from '../../assets/logo_red.png';
 
 const LoginActivity = () => {
   const navigation = useNavigation();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('premium_user');
+  const [password, setPassword] = useState('paiduser');
   const [loginFailed, setLoginFailed] = useState(false);
 
   const theme = useContext(themeContext)
@@ -27,31 +27,31 @@ const LoginActivity = () => {
     });
   }, [navigation]);
 
-  const handleLogin = () => {
-    validate()
-      .catch(() => {
-        setLoginFailed(true);
-      });
-  };
+    const handleLogin = () => {
+      validate()
+        .catch(() => {
+          setLoginFailed(true);
+        });
+    };
 
-  const validate = () => {
-    return new Promise((resolve, reject) => {
-      if (username.trim() === '' || password === '') {
-        console.log("invalid name");
-        reject(new Error('Login failed'));
-      } else {
-        console.log("valid name");
-        makeLoginRequest()
-          .then(() => {
-            resolve();
-          })
-          .catch(() => {
-            setLoginFailed(true);
-            reject(new Error('Login failed'));
-          });
-      }
-    });
-  };
+    const validate = () => {
+      return new Promise((resolve, reject) => {
+        if (username.trim() === '' || password === '') {
+          console.log("invalid name");
+          reject(new Error('Login failed'));
+        } else {
+          console.log("valid name");
+          makeLoginRequest()
+            .then(() => {
+              resolve();
+            })
+            .catch(() => {
+              setLoginFailed(true);
+              reject(new Error('Login failed'));
+            });
+        }
+      });
+    };
 
   const makeLoginRequest = () => {
     const body = {
