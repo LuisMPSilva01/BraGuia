@@ -17,7 +17,8 @@
       "supportsTablet": true,
       "runtimeVersion": {
         "policy": "sdkVersion"
-      }
+      },
+      "bundleIdentifier": "com.danyrivas13.AppDeliveryReactNative"
     },
     "android": {
       "adaptiveIcon": {
