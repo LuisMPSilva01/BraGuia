@@ -5,7 +5,7 @@
 * Apresentação: [aqui](https://github.com/simaocunha71/BraGuia/blob/main/Project%20Part%201/docs/TDS-Apresentacao-Parte_1.pptx)
 
 #### Parte 2: React Native
-* Relatório: [aqui](https://github.com/simaocunha71/BraGuia/blob/main/Project%20Part%202/docs/TDS-Relatorio-Parte_2.pdf)
+* Relatório: [aqui](https://github.com/simaocunha71/BraGuia/blob/main/Project%20Part%202/docs/TDS_TP2.pdf)
 * Apresentação: [aqui](https://github.com/simaocunha71/BraGuia/blob/main/Project%20Part%202/docs/TDS-Apresentacao-Parte_2.pptx)
 
 Autores:
